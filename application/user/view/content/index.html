@@ -1,0 +1,60 @@
+{extend name="public/base"/}
+{block name="body"}
+<div class="main-box clearfix">
+	<header class="main-box-header clearfix">
+		<div class="pull-left">
+			<h2>{$model_info['title']}管理</h2>
+		</div>
+		<div class="pull-right">
+			<a class="btn btn-primary" href="{:url('user/content/add?model_id='.$model_id)}">新 增</a>
+			<button class="btn btn-danger ajax-post confirm" url="{:url('user/content/del?model_id='.$model_id)}" target-form="ids">删 除</button>
+		</div>
+	</header>
+	<div class="main-box-body clearfix">
+		<div class="table-responsive clearfix">
+
+			<div class="table-responsive clearfix">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th width="30"><input class="checkbox check-all" type="checkbox"></th>
+							{volist name="grid['grids']" id="item"}
+							<th>{$item['title']}</th>
+							{/volist}
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{if condition="empty($list)"}
+						{php}
+						$cow = count($grid['grids'])+2;
+						{/php}
+						<tr>
+							<td colspan="{$cow}" align="center">暂无数据！</td>
+						</tr>
+						{else/}
+						{volist name="list" id="item"}
+						<tr>
+							<td><input class="ids row-selected" type="checkbox" name="ids[]" value="{$item['id']}"></td>
+							{volist name="grid['grids']" id="vo"}
+							{if isset($vo['format'])}
+							<td>{$item[$vo['field'][0]]|$vo['format']}</td>
+							{else/}
+							<td>{$item[$vo['field'][0]]}</td>
+							{/if}
+							{/volist}
+							<td>
+								<a href="{:url('user/content/edit',array('id'=>$item['id'],'model_id'=>$model_id))}" >编辑</a>
+								<a href="{:url('user/content/del',array('id'=>$item['id'],'model_id'=>$model_id))}" class="ajax-get confirm">删除</a>
+							</td>
+						</tr>
+						{/volist}
+						{/if}
+					</tbody>
+				</table>
+			</div>
+			{$page}
+		</div>
+	</div>
+</div>
+{/block}

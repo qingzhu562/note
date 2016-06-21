@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<title>{if isset($title)}{$title} - {/if}会员中心 - Powered by TenSent,Inc.</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/bootstrap/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/libs/font-awesome.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/libs/nanoscroller.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/common.css"/>
+<!-- <link href='//fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400' rel='stylesheet' type='text/css'> -->
+<link rel="stylesheet" type="text/css" href="__CSS__/style.css"/>
+<script src="__PUBLIC__/js/jquery.js"></script>
+<!--[if lt IE 9]>
+<script src="__PUBLIC__/js/html5shiv.js"></script>
+<script src="__PUBLIC__/js/respond.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
+	var BASE_URL = "{:config('base_url')}"; //根目录地址
+</script>
+{block name="style"}{/block}
+
+</head>
+<body>
+<div class="header">
+	<div class="top">
+		<div class="warp">
+			<div class="pull-left">
+			<a href="{:url('user/index/index')}" class="user-home">会员中心</a>
+			</div>
+			<div class="pull-right">
+				<span class="user dropdown profile-dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {:session('user_auth.username')} <span class="caret"></span></a>
+					<ul class="dropdown-menu dropdown-menu-right">
+						<li><a href="{:url('user/profile/index')}">资料修改</a></li>
+						<li><a href="{:url('user/profile/editpw')}">修改密码</a></li>
+						<li><a href="{:url('user/login/logout')}">退出</a></li>
+					</ul>
+				</span>
+				<a href="{:url('index/index/index')}">网站首页</a>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+	<div class="warp userinfo">
+		<div class="avatar">
+			<img src="{:avatar($user['uid'])}" alt="">
+		</div>
+		<div class="info">
+			<span class="username">{$user['username']}</span>
+			<span class="desc">签名：{$user['signature']}</span>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>
+<div class="warp user-body">
+	<div class="pull-left left">
+		{include file="public/left_nav" /}
+	</div>
+	<div class="pull-left right">
+		{block name="body"}{/block}
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<div class="footer">
+	<div class="warp">
+		<p>Copyright © 2013-2016　<a href="http://www.tensent.cn" target="_blank">腾速科技</a> 版权所有</p>
+	</div>
+</div>
+<script src="__PUBLIC__/js/bootstrap.js"></script>
+<script src="__PUBLIC__/js/jquery.nanoscroller.min.js"></script>
+<script src="__PUBLIC__/js/pace.min.js"></script>
+
+<script src="__PUBLIC__/js/hopscotch.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/libs/hopscotch.css">
+
+<script src="__PUBLIC__/js/messager.js"></script>
+<script src="__JS__/app.js"></script>
+<script type="text/javascript">
+(function(){
+	var SentCMS = window.Sent = {
+	"ROOT"   : "__ROOT__", //当前网站地址
+	"APP"    : "__APP__", //当前项目地址
+	"PUBLIC" : "__PUBLIC__", //项目公共目录地址
+	"DEEP"   : "{:config('URL_PATHINFO_DEPR')}", //PATHINFO分割符
+	"MODEL"  : ["{:config('URL_MODEL')}", "{:config('URL_CASE_INSENSITIVE')}", "{:config('URL_HTML_SUFFIX')}"],
+	"VAR"    : ["{:config('VAR_MODULE')}", "{:config('VAR_CONTROLLER')}", "{:config('VAR_ACTION')}"]
+	}
+})();
+</script>
+<script src="__PUBLIC__/js/core.js"></script>
+{block name="script"}{/block}
+</body>
+</html>

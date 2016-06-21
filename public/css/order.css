@@ -1,0 +1,24 @@
+.red{color: #d9534f;}
+
+.header{}
+.logo{padding: 30px 0;}
+.logo img{height: 60px;}
+
+.no-data{text-align: center; line-height: 100px; font-size: 24px;}
+
+.order_title{border-bottom: 1px solid #dcdcdc; line-height: 30px; color: #000000; padding: 0 10px; font-weight: bold;}
+
+.payment-list{position:relative; padding: 20px 0;}
+.payment-list li{position:relative;display:block;border:1px solid  #f1f1f1;padding-bottom:10px;text-align:center;width:194px;height:106px;float:left;cursor:pointer;margin-right:10px;margin-bottom:10px}
+.payment-list li label{padding:8px;margin-bottom:4px;border-bottom:1px solid #e4e4e4;display:block}
+.payment-list li:hover label{background-color:#fffae5}
+.payment-list li.selected{-webkit-box-shadow:5px 5px 0 #e3e3e3;-moz-box-shadow:5px 5px 0 #e3e3e3;box-shadow:5px 5px 0 #e3e3e3;border:1px solid #ffe580}
+.payment-list li.selected label{background-color:#fff5cc}
+.payment-list li input{display:none}
+
+.price_count{padding: 20px 0;}
+.price_count p{background: #efefef; margin: 0; padding: 15px;}
+.price_count p span{color: #d9534f;}
+
+.footer{background: #ffffff; border-top: 3px solid #F0EFF7; margin-top: 20px;}
+.footer p{padding: 0; margin: 0; line-height: 50px; text-align: center;}

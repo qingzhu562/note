@@ -1,0 +1,31 @@
+{extend name="public/base" /}
+{block name="body"}
+<form method="post" class="form form-horizontal">
+	<div class="tabs-wrapper">
+		<ul class="nav nav-tabs">
+			{volist name="fieldGroup" id="vGroup"}
+			<li {if $i eq 1}class="active"{/if}><a href="#tab{$key}" data-toggle="tab">{$key}</a></li>
+			{/volist}
+		</ul>
+		<div class="tab-content">
+			{volist name="fieldGroup" id="vGroup"}
+			<div class="tab-pane fade {if condition="$i eq 1"}in active{/if}" id="tab{$key}">
+				{volist name="vGroup" id="field"}
+				{if $field['type'] eq 'hidden'}
+				<input type="hidden" name="{$field['name']}" value="{$info[$field['name']]|default=''}"/>
+				{else/}
+				<div class="form-group">
+					<label class="col-lg-2 control-label">{$field['title']|htmlspecialchars}</label>
+					<div class="col-lg-8 col-sm-10">
+						{:widget('common/Form/show',array($field,$info))}
+						<div class="help-block">{$field['help']|default=''}</div>
+					</div>
+				</div>
+				{/if}
+				{/volist}
+			</div>
+			{/volist}
+		</div>
+	</div>
+</form>
+{/block}

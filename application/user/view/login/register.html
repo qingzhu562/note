@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta charset="UTF-8">
+<title>用户注册</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/bootstrap/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/libs/font-awesome.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/libs/nanoscroller.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/common.css"/>
+<!-- <link href='//fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400' rel='stylesheet' type='text/css'> -->
+<link rel="stylesheet" type="text/css" href="__CSS__/style.css"/>
+<script src="__PUBLIC__/js/jquery.js"></script>
+<!--[if lt IE 9]>
+<script src="__PUBLIC__/js/html5shiv.js"></script>
+<script src="__PUBLIC__/js/respond.min.js"></script>
+<![endif]-->
+</head>
+<body>
+<body id="login-page-full">
+	<div id="login-full-wrapper">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<div id="login-box">
+						<div id="login-box-holder">
+							<div class="row">
+								<div class="col-xs-12">
+									<div id="login-box-inner">
+										<form role="form" method="post">
+											<div class="input-group">
+												<span class="input-group-addon"> <i class="fa fa-user"></i>
+												</span>
+												<input class="form-control" name="username" type="text" placeholder="登录账户"></div>
+											<div class="input-group">
+												<span class="input-group-addon"> <i class="fa fa-key"></i>
+												</span>
+												<input type="password" name="password" class="form-control" placeholder="密码"></div>
+											<div class="input-group">
+												<span class="input-group-addon"> <i class="fa fa-key"></i>
+												</span>
+												<input type="password" name="repassword" class="form-control" placeholder="确认密码"></div>
+											<div class="input-group">
+												<span class="input-group-addon"> <i class="fa fa-qrcode"></i>
+												</span>
+												<input type="text" name="verify" class="form-control" placeholder="验证码">
+												<span class="input-group-addon reloadverify"><img src="{:url('user/index/verify')}" alt="验证码" height="40" class="verifyimg"></span>
+											</div>
+											<div class="row">
+												<div class="col-xs-12">
+													<button type="submit" class="btn btn-success col-xs-12">
+														<span class="hidden">
+															<i class="fa-loading"></i>
+															注 册 中 ...
+														</span>
+														<span class="show">注 册</span>
+													</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="login-box-footer">
+							<div class="row">
+								<div class="col-xs-12">
+									版权所有
+									&copy; <a href="http://www.tensent.cn" target="_blank">TenSent,Inc.</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script src="__PUBLIC__/js/messager.js"></script>
+<script type="text/javascript">
+$(function(){
+
+	/* 登陆表单获取焦点变色 */
+	$(".login-form").on("focus", "input", function(){
+		$(this).closest('.item').addClass('focus');
+	}).on("blur","input",function(){
+		$(this).closest('.item').removeClass('focus');
+	});
+
+	//表单提交
+	$(document).ajaxStart(function(){
+		$("button:submit").addClass("log-in").attr("disabled", true);
+	}).ajaxStop(function(){
+		$("button:submit").removeClass("log-in").attr("disabled", false);
+	});
+
+	$("form").submit(function(){
+		var self = $(this);
+		$.post(self.attr("action"), self.serialize(), success, "json");
+		return false;
+
+		function success(data){
+			if(data.code){
+				window.location.href = data.url;
+			} else {
+				$.messager.show(data.msg, {placement: 'center',type:'success'});
+				//刷新验证码
+				$(".reloadverify").click();
+			}
+		}
+	});
+	//初始化选中用户名输入框
+	$("#itemBox").find("input[name=username]").focus();
+	//刷新验证码
+	var verifyimg = $(".verifyimg").attr("src");
+	$(".reloadverify").click(function(){
+		if( verifyimg.indexOf('?')>0){
+			$(".verifyimg").attr("src", verifyimg+'&random='+Math.random());
+		}else{
+			$(".verifyimg").attr("src", verifyimg.replace(/\?.*$/,'')+'?'+Math.random());
+		}
+	});
+
+	//placeholder兼容性
+	//如果支持 
+	function isPlaceholer(){
+		var input = document.createElement('input');
+		return "placeholder" in input;
+	}
+	//如果不支持
+	if(!isPlaceholer()){
+		$(".placeholder_copy").css({display:'block'})
+		$("#itemBox input").keydown(function(){
+			$(this).parents(".item").next(".placeholder_copy").css({display:'none'})                    
+		})
+		$("#itemBox input").blur(function(){
+			if($(this).val()==""){
+				$(this).parents(".item").next(".placeholder_copy").css({display:'block'})                      
+			}
+		})
+	}
+});
+</script>

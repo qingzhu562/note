@@ -1,0 +1,50 @@
+{extend name="public/base" /}
+{block name="body"}
+<div class="tabs-wrapper">
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#editpw" data-toggle="tab">我的订单</a></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane fade in active" id="editpw">
+			{volist name="list" id="item"}
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					订单号：{$item['order_no']}（{$item['create_time']|date='Y-m-d',###}）
+					<span class="pull-right">
+					{if $item['pay_status']}
+					已付款
+					{else/}
+					<a href="{:url('user/order/cancel',array('order_id'=>$item['id']))}" class="ajax-get"><i class="fa fa-close"></i> 取消订单</a>
+					<a href="{:url('user/order/lists',array('order_id'=>$item['id']))}" target="_blank" class="text-danger">付款</a> 
+					{/if}
+					</span>
+				</div>
+				<table class="table">
+					<tr>
+						<th>图书</th>
+						<th>图书名称</th>
+						<th>操作</th>
+					</tr>
+					{volist name="item['product']" id="product"}
+					<tr>
+						<td width="80">
+							<a href="{:url('index/book/detail', array('id'=>$product['product_id']))}" target="_blank"><img src="{:get_cover($product->book['cover_id'],'path')}" alt="{$product->book['book_name']}" width="60"></a>
+						</td>
+						<td>
+							<a href="{:url('index/book/detail', array('id'=>$product['product_id']))}" target="_blank">{$product->book['book_name']}</a>
+						</td>
+						<td width="120">
+							{if $item['pay_status']}
+							<a href="{:url('user/upload/download',array('order_id'=>$item['id'],'product_id'=>$product['product_id']))}" target="_blank">下载图书</a>
+							{/if}
+						</td>
+					</tr>
+					{/volist}
+				</table>
+			</div>
+			{/volist}
+			{$page}
+		</div>
+	</div>
+</div>
+{/block}

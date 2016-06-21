@@ -1,0 +1,8 @@
+{volist name="__MENU__" id="submenu"}
+<ul class="left-nav">
+	<h3><i class="fa fa-cube"></i> {$key}</h3>
+	{volist name="submenu" id="item"}
+	<li class="{$item['active']}"><a href="{$item['url']|get_nav_url}"><i class="fa fa-{$item['icon']|default='list'}"></i> {$item['title']}</a> <span class="pull-right"><i class="fa fa-chevron-right text-primary"></i></span></li>
+	{/volist}
+</ul>
+{/volist}
