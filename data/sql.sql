@@ -327,7 +327,7 @@ CREATE TABLE IF NOT EXISTS `sent_auth_rule` (
 
 -- --------------------------------------------------------
 INSERT INTO `sent_auth_rule` (`id`, `module`, `type`, `name`, `title`, `group`, `status`, `condition`) VALUES
-(1, 'admin', 2, 'admin/order/index', '订单管理', '会员管理', 1, ''),
+(1, 'admin', 2, 'admin/index/index', '后台首页', '首页管理', 1, ''),
 (2, 'admin', 2, 'admin/form/index', '自定义表单', '运营管理', 1, ''),
 (3, 'admin', 2, 'admin/addons/hooks', '钩子列表', '扩展管理', 1, ''),
 (4, 'admin', 2, 'admin/addons/index', '插件列表', '扩展管理', 1, ''),
@@ -347,7 +347,7 @@ INSERT INTO `sent_auth_rule` (`id`, `module`, `type`, `name`, `title`, `group`, 
 (18, 'admin', 2, 'admin/menu/index', '菜单管理', '系统管理', 1, ''),
 (19, 'admin', 2, 'admin/config/group', '配置管理', '系统管理', 1, ''),
 (20, 'admin', 2, 'admin/index/clear', '更新缓存', '首页管理', 1, ''),
-(21, 'admin', 1, 'admin/index/index', '后台首页', '首页管理', 1, ''),
+(21, 'admin', 1, 'admin/config/add', '配置添加', '系统管理', 1, ''),
 (22, 'admin', 2, 'admin/content/index', '内容列表', '内容管理', 1, ''),
 (23, 'admin', 2, 'admin/content/add', '内容添加', '内容管理', 1, ''),
 (24, 'admin', 1, 'admin/content/edit', '内容编辑', '内容管理', 1, ''),
@@ -1388,8 +1388,7 @@ INSERT INTO `sent_menu` (`id`, `title`, `type`, `icon`, `pid`, `sort`, `url`, `h
 (22, '广告管理', 'admin', 'cc', 5, 0, 'admin/ad/index', 0, '', '运营管理', 0, 0),
 (23, '插件列表', 'admin', 'usb', 6, 0, 'admin/addons/index', 0, '', '插件管理', 0, 0),
 (24, '钩子列表', 'admin', 'code', 6, 0, 'admin/addons/hooks', 0, '', '插件管理', 0, 0),
-(25, '自定义表单', 'admin', '', 5, 0, 'admin/form/index', 0, '', '运营管理', 0, 0),
-(27, '订单管理', 'admin', '', 4, 0, 'admin/order/index', 0, '', '订单管理', 0, 0);
+(25, '自定义表单', 'admin', '', 5, 0, 'admin/form/index', 0, '', '运营管理', 0, 0);
 
 -- --------------------------------------------------------
 
