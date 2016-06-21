@@ -70,29 +70,6 @@ CREATE TABLE IF NOT EXISTS `sent_action_log` (
 -- 转存表中的数据 `sent_action_log`
 --
 
-INSERT INTO `sent_action_log` (`id`, `action_id`, `user_id`, `action_ip`, `model`, `record_id`, `remark`, `status`, `create_time`) VALUES
-(90, 9, 1, 2130706433, 'channel', 7, '操作url：/admin/channel/edit.html?id=7&pid=0', 1, 1464875426),
-(89, 9, 1, 2130706433, 'channel', 7, '操作url：/admin/channel/edit.html?id=7&pid=0', 1, 1464831607),
-(88, 9, 1, 2130706433, 'channel', 7, '操作url：/admin/channel/edit.html?id=7&pid=0', 1, 1464831571),
-(87, 9, 1, 2130706433, 'channel', 0, '操作url：/admin/channel/del.html?id=20', 1, 1464831558),
-(86, 10, 1, 2130706433, 'Menu', 26, '操作url：/admin/menu/add.html?pid=3', 1, 1464830087),
-(85, 9, 1, 2130706433, 'channel', 1, '操作url：/admin/channel/edit.html?id=1&pid=0', 1, 1464490544),
-(84, 7, 1, 2130706433, 'model', 4, '操作url：/admin/model/update.html', 1, 1464401211),
-(83, 9, 1, 2130706433, 'channel', 7, '操作url：/admin/channel/edit.html?id=7&pid=0', 1, 1464013991),
-(91, 7, 1, 2130706433, 'model', 9, '操作url：/admin/model/update.html', 1, 1465006481),
-(92, 7, 1, 2130706433, 'model', 10, '操作url：/admin/model/update.html', 1, 1465702527),
-(93, 7, 1, 2130706433, 'model', 10, '操作url：/admin/model/update.html', 1, 1465702735),
-(94, 7, 1, 2130706433, 'model', 10, '操作url：/admin/model/update.html', 1, 1465702774),
-(95, 7, 1, 2130706433, 'model', 10, '操作url：/admin/model/update.html', 1, 1465703849),
-(96, 7, 1, 2130706433, 'model', 10, '操作url：/admin/model/update.html', 1, 1465703876),
-(97, 7, 1, 2130706433, 'model', 10, '操作url：/admin/model/update.html', 1, 1465714184),
-(98, 7, 1, 2130706433, 'model', 10, '操作url：/admin/model/update.html', 1, 1465714232),
-(99, 7, 1, 2130706433, 'model', 10, '操作url：/admin/model/update.html', 1, 1465714591),
-(100, 7, 1, 2130706433, 'model', 10, '操作url：/sentcms_think/admin/model/update.html', 1, 1465895662),
-(101, 7, 1, 2130706433, 'model', 10, '操作url：/sentcms_think/admin/model/update.html', 1, 1465895688),
-(102, 10, 1, 2130706433, 'Menu', 27, '操作url：/sentcms_think/admin/menu/add.html?pid=4', 1, 1465896029),
-(103, 7, 1, 2130706433, 'model', 10, '操作url：/admin/model/update.html', 1, 1465919504);
-
 -- --------------------------------------------------------
 
 --
@@ -270,28 +247,7 @@ INSERT INTO `sent_attribute` (`id`, `name`, `title`, `length`, `type`, `value`, 
 (31, 'content', '内容', '', 'editor', '', '', 1, '', 4, 0, 0, 0, 0, '', 0, '', '0', '', 0, '0'),
 (32, 'create_time', '创建时间', '11', 'datetime', '', '', 1, '', 4, 0, 0, 0, 0, '', 0, '', '0', '', 0, '0'),
 (33, 'update_time', '更新时间', '11', 'datetime', '', '', 1, '', 4, 0, 0, 0, 0, '', 0, '', '0', '', 0, '0'),
-(34, 'book_name', '书名', '500', 'text', '', '书名', 1, '', 10, 1, 0, 1465702694, 1465702578, '', 0, '', '0', '', 0, '0'),
-(35, 'book_list_no', '书目号', '20', 'text', '', '', 1, '', 10, 0, 0, 1465702614, 1465702614, '', 0, '', '0', '', 0, '0'),
-(36, 'book_bar_code', '条码', '50', 'text', '', '', 1, '', 10, 0, 0, 1465702677, 1465702632, '', 0, '', '0', '', 0, '0'),
-(37, 'book_no', '书号/标准号', '60', 'text', '', '', 1, '', 10, 0, 0, 1465702667, 1465702667, '', 0, '', '0', '', 0, '0'),
-(38, 'status', '状态', '1', 'select', '', '', 1, '1:启用\r\n0:禁用', 10, 0, 0, 1465703795, 1465703795, '', 0, '', '0', '', 0, '0'),
-(39, 'cover_id', '图书封面', '11', 'image', '', '', 1, '', 10, 0, 0, 1465703830, 1465703830, '', 0, '', '0', '', 0, '0'),
-(40, 'stand_class', '图书标准类型', '1', 'select', '', '', 1, '1:GB\r\n2:ZB\r\n3:GZ', 10, 0, 0, 1465713518, 1465713518, '', 0, '', '0', '', 0, '0'),
-(41, 'publish_date', '出版日期', '20', 'text', '', '', 1, '', 10, 0, 0, 1465713545, 1465713545, '', 0, '', '0', '', 0, '0'),
-(42, 'shop_place', '门市仓位', '20', 'text', '', '', 1, '', 10, 0, 0, 1465713574, 1465713574, '', 0, '', '0', '', 0, '0'),
-(43, 'storage_place', '内仓仓位', '20', 'text', '', '', 1, '', 10, 0, 0, 1465713591, 1465713591, '', 0, '', '0', '', 0, '0'),
-(44, 'book_name_en', '英文标准名称', '500', 'text', '', '', 1, '', 10, 0, 0, 1465713616, 1465713616, '', 0, '', '0', '', 0, '0'),
-(45, 'book_name_mn', '蒙文标准名称', '500', 'text', '', '', 1, '', 10, 0, 0, 1465713634, 1465713634, '', 0, '', '0', '', 0, '0'),
-(46, 'book_name_rs', '俄文标准名称', '500', 'text', '', '', 1, '', 10, 0, 0, 1465713652, 1465713652, '', 0, '', '0', '', 0, '0'),
-(47, 'remark', '备注', '', 'textarea', '', '', 1, '', 10, 0, 0, 1465714043, 1465714043, '', 0, '', '0', '', 0, '0'),
-(48, 'sort', '排序', '11', 'num', '', '', 1, '', 10, 0, 0, 1465714070, 1465714070, '', 0, '', '0', '', 0, '0'),
-(49, 'user_last_modify', '最后修改者', '11', 'textarea', '', '', 0, '', 10, 0, 0, 1465714134, 1465714093, '', 0, '', '0', '', 0, '0'),
-(50, 'date_last_modify', '最后修改日期', '11', 'datetime', '', '', 0, '', 10, 0, 0, 1465714562, 1465714122, '', 0, '', '0', '', 0, '0'),
-(51, 'price', '单价', '9,2', 'decimal', '', '', 1, '', 10, 0, 0, 1465714570, 1465714287, '', 0, '', '0', '', 0, '0'),
-(52, 'file', '图书文件', '11', 'attach', '', '', 1, '', 10, 0, 0, 1465714634, 1465714634, '', 0, '', '0', '', 0, '0'),
-(53, 'create_time', '发布时间', '11', 'datetime', '', '', 1, '', 10, 0, 0, 1465895610, 1465895610, '', 0, '', '0', '', 0, '0'),
-(54, 'content', '图书内容', '', 'editor', '', '', 1, '', 10, 0, 0, 1465895637, 1465895637, '', 0, '', '0', '', 0, '0'),
-(55, 'is_top', '是否置顶', '1', 'bool', '0', '', 1, '0:否\r\n1:是', 1, 0, 0, 1466041260, 1466041226, '', 0, '', '0', '', 0, '0');
+(34, 'is_top', '是否置顶', '1', 'bool', '0', '', 1, '0:否\r\n1:是', 1, 0, 0, 1466041260, 1466041226, '', 0, '', '0', '', 0, '0');
 
 -- --------------------------------------------------------
 
@@ -405,44 +361,6 @@ INSERT INTO `sent_auth_rule` (`id`, `module`, `type`, `name`, `title`, `group`, 
 (32, 'admin', 1, 'admin/category/move', '栏目移动', '内容管理', 1, ''),
 (33, 'admin', 1, 'admin/category/status', '栏目状态', '内容管理', 1, '');
 
---
--- 表的结构 `sent_book`
---
-
-DROP TABLE IF EXISTS `sent_book`;
-CREATE TABLE IF NOT EXISTS `sent_book` (
-  `id` int(11) unsigned NOT NULL COMMENT '主键',
-  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户uid',
-  `book_name` varchar(500) NOT NULL COMMENT '书名',
-  `book_list_no` varchar(20) DEFAULT NULL,
-  `book_bar_code` varchar(50) DEFAULT NULL,
-  `book_no` varchar(60) DEFAULT NULL,
-  `status` int(1) DEFAULT NULL,
-  `cover_id` int(11) DEFAULT NULL,
-  `stand_class` int(1) DEFAULT NULL,
-  `publish_date` varchar(20) DEFAULT NULL,
-  `shop_place` varchar(20) DEFAULT NULL,
-  `storage_place` varchar(20) DEFAULT NULL,
-  `book_name_en` varchar(500) DEFAULT NULL,
-  `book_name_mn` varchar(500) DEFAULT NULL,
-  `book_name_rs` varchar(500) DEFAULT NULL,
-  `remark` text,
-  `sort` int(11) DEFAULT NULL,
-  `user_last_modify` tinytext,
-  `date_last_modify` int(11) DEFAULT NULL,
-  `price` decimal(9,2) DEFAULT NULL,
-  `file` varchar(11) DEFAULT NULL,
-  `create_time` int(11) DEFAULT NULL,
-  `content` text
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='图书';
-
---
--- 转存表中的数据 `sent_book`
---
-
-INSERT INTO `sent_book` (`id`, `uid`, `book_name`, `book_list_no`, `book_bar_code`, `book_no`, `status`, `cover_id`, `stand_class`, `publish_date`, `shop_place`, `storage_place`, `book_name_en`, `book_name_mn`, `book_name_rs`, `remark`, `sort`, `user_last_modify`, `date_last_modify`, `price`, `file`, `create_time`, `content`) VALUES
-(1, 0, 'PHP基础教程入门', '', '', '', 1, 29, 1, '2016-6', '', '', 'PHP基础教程入门', 'PHP基础教程入门', 'PHP基础教程入门', '', 10, NULL, 1465895710, '10.00', '', 0, '<p>PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门</p>');
-
 -- --------------------------------------------------------
 
 --
@@ -523,25 +441,7 @@ CREATE TABLE IF NOT EXISTS `sent_channel` (
 --
 
 INSERT INTO `sent_channel` (`id`, `pid`, `title`, `url`, `sort`, `icon`, `color`, `band_color`, `band_text`, `active`, `create_time`, `update_time`, `status`, `target`) VALUES
-(1, 0, '网站首页', 'index/index/index', 1, 'home', '', '', '', 'home', 1379475111, 1464490544, 1, 0),
-(2, 0, '本院简介', 'index/content/detail?model_id=4&id=1', 2, '', '', '', '', 'news', 1379475131, 1379483713, 1, 0),
-(3, 0, '组织机构', '#', 3, '', '', '', '', 'page', 1379475131, 1379483713, 1, 0),
-(4, 0, '新闻动态', 'index/content/lists?model=article&id=1', 4, '', '', '', '', 'news', 0, 0, 1, 0),
-(5, 0, '通知公告', 'index/content/lists?model=article&id=4', 5, '', '', '', '', '', 0, 0, 1, 0),
-(6, 0, '管理条例', 'index/content/lists?model=article&id=5', 6, '', '', '', '', '', 0, 0, 1, 0),
-(7, 0, '在线图书', 'index/book/index', 7, 'book', '', '', '', '', 0, 1464875426, 1, 0),
-(8, 0, '学生工作', 'index/content/lists?model=article&id=7', 8, '', '', '', '', '', 0, 0, 1, 0),
-(9, 3, '院领导', 'index/content/detail?model_id=4&id=2', 1, '', '', '', '', '', 0, 0, 1, 0),
-(10, 3, '办公室', 'index/content/detail?model_id=4&id=3', 2, '', '', '', '', '', 0, 0, 1, 0),
-(11, 3, '档案室', 'index/content/detail?model_id=4&id=4', 3, '', '', '', '', '', 0, 0, 1, 0),
-(12, 3, 'MODIS数据中心', 'index/content/detail?model_id=4&id=5', 4, '', '', '', '', '', 0, 0, 1, 0),
-(13, 3, '3S综合应用中心', 'index/content/detail?model_id=4&id=6', 5, '', '', '', '', '', 0, 0, 1, 0),
-(14, 3, 'GIS二次开发中心', 'index/content/detail?model_id=4&id=7', 6, '', '', '', '', '', 0, 0, 1, 0),
-(15, 3, '遥感数据综合应用中心', 'index/content/detail?model_id=4&id=8', 7, '', '', '', '', '', 0, 0, 1, 0),
-(16, 3, '蒙古高原研究中心', 'index/content/detail?model_id=4&id=9', 9, '', '', '', '', '', 0, 0, 1, 0),
-(17, 3, '资源与环境高校开放实验室', 'index/content/detail?model_id=4&id=10', 10, '', '', '', '', '', 0, 0, 1, 0),
-(18, 4, '国内动态', 'index/content/lists?model=article&id=2', 1, '', '', '', '', '', 0, 0, 1, 0),
-(19, 4, '国外动态', 'index/content/lists?model=article&id=3', 1, '', '', '', '', '', 0, 0, 1, 0);
+(1, 0, '网站首页', 'index/index/index', 1, 'home', '', '', '', 'home', 1379475111, 1464490544, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -1319,29 +1219,14 @@ CREATE TABLE IF NOT EXISTS `sent_link` (
   `update_time` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
   `uid` int(7) NOT NULL DEFAULT '0' COMMENT '用户ID ',
   `status` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `sent_link`
 --
 
 INSERT INTO `sent_link` (`id`, `ftype`, `title`, `url`, `cover_id`, `descrip`, `sort`, `hits`, `update_time`, `uid`, `status`) VALUES
-(5, 1, '腾速科技', 'http://www.tensent.cn', 0, '', 0, 0, 1462496026, 0, 1),
-(6, 2, '学生', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(7, 2, '教职工', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(8, 2, '校友', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(9, 2, '访客', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(10, 2, '申请入读', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(11, 3, '办公电话', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(12, 3, '二级学院', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(13, 3, '管理机构', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(14, 3, '科研院所', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(15, 3, '师大校历', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(16, 4, '信息门户', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(17, 4, '电子邮件', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(18, 4, '图书馆', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(19, 4, '校园网登陆/注销', '#', 0, '', 0, 0, 1462496026, 0, 1),
-(20, 4, 'VPN服务', '#', 0, '', 0, 0, 1462496026, 0, 1);
+(1, 1, '腾速科技', 'http://www.tensent.cn', 0, '', 0, 0, 1462496026, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -1380,11 +1265,7 @@ CREATE TABLE IF NOT EXISTS `sent_member` (
 --
 
 INSERT INTO `sent_member` (`uid`, `username`, `password`, `nickname`, `email`, `mobile`, `sex`, `birthday`, `qq`, `score`, `signature`, `pos_province`, `pos_city`, `pos_district`, `pos_community`, `salt`, `login`, `reg_ip`, `reg_time`, `last_login_ip`, `last_login_time`, `status`) VALUES
-(1, 'admin', 'e927747ef39033eca386584ef290949c', '系统管理员', 'admin@admin.com', '', 1, '0000-00-00', '707479167', 0, '测试用户签名', 0, 0, 0, 0, 'YsIplN', 131, 0, 1455846185, 2130706433, 1465894850, 1),
-(14, 'molong', '73a3f0888ccb71bfae880ac2d93348b3', '墨龙', 'molong@tensent.cn', NULL, 1, '0000-00-00', '707479167', 0, '你好', 0, 0, 0, 0, 'lKywMh', 4, 0, 0, 2130706433, 1465726278, 1),
-(15, 'tensent', '57a0420247722a08603bb5b21e4e0081', '', NULL, NULL, 0, '0000-00-00', '', 0, NULL, 0, 0, 0, 0, 'jRrWYt', 0, 0, 0, 0, 0, 1),
-(24, 'ycgpp', 'd038beecf852988d26425c0d9c70c186', 'ycgpp', '', NULL, 1, '0000-00-00', '', 0, '无话可说无话可说无话可说', 0, 0, 0, 0, 'vtBNan', 5, 0, 0, 2130706433, 1464529314, 1);
-
+(1, 'admin', 'e927747ef39033eca386584ef290949c', '系统管理员', 'admin@admin.com', '', 1, '0000-00-00', '707479167', 0, '测试用户签名', 0, 0, 0, 0, 'YsIplN', 131, 0, 1455846185, 2130706433, 1465894850, 1);
 -- --------------------------------------------------------
 
 --
@@ -1553,80 +1434,7 @@ INSERT INTO `sent_model` (`id`, `name`, `title`, `extend`, `icon`, `relation`, `
 (1, 'document', '通用模型', 0, '', '', 1, 1, '{"1":["17","16","19","20","14","13","4","3","2","5","12","11","10"]}', '1:基础,2:扩展', '1,7,8,9,10,2,11,12,13,3,4,14,25,15,5,6,23,22,24', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', 1450088499, 1454054412, 1, 'MyISAM'),
 (2, 'article', '文章', 1, 'file-word-o', '', 1, 1, '{"1":["3","2","4","25","12","5","24","55"],"2":["11","10","13","19","17","16","14","20"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', 1453859167, 1466042056, 1, 'MyISAM'),
 (3, 'photo', '图片', 1, 'file-image-o', '', 1, 1, '{"1":["3","2","4","12","26","5","27","55"],"2":["11","10","19","13","16","17","14","20"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', 1454052310, 1466042066, 1, 'MyISAM'),
-(4, 'page', '单页', 2, 'file-text-o', '', 1, 1, '{"1":["28","30","31","32","33"]}', '1:基础', '', '', '', 'id:ID\r\ntitle:标题\r\nupdate_time:更新时间', 10, '', '', 1456296668, 1464401211, 1, 'MyISAM'),
-(10, 'book', '图书', 2, 'book', '', 1, 1, '{"1":["34","39","45","44","46","41","51","47","54","38"],"2":["52","53","43","48","42","40","37","36","35"]}', '1:基础,2:扩展', NULL, '', '', 'id:ID\r\nbook_name:书名', 10, '', '', 1465702527, 1465895688, 1, 'MyISAM');
-
--- --------------------------------------------------------
-
---
--- 表的结构 `sent_module`
---
-
-DROP TABLE IF EXISTS `sent_module`;
-CREATE TABLE IF NOT EXISTS `sent_module` (
-  `id` int(11) NOT NULL,
-  `name` varchar(30) NOT NULL COMMENT '模块名',
-  `alias` varchar(30) NOT NULL COMMENT '中文名',
-  `version` varchar(20) NOT NULL COMMENT '版本号',
-  `is_com` tinyint(4) NOT NULL COMMENT '是否商业版',
-  `show_nav` tinyint(4) NOT NULL COMMENT '是否显示在导航栏中',
-  `summary` varchar(200) NOT NULL COMMENT '简介',
-  `developer` varchar(50) NOT NULL COMMENT '开发者',
-  `website` varchar(200) NOT NULL COMMENT '网址',
-  `entry` varchar(50) NOT NULL COMMENT '前台入口',
-  `is_setup` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否已安装',
-  `sort` int(11) NOT NULL DEFAULT '0' COMMENT '模块排序',
-  `icon` varchar(20) NOT NULL,
-  `can_uninstall` tinyint(4) NOT NULL,
-  `admin_entry` varchar(50) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='模块管理表';
-
---
--- 转存表中的数据 `sent_module`
---
-
-INSERT INTO `sent_module` (`id`, `name`, `alias`, `version`, `is_com`, `show_nav`, `summary`, `developer`, `website`, `entry`, `is_setup`, `sort`, `icon`, `can_uninstall`, `admin_entry`) VALUES
-(1, 'Home', '网站主页', '1.0.0', 0, 1, '首页模块，主要用于展示网站内容', '南昌腾速科技有限公司', 'http://www.tensent.cn', 'Home/index/index', 1, 0, 'home', 0, 'Admin/index/index'),
-(2, 'User', '用户中心', '1.0.0', 0, 1, '用户中心模块，系统核心模块', '南昌腾速科技有限公司', 'http://www.tensent.cn', 'User/index/index', 1, 0, 'user', 0, 'Admin/User/index');
-
--- --------------------------------------------------------
-
---
--- 表的结构 `sent_order`
---
-
-DROP TABLE IF EXISTS `sent_order`;
-CREATE TABLE IF NOT EXISTS `sent_order` (
-  `id` int(11) unsigned NOT NULL COMMENT '主键',
-  `order_no` varchar(30) NOT NULL COMMENT '订单编号',
-  `uid` int(11) NOT NULL COMMENT '用户UID',
-  `price_count` decimal(9,2) DEFAULT NULL COMMENT '订单总价',
-  `pay_type` varchar(20) NOT NULL DEFAULT 'wechat' COMMENT '支付方式',
-  `pay_status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '支付状态',
-  `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态',
-  `create_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
-  `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间'
-) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单表';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `sent_order_product`
---
-
-DROP TABLE IF EXISTS `sent_order_product`;
-CREATE TABLE IF NOT EXISTS `sent_order_product` (
-  `id` int(11) unsigned NOT NULL COMMENT '主键',
-  `order_no` varchar(30) NOT NULL COMMENT '订单编号',
-  `product_id` int(11) NOT NULL COMMENT '产品ID',
-  `num` int(11) NOT NULL COMMENT '购买数量',
-  `price` int(11) NOT NULL COMMENT '购买单价',
-  `price_count` int(11) NOT NULL COMMENT '购买总价',
-  `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态',
-  `craete_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
-  `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间'
-) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单产品';
-
+(4, 'page', '单页', 2, 'file-text-o', '', 1, 1, '{"1":["28","30","31","32","33"]}', '1:基础', '', '', '', 'id:ID\r\ntitle:标题\r\nupdate_time:更新时间', 10, '', '', 1456296668, 1464401211, 1, 'MyISAM');
 -- --------------------------------------------------------
 
 --
@@ -1676,42 +1484,7 @@ CREATE TABLE IF NOT EXISTS `sent_picture` (
   `sha1` char(40) NOT NULL DEFAULT '' COMMENT '文件 sha1编码',
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间'
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
-
---
--- 转存表中的数据 `sent_picture`
---
-
-INSERT INTO `sent_picture` (`id`, `path`, `url`, `md5`, `sha1`, `status`, `create_time`) VALUES
-(1, '/uploads/picture/2016-05-11/5733139be0794.png', '', '81ce977a5d7c5ca65e569e8b219d495d', '631d88934fdc0b8b076be11b16dd0b2198393db7', 1, 0),
-(2, '/uploads/picture/2016-05-11/573313b0b542b.jpg', '', '30d8360d72b8094157a3437d55bdee0a', 'f74226c1ea337c8c20e54491ab74093936d2bede', 1, 0),
-(3, '/uploads/picture/2016-05-11/5733141fae525.png', '', 'a0e7ccb947ef0aa95dc0ce50a5de7c05', '700123d0749aaecebeae5f54334fa279502a57f6', 1, 0),
-(4, '/uploads/picture/2016-05-11/57331457e098e.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', 1, 0),
-(5, '/uploads/picture/2016-05-11/573314ac38d86.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', 1, 0),
-(6, '/uploads/picture/2016-05-11/573314fd2c3f5.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', 1, 0),
-(7, '/uploads/picture/2016-05-11/5733151e7101d.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', 1, 0),
-(8, '/uploads/picture/2016-05-11/5733153062aec.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', 1, 0),
-(9, '/uploads/picture/2016-05-11/573315afad7a1.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', 1, 0),
-(10, '/uploads/picture/2016-05-11/57331680ae053.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', 1, 0),
-(11, '/uploads/picture/2016-05-11/5733169e11942.jpg', '', '30d8360d72b8094157a3437d55bdee0a', 'f74226c1ea337c8c20e54491ab74093936d2bede', 1, 0),
-(12, '/uploads/picture/2016-05-11/5733170c02baf.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', 1, 0),
-(13, '/uploads/picture/2016-05-11/5733172bf2a85.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', 1, 0),
-(14, '/uploads/picture/2016-05-11/573317546db5d.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', 1, 0),
-(15, '/uploads/picture/2016-06-04/575258deaaf50.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', 1, 0),
-(16, '/uploads/picture/2016-06-05/57539462a20b8.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', 1, 0),
-(17, '/uploads/picture/2016-06-05/575395e576640.jpg', '', 'f236e7fa3dc02ff1cc87031098797387', '76f41d4c21af5e433b1a48bf8da0e3a78b3d979f', 1, 0),
-(18, '/uploads/picture/2016-06-05/575409f67941d.jpg', '', 'f236e7fa3dc02ff1cc87031098797387', '76f41d4c21af5e433b1a48bf8da0e3a78b3d979f', 1, 0),
-(19, '/uploads/picture/2016-06-07/5756cbed3ea40.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', 1, 0),
-(20, '/uploads/picture/20160607/5756cc480b490.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', 1, 0),
-(21, '/uploads/picture/20160607/5756ccf66a5d3.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', 1, 0),
-(22, '/uploads/picture/20160607/5756cd41b0f8b.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', 1, 0),
-(23, '/uploads/picture/20160607/5756cd7e83a32.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', 1, 0),
-(24, '/uploads/picture/20160607/5756cd96596b5.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', 1, 0),
-(25, '/uploads/picture/20160612/575d0904d24fd.jpg', '', '342afbd18af9f4bc2cf02fdc2026161b', '7a13cb1452742e3bfaaa2887c826426d530cd1d1', 1, 0),
-(26, '/uploads/picture/20160612/575d09236a74c.jpg', '', '342afbd18af9f4bc2cf02fdc2026161b', '7a13cb1452742e3bfaaa2887c826426d530cd1d1', 1, 0),
-(27, '/uploads/picture/20160612/575d0a80c8648.jpg', '', '342afbd18af9f4bc2cf02fdc2026161b', '7a13cb1452742e3bfaaa2887c826426d530cd1d1', 1, 0),
-(28, '/uploads/picture/20160612/575d0ae42797e.jpg', '', '342afbd18af9f4bc2cf02fdc2026161b', '7a13cb1452742e3bfaaa2887c826426d530cd1d1', 1, 0),
-(29, '/uploads/picture/20160612/575d0b19451af.jpg', '', '342afbd18af9f4bc2cf02fdc2026161b', '7a13cb1452742e3bfaaa2887c826426d530cd1d1', 1, 0);
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1836,11 +1609,6 @@ ALTER TABLE `sent_auth_rule`
   ADD PRIMARY KEY (`id`),
   ADD KEY `module` (`module`,`status`,`type`);
 
---
--- Indexes for table `sent_book`
---
-ALTER TABLE `sent_book`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `sent_category`
@@ -1949,26 +1717,6 @@ ALTER TABLE `sent_model`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sent_module`
---
-ALTER TABLE `sent_module`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`),
-  ADD KEY `name_2` (`name`);
-
---
--- Indexes for table `sent_order`
---
-ALTER TABLE `sent_order`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `sent_order_product`
---
-ALTER TABLE `sent_order_product`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `sent_page`
 --
 ALTER TABLE `sent_page`
@@ -2035,11 +1783,6 @@ ALTER TABLE `sent_auth_group`
 --
 ALTER TABLE `sent_auth_rule`
   MODIFY `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT '规则id,自增主键',AUTO_INCREMENT=25;
---
--- AUTO_INCREMENT for table `sent_book`
---
-ALTER TABLE `sent_book`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `sent_category`
 --
@@ -2115,31 +1858,13 @@ ALTER TABLE `sent_menu`
 --
 ALTER TABLE `sent_model`
   MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '模型ID',AUTO_INCREMENT=11;
---
--- AUTO_INCREMENT for table `sent_module`
---
-ALTER TABLE `sent_module`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `sent_order`
---
-ALTER TABLE `sent_order`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',AUTO_INCREMENT=31;
---
--- AUTO_INCREMENT for table `sent_order_product`
---
-ALTER TABLE `sent_order_product`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',AUTO_INCREMENT=27;
---
--- AUTO_INCREMENT for table `sent_page`
---
 ALTER TABLE `sent_page`
   MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `sent_picture`
 --
 ALTER TABLE `sent_picture`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id自增',AUTO_INCREMENT=30;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id自增',AUTO_INCREMENT=1;
 --
 -- AUTO_INCREMENT for table `sent_seo_rule`
 --
