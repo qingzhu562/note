@@ -440,7 +440,7 @@ CREATE TABLE IF NOT EXISTS `sent_channel` (
 --
 
 INSERT INTO `sent_channel` (`id`, `pid`, `title`, `url`, `sort`, `icon`, `color`, `band_color`, `band_text`, `active`, `create_time`, `update_time`, `status`, `target`) VALUES
-(1, 0, '网站首页', 'index/index/index', 1, 'home', '', '', '', 'home', 1379475111, 1464490544, 1, 0),
+(1, 0, '网站首页', 'index/index/index', 1, 'home', '', '', '', 'home', 1379475111, 1464490544, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -1435,7 +1435,7 @@ INSERT INTO `sent_model` (`id`, `name`, `title`, `extend`, `icon`, `relation`, `
 (1, 'document', '通用模型', 0, '', '', 1, 1, '{"1":["17","16","19","20","14","13","4","3","2","5","12","11","10"]}', '1:基础,2:扩展', '1,7,8,9,10,2,11,12,13,3,4,14,25,15,5,6,23,22,24', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', '', '', '', 1450088499, 1454054412, 1, 'MyISAM'),
 (2, 'article', '文章', 1, 'file-word-o', '', 0, 1, '{"1":["3","2","4","25","12","5","24","55"],"2":["11","10","13","19","17","16","14","20"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', '', '', '', 1453859167, 1467019566, 1, 'MyISAM'),
 (3, 'photo', '图片', 1, 'file-image-o', '', 0, 1, '{"1":["3","2","4","12","26","5","27","55"],"2":["11","10","19","13","16","17","14","20"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', '', '', '', 1454052310, 1467019679, 1, 'MyISAM'),
-(4, 'page', '单页', 2, 'file-text-o', '', 0, 1, '{"1":["28","30","31","32","33"]}', '1:基础', '', '', '', 'id:ID\r\ntitle:标题\r\nupdate_time:更新时间', 10, '', '', '', '', '', 1456296668, 1467019686, 1, 'MyISAM'),
+(4, 'page', '单页', 2, 'file-text-o', '', 0, 1, '{"1":["28","30","31","32","33"]}', '1:基础', '', '', '', 'id:ID\r\ntitle:标题\r\nupdate_time:更新时间', 10, '', '', '', '', '', 1456296668, 1467019686, 1, 'MyISAM');
 -- --------------------------------------------------------
 
 --
