@@ -109,6 +109,8 @@ class Request
         'csv'  => 'text/csv',
     ];
 
+    protected $content;
+
     // 全局过滤规则
     protected $filter;
     // Hook扩展方法
@@ -126,6 +128,7 @@ class Request
                 $this->$name = $item;
             }
         }
+        $this->filter = Config::get('default_filter');
     }
 
     public function __call($method, $args)
@@ -177,9 +180,10 @@ class Request
      * @param array     $cookie
      * @param array     $files
      * @param array     $server
+     * @param string    $content
      * @return \think\Request
      */
-    public static function create($uri, $method = 'GET', $params = [], $cookie = [], $files = [], $server = [])
+    public static function create($uri, $method = 'GET', $params = [], $cookie = [], $files = [], $server = [], $content = null)
     {
         $server['PATH_INFO']      = '';
         $server['REQUEST_METHOD'] = strtoupper($method);
@@ -235,6 +239,7 @@ class Request
         $options['pathinfo']    = ltrim($info['path'], '/');
         $options['method']      = $server['REQUEST_METHOD'];
         $options['domain']      = $server['HTTP_HOST'];
+        $options['content']     = $content;
         self::$instance         = new self($options);
         return self::$instance;
     }
@@ -983,7 +988,7 @@ class Request
                         $value = $default;
                         break;
                     }
-                } else {
+                } elseif (!empty($filter)) {
                     // filter函数不存在时, 则使用filter_var进行过滤
                     // filter为非整形值时, 调用filter_id取得过滤id
                     $value = filter_var($value, is_int($filter) ? $filter : filter_id($filter));
@@ -1289,14 +1294,14 @@ class Request
     }
 
     /**
-     * 获取当前请求的调度信息
+     * 设置或者获取当前请求的调度信息
      * @access public
-     * @param array $dispatch 调度信息
+     * @param array  $dispatch 调度信息
      * @return array
      */
-    public function dispatch($dispatch = [])
+    public function dispatch($dispatch = null)
     {
-        if (!empty($dispatch)) {
+        if (!is_null($dispatch)) {
             $this->dispatch = $dispatch;
         }
         return $this->dispatch;
@@ -1366,4 +1371,16 @@ class Request
         }
     }
 
+    /**
+     * 设置或者获取当前请求的content
+     * @access public
+     * @return string
+     */
+    public function getContent()
+    {
+        if (is_null($this->content)) {
+            $this->content = file_get_contents('php://input');
+        }
+        return $this->content;
+    }
 }

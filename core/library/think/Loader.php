@@ -59,34 +59,38 @@ class Loader
             if (!strpos($class, '\\')) {
                 return false;
             }
-
-            // 解析命名空间
-            list($name, $class) = explode('\\', $class, 2);
-            if (isset(self::$namespace[$name])) {
-                // 根命名空间
-                $path = self::$namespace[$name];
-            } elseif (is_dir(EXTEND_PATH . $name)) {
+            $item = explode('\\', $class);
+            // 解析命名空间所在的路径
+            if (count($item) > 2 && isset(self::$namespace[$item[0] . '\\' . $item[1]])) {
+                // 子命名空间定义（仅支持二级）
+                list($ns1, $ns2, $class) = explode('\\', $class, 3);
+                $path                    = self::$namespace[$ns1 . '\\' . $ns2];
+            } elseif (isset(self::$namespace[$item[0]])) {
+                // 根命名空间定义
+                list($name, $class) = explode('\\', $class, 2);
+                $path               = self::$namespace[$name];
+            } elseif (is_dir(EXTEND_PATH . $item[0])) {
                 // 扩展类库命名空间
-                $path = EXTEND_PATH . $name . DS;
+                list($name, $class) = explode('\\', $class, 2);
+                $path               = EXTEND_PATH . $name . DS;
             } else {
-                // 非根命名空间检测
-                foreach (self::$namespace as $ns => $val) {
-                    if (strpos($ns, '\\') && 0 === strpos($name . '\\' . $class, $ns)) {
-                        $path  = $val;
-                        $class = substr($name . $class, strlen($ns));
-                        break;
+                return false;
+            }
+            // 定位文件
+            $match = false;
+            foreach ((array) $path as $p) {
+                $filename = $p . str_replace('\\', DS, $class) . EXT;
+                if (is_file($filename)) {
+                    // Win环境严格区分大小写
+                    if (IS_WIN && false === strpos(realpath($filename), $class . EXT)) {
+                        continue;
                     }
-                }
-                if (!isset($path)) {
-                    return false;
+                    $match = true;
+                    break;
                 }
             }
-            $filename = $path . str_replace('\\', DS, $class) . EXT;
-            if (is_file($filename)) {
-                // 开启调试模式Win环境严格区分大小写
-                if (IS_WIN && false === strpos(realpath($filename), $class . EXT)) {
-                    return false;
-                }
+
+            if ($match) {
                 include $filename;
             } else {
                 return false;
@@ -96,7 +100,7 @@ class Loader
     }
 
     // 注册classmap
-    public static function addMap($class, $map = '')
+    public static function addClassMap($class, $map = '')
     {
         if (is_array($class)) {
             self::$map = array_merge(self::$map, $class);
@@ -119,7 +123,7 @@ class Loader
     public static function addNamespaceAlias($namespace, $original = '')
     {
         if (is_array($namespace)) {
-            self::$namespaceAlias = array_merge(self::$namespace, $namespace);
+            self::$namespaceAlias = array_merge(self::$namespaceAlias, $namespace);
         } else {
             self::$namespaceAlias[$namespace] = $original;
         }
@@ -130,83 +134,33 @@ class Loader
     {
         // 注册系统自动加载
         spl_autoload_register($autoload ?: 'think\\Loader::autoload');
+        // 注册命名空间定义
+        self::addNamespace([
+            'think'    => LIB_PATH . 'think' . DS,
+            'behavior' => LIB_PATH . 'behavior' . DS,
+            'traits'   => LIB_PATH . 'traits' . DS,
+        ]);
+        // 加载类库映射文件
+        self::addClassMap(include THINK_PATH . 'classmap' . EXT);
 
+        // Composer自动加载支持
         if (is_dir(VENDOR_PATH . 'composer')) {
             // 注册Composer自动加载
-            self::registerComposerLoader();
             self::$composerLoader = true;
+            self::registerComposerLoader();
         } elseif (is_file(VENDOR_PATH . 'think_autoload.php')) {
             // 读取Composer自动加载文件
             $autoload = include VENDOR_PATH . 'think_autoload.php';
             if (is_array($autoload)) {
-                self::addMap($autoload);
-            }
-        } elseif (AUTO_SCAN_PACKAGE) {
-            if (is_file(RUNTIME_PATH . 'class_namespace.php')) {
-                self::addNamespace(include RUNTIME_PATH . 'class_namespace.php');
-                if (is_file(RUNTIME_PATH . 'load_files.php')) {
-                    $files = include RUNTIME_PATH . 'load_files.php';
-                    foreach ($files as $file) {
-                        include $file;
-                    }
-                }
-            } elseif (is_dir(VENDOR_PATH)) {
-                self::scanComposerPackage(VENDOR_PATH);
-            }
-        }
-    }
-
-    // 扫描composer package
-    private static function scanComposerPackage($path)
-    {
-        // 自动扫描下载Composer安装类库
-        $dirs      = scandir($path, 1);
-        $namespace = [];
-        foreach ($dirs as $dir) {
-            if ('.' != $dir && '..' != $dir && is_file($path . $dir . DS . 'composer.json')) {
-                // 解析 package的composer.json 文件
-                $namespace = array_merge($namespace, self::parseComposerPackage($path . $dir . DS));
-            }
-        }
-        if (!empty($namespace)) {
-            self::addNamespace($namespace);
-            // 生成缓存
-            file_put_contents(RUNTIME_PATH . 'class_namespace.php', "<?php\nreturn " . var_export($namespace, true) . ';');
-        }
-        if (!empty(self::$load)) {
-            // 生成缓存
-            file_put_contents(RUNTIME_PATH . 'load_files.php', "<?php\nreturn " . var_export(self::$load, true) . ';');
-        }
-    }
-
-    // 解析Composer Package
-    private static function parseComposerPackage($package)
-    {
-        $content   = file_get_contents($package . 'composer.json');
-        $result    = json_decode($content, true);
-        $namespace = [];
-        if (!empty($result['autoload'])) {
-            $autoload = $result['autoload'];
-            if (isset($autoload['psr-0'])) {
-                foreach ($autoload['psr-0'] as $ns => $path) {
-                    $namespace[rtrim($ns, '\\')] = realpath($package . $path . DS . str_replace('\\', DS, $ns)) . DS;
-                }
-            }
-
-            if (isset($autoload['psr-4'])) {
-                foreach ($autoload['psr-4'] as $ns => $path) {
-                    $namespace[rtrim($ns, '\\')] = realpath($package . $path) . DS;
-                }
-            }
-
-            if (isset($autoload['files'])) {
+                // 命名空间和类库映射注册
+                self::addNamespace($autoload['namespace']);
+                self::addClassMap($autoload['classmap']);
+                // 载入composer包的文件列表
                 foreach ($autoload['files'] as $file) {
-                    self::$load[] = realpath($package . $file);
-                    require $package . $file;
+                    include $file;
                 }
             }
         }
-        return $namespace;
     }
 
     // 注册composer自动加载
@@ -234,7 +188,7 @@ class Loader
         if (is_file(VENDOR_PATH . 'composer/autoload_classmap.php')) {
             $classMap = require VENDOR_PATH . 'composer/autoload_classmap.php';
             if ($classMap) {
-                self::addMap($classMap);
+                self::addClassMap($classMap);
             }
         }
 

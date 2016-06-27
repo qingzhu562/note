@@ -164,10 +164,17 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
     /**
      *  获取关联模型实例
      * @access protected
-     * @return Relation
+     * @param string|array $relation 关联查询
+     * @return Relation|Query
      */
-    protected function relation()
+    protected function relation($relation = null)
     {
+        if (!is_null($relation)) {
+            // 执行关联查询
+            return $this->db->relation($relation);
+        }
+
+        // 获取关联对象实例
         if (is_null($this->relation)) {
             $this->relation = new Relation($this);
         }
@@ -250,11 +257,11 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                     list($type, $param) = explode(':', $type, 2);
                 }
                 switch ($type) {
-                    case 'timestamp':
+                    case 'datetime':
                         $format = !empty($param) ? $param : $this->dateFormat;
                         $value  = date($format, $_SERVER['REQUEST_TIME']);
                         break;
-                    case 'datetime':
+                    case 'timestamp':
                         $value = $_SERVER['REQUEST_TIME'];
                         break;
                 }
@@ -549,6 +556,9 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
 
         // 检测字段
         if (!empty($this->field)) {
+            if (true === $this->field) {
+                $this->field = $this->db->getTableInfo('', 'fields');
+            }
             foreach ($this->data as $key => $val) {
                 if (!in_array($key, $this->field)) {
                     unset($this->data[$key]);
@@ -666,7 +676,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
     /**
      * 设置允许写入的字段
      * @access public
-     * @param bool $update
+     * @param bool|array $field 允许写入的字段 如果为true只允许写入数据表字段
      * @return $this
      */
     public function allowField($field)
@@ -971,25 +981,27 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      * 命名范围
      * @access public
      * @param string|array|Closure  $name 命名范围名称 逗号分隔
-     * @param mixed                 $params 参数调用
+     * @param mixed                 ...$params 参数调用
      * @return Model
      */
-    public static function scope($name, $params = [])
+    public static function scope($name)
     {
-        $model = new static();
-        $query = $model->db();
-        if ($name instanceof \Closure) {
-            call_user_func_array($name, [ & $query, $params]);
-        } elseif ($name instanceof Query) {
+        if ($name instanceof Query) {
             return $name;
-        } else {
-            if (is_string($name)) {
-                $names = explode(',', $name);
-            }
-            foreach ($names as $scope) {
+        }
+        $model = new static();
+        $params = func_get_args();
+        $params[0] = $model->db();
+        if ($name instanceof \Closure) {
+            call_user_func_array($name, $params);
+        } elseif (is_string($name)) {
+            $name = explode(',', $name);
+        }
+        if (is_array($name)) {
+            foreach ($name as $scope) {
                 $method = 'scope' . trim($scope);
                 if (method_exists($model, $method)) {
-                    $model->$method($query, $params);
+                    call_user_func_array([$model, $method], $params);
                 }
             }
         }
