@@ -33,7 +33,7 @@ class Sent extends Taglib{
 		'next'		=>	array('attr' => 'id,cate' , 'close' => 1),//下一篇
 	);
 
-	public function _nav($tag, $content){
+	public function tagnav($tag, $content){
 		$field  = empty($tag['field']) ? 'true' : $tag['field'];
 		$tree   =   empty($tag['tree'])? true : false;
 		$parse  = $parse   = '<?php ';
@@ -48,7 +48,7 @@ class Sent extends Taglib{
 		return $parse;
 	}
 
-	public function _doc($tag, $content){
+	public function tagdoc($tag, $content){
 		$model     = !empty($tag['model']) ? $tag['model']:'';
 		$cid     = !empty($tag['cid']) ? $tag['cid']:'0';
 		$field     = empty($tag['field']) ? '*' : $tag['field'];
@@ -70,7 +70,7 @@ class Sent extends Taglib{
 		return $parse;
 	}
 
-	public function _list($tag, $content){
+	public function taglist($tag, $content){
 		$name     = !empty($tag['name']) ? $tag['name'] : '';
 		$map     = !empty($tag['map']) ? $tag['map'] : '';
 		$field     = empty($tag['field']) ? '*' : $tag['field'];
@@ -92,7 +92,7 @@ class Sent extends Taglib{
 		return $parse;
 	}
 
-	public function _link($tag, $content){
+	public function taglink($tag, $content){
 		$type     = !empty($tag['type']) ? $tag['type'] : '';
 		$limit     = !empty($tag['limit']) ? $tag['limit'] : '';
 		$field     = empty($tag['field']) ? '*' : $tag['field'];
@@ -114,7 +114,7 @@ class Sent extends Taglib{
 		return $parse;
 	}
 
-	public function _prev($tag, $content){
+	public function tagprev($tag, $content){
 		$id     = !empty($tag['id']) ? $tag['id'] : '';
 		$cate     = !empty($tag['cate']) ? $tag['cate'] : '';
 		$model_id     = !empty($tag['model']) ? $tag['model'] : '';
@@ -128,7 +128,7 @@ class Sent extends Taglib{
 		return $parse;
 	}
 
-	public function _next($tag, $content){
+	public function tagnext($tag, $content){
 		$id     = !empty($tag['id']) ? $tag['id'] : '';
 		$cate     = !empty($tag['cate']) ? $tag['cate'] : '';
 		$model_id     = !empty($tag['model']) ? $tag['model'] : '';
