@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.3
+-- version 4.4.12
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: 2016-06-14 23:51:59
+-- Generation Time: 2016-06-27 09:31:01
 -- 服务器版本： 5.5.28
 -- PHP Version: 5.4.14
 
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `sent_action_log` (
   `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '日志备注',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '执行行为的时间'
-) ENGINE=MyISAM AUTO_INCREMENT=104 DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='行为日志表';
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='行为日志表';
 
 --
 -- 转存表中的数据 `sent_action_log`
@@ -325,7 +325,10 @@ CREATE TABLE IF NOT EXISTS `sent_auth_rule` (
   `condition` varchar(300) NOT NULL DEFAULT '' COMMENT '规则附加条件'
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
+--
+-- 转存表中的数据 `sent_auth_rule`
+--
+
 INSERT INTO `sent_auth_rule` (`id`, `module`, `type`, `name`, `title`, `group`, `status`, `condition`) VALUES
 (1, 'admin', 2, 'admin/index/index', '后台首页', '首页管理', 1, ''),
 (2, 'admin', 2, 'admin/form/index', '自定义表单', '运营管理', 1, ''),
@@ -437,7 +440,7 @@ CREATE TABLE IF NOT EXISTS `sent_channel` (
 --
 
 INSERT INTO `sent_channel` (`id`, `pid`, `title`, `url`, `sort`, `icon`, `color`, `band_color`, `band_text`, `active`, `create_time`, `update_time`, `status`, `target`) VALUES
-(1, 0, '网站首页', 'index/index/index', 1, 'home', '', '', '', 'home', 1379475111, 1464490544, 1, 0);
+(1, 0, '网站首页', 'index/index/index', 1, 'home', '', '', '', 'home', 1379475111, 1464490544, 1, 0),
 
 -- --------------------------------------------------------
 
@@ -1404,7 +1407,7 @@ CREATE TABLE IF NOT EXISTS `sent_model` (
   `extend` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '继承的模型',
   `icon` varchar(20) NOT NULL COMMENT '模型图标',
   `relation` varchar(30) NOT NULL DEFAULT '' COMMENT '继承与被继承模型的关联字段',
-  `is_bind_category` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否绑定栏目',
+  `is_user_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否会员中心显示',
   `need_pk` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '新建表时是否需要主键字段',
   `field_sort` text COMMENT '表单字段排序',
   `field_group` varchar(255) NOT NULL DEFAULT '1:基础' COMMENT '字段分组',
@@ -1415,6 +1418,9 @@ CREATE TABLE IF NOT EXISTS `sent_model` (
   `list_row` smallint(2) unsigned NOT NULL DEFAULT '10' COMMENT '列表数据长度',
   `search_key` varchar(50) NOT NULL DEFAULT '' COMMENT '默认搜索字段',
   `search_list` varchar(255) NOT NULL DEFAULT '' COMMENT '高级搜索的字段',
+  `template_list` varchar(255) NOT NULL DEFAULT '' COMMENT '列表显示模板',
+  `template_add` varchar(255) NOT NULL DEFAULT '' COMMENT '新增模板',
+  `template_edit` varchar(255) NOT NULL DEFAULT '' COMMENT '编辑模板',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
@@ -1425,11 +1431,11 @@ CREATE TABLE IF NOT EXISTS `sent_model` (
 -- 转存表中的数据 `sent_model`
 --
 
-INSERT INTO `sent_model` (`id`, `name`, `title`, `extend`, `icon`, `relation`, `is_bind_category`, `need_pk`, `field_sort`, `field_group`, `field_list`, `attribute_list`, `attribute_alias`, `list_grid`, `list_row`, `search_key`, `search_list`, `create_time`, `update_time`, `status`, `engine_type`) VALUES
-(1, 'document', '通用模型', 0, '', '', 1, 1, '{"1":["3","4","2","12","5"],"2":["34","11","10","13","19","17","16","20","14"]}', '1:基础,2:扩展', '1,7,8,9,10,2,11,12,13,3,4,14,25,15,5,6,23,22,24', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', 1450088499, 1466501821, 1, 'MyISAM'),
-(2, 'article', '文章', 1, 'file-word-o', '', 1, 1, '{"1":["3","2","4","25","12","5","24","55"],"2":["11","10","13","19","17","16","14","20"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', 1453859167, 1466042056, 1, 'MyISAM'),
-(3, 'photo', '图片', 1, 'file-image-o', '', 1, 1, '{"1":["3","2","4","12","26","5","27","55"],"2":["11","10","19","13","16","17","14","20"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', 1454052310, 1466042066, 1, 'MyISAM'),
-(4, 'page', '单页', 2, 'file-text-o', '', 1, 1, '{"1":["28","30","31","32","33"]}', '1:基础', '', '', '', 'id:ID\r\ntitle:标题\r\nupdate_time:更新时间', 10, '', '', 1456296668, 1464401211, 1, 'MyISAM');
+INSERT INTO `sent_model` (`id`, `name`, `title`, `extend`, `icon`, `relation`, `is_user_show`, `need_pk`, `field_sort`, `field_group`, `field_list`, `attribute_list`, `attribute_alias`, `list_grid`, `list_row`, `search_key`, `search_list`, `template_list`, `template_add`, `template_edit`, `create_time`, `update_time`, `status`, `engine_type`) VALUES
+(1, 'document', '通用模型', 0, '', '', 1, 1, '{"1":["17","16","19","20","14","13","4","3","2","5","12","11","10"]}', '1:基础,2:扩展', '1,7,8,9,10,2,11,12,13,3,4,14,25,15,5,6,23,22,24', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', '', '', '', 1450088499, 1454054412, 1, 'MyISAM'),
+(2, 'article', '文章', 1, 'file-word-o', '', 0, 1, '{"1":["3","2","4","25","12","5","24","55"],"2":["11","10","13","19","17","16","14","20"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', '', '', '', 1453859167, 1467019566, 1, 'MyISAM'),
+(3, 'photo', '图片', 1, 'file-image-o', '', 0, 1, '{"1":["3","2","4","12","26","5","27","55"],"2":["11","10","19","13","16","17","14","20"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', '', '', '', 1454052310, 1467019679, 1, 'MyISAM'),
+(4, 'page', '单页', 2, 'file-text-o', '', 0, 1, '{"1":["28","30","31","32","33"]}', '1:基础', '', '', '', 'id:ID\r\ntitle:标题\r\nupdate_time:更新时间', 10, '', '', '', '', '', 1456296668, 1467019686, 1, 'MyISAM'),
 -- --------------------------------------------------------
 
 --
@@ -1446,7 +1452,7 @@ CREATE TABLE IF NOT EXISTS `sent_page` (
   `content` text,
   `create_time` int(11) DEFAULT NULL,
   `update_time` int(11) DEFAULT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='单页';
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='单页';
 
 --
 -- 转存表中的数据 `sent_page`
