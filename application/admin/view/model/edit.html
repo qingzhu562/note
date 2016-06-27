@@ -48,6 +48,16 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-lg-2 control-label">是否会员显示</label>
+							<div class="col-lg-10">
+								<select name="is_user_show" class="form-control" style="width:auto">
+									<option value="1" {if $info['is_user_show'] ==1}selected="selected"{/if}>是</option>
+									<option value="0" {if $info['is_user_show'] ==0}selected="selected"{/if}>否</option>
+								</select>
+								<span class="help-block">（选“是”则会新建默认的id字段作为主键）</span>
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-lg-2 control-label">模型图标</label>
 							<div class="col-lg-6 col-sm-10">
 								<input type="text" class="form-control " name="icon" value="{$info['icon']}">
@@ -127,21 +137,21 @@
 							<label class="col-lg-2 control-label">列表模板</label>
 							<div class="col-lg-6 col-sm-10">
 								<input type="text" class="form-control" name="template_list" value="{$info['template_list']|default=''}">
-								<span class="help-block">（自定义的列表模板，放在Application\Admin\View\Think下，不写则使用默认模板）</span>
+								<span class="help-block">（自定义的列表模板，放在application\admin\view\content下，不写则使用默认模板）</span>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-lg-2 control-label">新增模板</label>
 							<div class="col-lg-6 col-sm-10">
 								<input type="text" class="form-control" name="template_add" value="{$info['template_add']|default=''}">
-								<span class="help-block">（自定义的新增模板，放在Application\Admin\View\Think下，不写则使用默认模板）</span>
+								<span class="help-block">（自定义的新增模板，放在application\admin\view\content下，不写则使用默认模板）</span>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-lg-2 control-label">编辑模板</label>
 							<div class="col-lg-6 col-sm-10">
 								<input type="text" class="form-control" name="template_edit" value="{$info['template_edit']|default=''}">
-								<span class="help-block">（自定义的编辑模板，放在Application\Admin\View\Think下，不写则使用默认模板）</span>
+								<span class="help-block">（自定义的编辑模板，放在application\admin\view\content下，不写则使用默认模板）</span>
 							</div>
 						</div>
 						<div class="form-group">

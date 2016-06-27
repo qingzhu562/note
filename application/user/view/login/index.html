@@ -4,13 +4,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <meta charset="UTF-8">
-<title>会员登录</title>
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/bootstrap/bootstrap.min.css"/>
+<title>用户注册</title>
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/libs/font-awesome.css"/>
-<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/libs/nanoscroller.css"/>
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/common.css"/>
 <!-- <link href='//fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400' rel='stylesheet' type='text/css'> -->
-<link rel="stylesheet" type="text/css" href="__CSS__/style.css"/>
+<link rel="stylesheet" type="text/css" href="__CSS__/member_login.css"/>
 <script src="__PUBLIC__/js/jquery.js"></script>
 <!--[if lt IE 9]>
 <script src="__PUBLIC__/js/html5shiv.js"></script>
@@ -18,60 +16,75 @@
 <![endif]-->
 </head>
 <body>
-<body id="login-page-full">
-	<div id="login-full-wrapper">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-12">
-					<div id="login-box">
-						<div id="login-box-holder">
-							<div class="row">
-								<div class="col-xs-12">
-									<div id="login-box-inner">
-										<form role="form" method="post">
-											<div class="input-group">
-												<span class="input-group-addon"> <i class="fa fa-user"></i>
-												</span>
-												<input class="form-control" name="username" type="text" placeholder="登录账户"></div>
-											<div class="input-group">
-												<span class="input-group-addon"> <i class="fa fa-key"></i>
-												</span>
-												<input type="password" name="password" class="form-control" placeholder="登录密码"></div>
-											<div class="input-group">
-												<span class="input-group-addon"> <i class="fa fa-qrcode"></i>
-												</span>
-												<input type="text" name="verify" class="form-control" placeholder="验证码">
-												<span class="input-group-addon reloadverify"><img src="{:url('user/index/verify')}" alt="验证码" height="40" class="verifyimg"></span>
-											</div>
-											<div class="row">
-												<div class="col-xs-12">
-													<button type="submit" class="btn btn-success col-xs-12">
-														<span class="hidden">
-															<i class="fa-loading"></i>
-															登 录 中 ...
-														</span>
-														<span class="show">登 录</span>
-													</button>
-												</div>
-											</div>
-										</form>
-									</div>
-								</div>
-							</div>
+<div class="header-wrap">
+	<header class="public-head-layout wrapper">
+		<h1 class="site-logo">
+			<a href="{:url('index/index/index')}"><img src="__PUBLIC__/images/logo.png" class="pngFix"></a>
+		</h1>
+		<div class="nc-login-now">
+			<span>我还没账号，现在就<a href="{:url('user/login/register')}" title="" class="register">注册</a></span>
+		</div>
+	</header>
+</div>
+<div class="nc-login-layout">
+	<div class="left-pic"><img src="http://s.dxpd.cn/data/upload/shop/login/1.jpg" border="0"></div>
+	<div class="nc-login">
+		<div class="nc-login-mode">
+			<ul class="tabs-nav">
+				<li><a href="#default" class="tabulous_active">用户登录<i></i></a></li>
+			</ul>
+			<div id="tabs_container" class="tabs-container">
+				<div id="default" class="tabs-content">
+					<form id="login_form" class="nc-login-form" method="post">
+						<dl>
+							<dt>账&nbsp;&nbsp;&nbsp;号：</dt>
+							<dd>
+								<input type="text" class="text" autocomplete="off"  name="username" placeholder="用户名/邮箱" id="username"  >
+							</dd>
+						</dl>
+						<dl>
+							<dt>密&nbsp;&nbsp;&nbsp;码：</dt>
+							<dd>
+								<input type="password" class="text" name="password" autocomplete="off" placeholder="6-20个大小写英文字母、符号或数字" id="password">
+							</dd>
+						</dl>
+						<div class="code-div mt15">
+							<dl>
+								<dt>验证码：</dt>
+								<dd>
+									<input type="text" name="verify" autocomplete="off" class="text w80" placeholder="输入验证码" id="verify" size="10" />
+								</dd>
+							</dl>
+							<span><img src="{:url('user/index/verify')}" id="codeimage"/> <a class="makecode" href="javascript:void(0)">看不清，换一张</a></span>
 						</div>
-						<div id="login-box-footer">
-							<div class="row">
-								<div class="col-xs-12">
-									版权所有
-									&copy; <a href="http://www.tensent.cn" target="_blank">TenSent,Inc.</a>
-								</div>
-							</div>
+						<div class="handle-div">
+							<span class="auto">
+								<input type="checkbox" class="checkbox" name="auto_login" value="1">七天自动登录<em style="display: none;">请勿在公用电脑上使用</em>
+							</span>
+							<a class="forget" href="{:url('user/login/forget')}">忘记密码？</a>
 						</div>
-					</div>
+						<div class="submit-div">
+							<input type="submit" class="submit" value="登&nbsp;&nbsp;&nbsp;录">
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div class="clear"></div>
+</div>
+
+<div id="footer" class="wrapper">
+	<p><a href="http://s.dxpd.cn/shop">首页</a>
+	| <a  href="http://s.dxpd.cn/index.php?act=article&article_id=24">招聘英才</a>
+	| <a  href="http://s.dxpd.cn/index.php?act=article&article_id=25">合作及洽谈</a>
+	| <a  href="http://s.dxpd.cn/index.php?act=article&article_id=23">联系我们</a>
+	| <a  href="http://s.dxpd.cn/index.php?act=article&article_id=22">关于我们</a>
+	| <a  href="http://s.dxpd.cn/delivery">物流自取</a>
+	| <a  href="http://s.dxpd.cn/index.php?act=link">友情链接</a>
+	</p>
+	Copyright 2015 <a href="http://www.tensent.cn" target="_blank">腾速科技</a> All rights reserved.<br/>
+</div>
 </body>
 </html>
 <script src="__PUBLIC__/js/messager.js"></script>
@@ -103,19 +116,19 @@ $(function(){
 			} else {
 				$.messager.show(data.msg, {placement: 'center',type:'success'});
 				//刷新验证码
-				$(".reloadverify").click();
+				$(".makecode").click();
 			}
 		}
 	});
 	//初始化选中用户名输入框
 	$("#itemBox").find("input[name=username]").focus();
 	//刷新验证码
-	var verifyimg = $(".verifyimg").attr("src");
-	$(".reloadverify").click(function(){
+	var verifyimg = $(".codeimage").attr("src");
+	$(".makecode").click(function(){
 		if( verifyimg.indexOf('?')>0){
-			$(".verifyimg").attr("src", verifyimg+'&random='+Math.random());
+			$(".codeimage").attr("src", verifyimg+'&random='+Math.random());
 		}else{
-			$(".verifyimg").attr("src", verifyimg.replace(/\?.*$/,'')+'?'+Math.random());
+			$(".codeimage").attr("src", verifyimg.replace(/\?.*$/,'')+'?'+Math.random());
 		}
 	});
 

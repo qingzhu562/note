@@ -110,7 +110,7 @@ class User extends \think\model\Merge{
 	 * 用户注册
 	 * @param  integer $user 用户信息数组
 	 */
-	function register($username, $password, $repassword, $isautologin = true){
+	function register($username, $password, $repassword, $email, $isautologin = true){
 		if ($password !== $repassword) {
 			$this->error = "密码和确认密码不相同";
 			return false;
@@ -119,6 +119,7 @@ class User extends \think\model\Merge{
 		$data['username'] = $username;
 		$data['salt'] = rand_string(6);
 		$data['password'] = $password;
+		$data['email'] = $email;
 		$result = $this->validate(true)->save($data);
 		if ($result) {
 			$this->data['uid'] = $result;

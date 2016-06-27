@@ -47,13 +47,9 @@ class Login extends Fornt{
 		return $this->redirect('index/index/index');
 	}
 
-	public function register(){
+	public function register($username = '', $password = '', $repassword = '', $email = '', $verify = ''){
 		if (IS_POST) {
 			$user = model('User');
-			$username = input('username', '', 'trim');
-			$password = input('password', '', 'trim');
-			$repassword = input('repassword', '', 'trim');
-			$verify = input('verify', '', 'trim');
 			
 			//验证码验证
 			$this->checkVerify($verify);
@@ -61,14 +57,25 @@ class Login extends Fornt{
 			if ($username == '' || $password == '' || $repassword == '') {
 				return $this->error("请填写完整注册信息！", '');
 			}
-			$result = $user->register($username, $password, $repassword);
+			$result = $user->register($username, $password, $repassword, $email);
 			if ($result) {
 				return $this->success('注册成功！', url('user/index/index'));
 			}else{
 				return $this->error($user->getError(), '');
 			}
 		}else{
+			if (is_login()) {
+				$this->redirect('user/index/index');
+			}
 			return $this->fetch();
 		}
+	}
+
+	public function forget(){
+		
+	}
+
+	public function find(){
+		
 	}
 }

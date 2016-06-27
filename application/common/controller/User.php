@@ -16,8 +16,11 @@ class User extends Base{
 
 		if (!is_login() and !in_array($this->url,array('user/login/index', 'user/index/verify'))) {
 			$this->redirect('user/login/index');exit();
-		}else{
+		}elseif (is_login()) {
 			$user = model('User')->getInfo(session('user_auth.uid'));
+			if (!$this->checkProfile($user) && $this->url !== 'user/profile/index') {
+				return $this->error('请补充完个人资料！', url('user/profile/index'));
+			}
 			$this->assign('user', $user);
 
 			//设置会员中心菜单
@@ -34,7 +37,11 @@ class User extends Base{
 		$menu['订单管理'] = array(
 			array('title'=>'我的订单', 'url'=>'user/order/index', 'icon'=>'shopping-bag'),
 		);
-		$menu['内容管理'] = $this->getContentMenu();
+		$contetnmenu = $this->getContentMenu();
+		if (!empty($contetnmenu)) {
+			$menu['内容管理'] = $contetnmenu;
+		}
+
 		foreach ($menu as $group => $item) {
 			foreach ($item as $key => $value) {
 				if (url($value['url']) == $_SERVER['REQUEST_URI']) {
@@ -51,6 +58,7 @@ class User extends Base{
 	protected function getContentMenu(){
 		$list = array();
 		$map = array(
+			'is_user_show' => 1,
 			'status' => array('gt',0),
 			'extend' => array('gt',0),
 		);
@@ -63,5 +71,14 @@ class User extends Base{
 			$list[$key] = $value;
 		}
 		return $list;
+	}
+
+	protected function checkProfile($user){
+		$result = true;
+		//判断用户资料是否填写完整
+		if (!$user['nickname'] || !$user['qq']) {
+			$result = false;
+		}
+		return $result;
 	}
 }

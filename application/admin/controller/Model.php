@@ -60,7 +60,7 @@ class Model extends Admin{
 	 * @author huajie <banhuajie@163.com>
 	 */
 	public function edit() {
-		$id = input('get.id', '');
+		$id = input('id', '', 'trim,intval');
 		if (empty($id)) {
 			return $this->error('参数不能为空！');
 		}

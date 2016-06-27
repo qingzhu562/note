@@ -35,7 +35,7 @@
 						{else/}
 						{volist name="list" id="item"}
 						<tr>
-							<td><input class="ids row-selected" type="checkbox" name="ids[]" value="{$item['id']}"></td>
+							<td><input class="ids row-selected" type="checkbox" name="id[]" value="{$item['id']}"></td>
 							{volist name="grid['grids']" id="vo"}
 							{if isset($vo['format'])}
 							<td>{$item[$vo['field'][0]]|$vo['format']}</td>
@@ -44,6 +44,13 @@
 							{/if}
 							{/volist}
 							<td>
+								{if isset($item['is_top'])}
+								{if $item['is_top']}
+								<a href="{:url('admin/content/is_top',array('id'=>$item['id'],'model_id'=>$model_id,'is_top'=>'0'))}" class="ajax-get">取消置顶</a>
+								{else/}
+								<a href="{:url('admin/content/is_top',array('id'=>$item['id'],'model_id'=>$model_id,'is_top'=>'1'))}" class="ajax-get">置顶</a>
+								{/if}
+								{/if}
 								{if isset($item['status'])}
 								{if $item['status']}
 								<a href="{:url('admin/content/status',array('id'=>$item['id'],'model_id'=>$model_id,'status'=>'0'))}" class="ajax-get">取消审核</a>

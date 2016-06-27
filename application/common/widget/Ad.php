@@ -18,6 +18,7 @@ class Ad{
 			echo "";return;
 		}
 		$ad = db('Ad')->where(array('place_id'=>$place['id'],'status'=>1))->select();
+		$list = array();
 		foreach ($ad as $key => $value) {
 			if ($value['photolist'] != '') {
 				$photolist = explode(',', $value['photolist']);

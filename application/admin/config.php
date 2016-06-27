@@ -11,7 +11,7 @@ return array(
 
 	'user_administrator'  => 1,
 
-	'url_common_param'=>true,
+	//'url_common_param'=>true,
 
 	'template' => array(
 	),

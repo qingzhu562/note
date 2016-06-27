@@ -48,11 +48,12 @@ class Content extends Admin{
 		$grid_list = get_grid_list($this->modelInfo['list_grid']);
 		$order = "id desc";
 		$map = array();
+		$field = array_filter($grid_list['fields']);
 		if ($this->modelInfo['extend'] == 1) {
 			$map['model_id'] = $this->modelInfo['id'];
+			array_push($field, 'is_top');
 		}
-
-		$field = array_filter($grid_list['fields']);
+		
 		$list = $this->model->where($map)->field($field)->order($order)->paginate(15);
 
 		$data = array(
@@ -60,9 +61,14 @@ class Content extends Admin{
 			'list'  => $list,
 			'page'  => $list->render()
 		);
+		if($this->modelInfo['template_list']){
+			$template = 'content/' . $this->modelInfo['template_list'];
+		}else{
+			$template = 'content/index';
+		}
 		$this->assign($data);
 		$this->setMeta($this->modelInfo['title'] . "列表");
-		return $this->fetch('content/index');
+		return $this->fetch($template);
 	}
 
 	/**
@@ -104,7 +110,7 @@ class Content extends Admin{
 				return $this->error($this->model->getError(),'');
 			}
 		}else{
-			$id = input('get.id','','trim,intval');
+			$id = input('id','','trim,intval');
 			if (!$id) {
 				return $this->error("非法操作！");
 			}
@@ -129,7 +135,7 @@ class Content extends Admin{
 	 */
 	public function del(){
 		$id = input('get.id','','trim');
-		$ids = input('post.ids/a',array());
+		$ids = input('post.ids',array());
 		array_push($ids, $id);
 		if (empty($ids)) {
 			return $this->error("非法操作！");

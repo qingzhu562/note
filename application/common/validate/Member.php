@@ -16,11 +16,16 @@ class Member extends \think\Validate{
 
 	protected $rule = array(
 		'username'   => 'require|unique:member|/^[a-zA-Z]\w{0,39}$/',
+		'email'   => 'require|unique:member|email',
 	);
 	protected $message = array(
 		'username.require'    => '用户名必须',
 		'username.unique'    => '用户名已存在',
+		'email.require'    => '邮箱必须',
+		'email.unique'    => '邮箱已存在',
 	);
-	protected $scene = array();
+	protected $scene = array(
+		//'add'     => 'username,email',
+	);
 
 }
