@@ -49,16 +49,17 @@ class Config extends Admin{
 		return $this->fetch();
 	}
 
-	public function group(){
+	public function group($id = 1){
 		if (IS_POST) {
-			$config = input('post.config/a','');
+			$config = $this->request->post('config/a');
 			$model = model('Config');
 			foreach ($config as $key => $value) {
-				$model::where('name',$key)->update(array('value' => $value));
+				$model->where(array('name'=>$key))->setField('value', $value);
 			}
+			//清除db_config_data缓存
+			cache('db_config_data', null);
 			return $this->success("更新成功！");
 		}else{
-			$id = input('get.id', 1);
 			$type = config('config_group_list');
 			$list = db("Config")->where(array('status' => 1, 'group' => $id))->field('id,name,title,extra,value,remark,type')->order('sort')->select();
 			if ($list) {

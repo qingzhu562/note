@@ -82,11 +82,11 @@ class Database{
      */
     public function create(){
         $sql  = "-- -----------------------------\n";
-        $sql .= "-- Think MySQL Data Transfer \n";
+        $sql .= "-- SentCMS MySQL Data Transfer \n";
         $sql .= "-- \n";
-        $sql .= "-- Host     : " . config('DB_HOST') . "\n";
-        $sql .= "-- Port     : " . config('DB_PORT') . "\n";
-        $sql .= "-- Database : " . config('DB_NAME') . "\n";
+        $sql .= "-- Host     : " . config('database.hostname') . "\n";
+        $sql .= "-- Port     : " . config('database.hostport') . "\n";
+        $sql .= "-- Database : " . config('database.database') . "\n";
         $sql .= "-- \n";
         $sql .= "-- Part : #{$this->file['part']}\n";
         $sql .= "-- Date : " . date("Y-m-d H:i:s") . "\n";
@@ -129,7 +129,7 @@ class Database{
             $sql .= "-- Table structure for `{$table}`\n";
             $sql .= "-- -----------------------------\n";
             $sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
-            $sql .= trim($result[0]['create table']) . ";\n\n";
+            $sql .= trim($result[0]['Create Table']) . ";\n\n";
             if(false === $this->write($sql)){
                 return false;
             }
