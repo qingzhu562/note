@@ -162,7 +162,7 @@ class App
      * @param array         $params 参数
      * @return void
      */
-    public static function dispatch($dispath, $type = 'module', $params = [])
+    public static function dispatch($dispatch, $type = 'module', $params = [])
     {
         self::$dispatch = ['type' => $type, $type => $dispatch, 'params' => $params];
     }
@@ -307,7 +307,9 @@ class App
 
         try {
             $instance = Loader::controller($controller, $config['url_controller_layer'], $config['controller_suffix'], $config['empty_controller']);
-
+            if (is_null($instance)) {
+                throw new HttpException(404, 'controller not exists:' . $controller);
+            }
             // 获取当前操作名
             $action = $actionName . $config['action_suffix'];
             if (!preg_match('/^[A-Za-z](\w)*$/', $action)) {

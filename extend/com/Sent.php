@@ -25,12 +25,13 @@ class Sent extends Taglib{
 	// 标签定义
 	protected $tags   =  array(
 		// 标签定义： attr 属性列表 close 是否闭合（0 或者1 默认1） alias 标签别名 level 嵌套层次
-		'nav'       =>  array('attr' => 'field,name', 'close' => 1), //获取导航
-		'list'      =>  array('attr' => 'table,where,order,limit,id,sql,field,key','level'=>3),//列表
-		'doc'  =>  array('attr' => 'model,field,limit,id,field,key','level'=>3),
-		'link'		=>	array('attr' => 'type,limit' , 'close' => 1),//友情链接
-		'prev'		=>	array('attr' => 'id,cate' , 'close' => 1),//上一篇
-		'next'		=>	array('attr' => 'id,cate' , 'close' => 1),//下一篇
+		'nav'       => array('attr' => 'field,name', 'close' => 1), //获取导航
+		'list'      => array('attr' => 'table,where,order,limit,id,sql,field,key','level'=>3),//列表
+		'doc'       => array('attr' => 'model,field,limit,id,field,key','level'=>3),
+		'recom'     => array('attr' => 'doc_id,id'),
+		'link'		=> array('attr' => 'type,limit' , 'close' => 1),//友情链接
+		'prev'		=> array('attr' => 'id,cate' , 'close' => 1),//上一篇
+		'next'		=> array('attr' => 'id,cate' , 'close' => 1),//下一篇
 	);
 
 	public function tagnav($tag, $content){
@@ -62,7 +63,7 @@ class Sent extends Taglib{
 		$where .= " and model_id = {$model} and status >= 1";
 
 		$parse  = $parse   = '<?php ';
-		$parse .= '$__LIST__ = model(\'Document\')->extend(\''.$model.'\')->list(\''.$where.'\',\''.$field.'\',\''.$limit.'\',\''.$order.'\')->all();';
+		$parse .= '$__LIST__ = model(\'Document\')->extend(\''.$model.'\')->where(\''.$where.'\')->field(\''.$field.'\')->limit(\''.$limit.'\')->order(\''.$order.'\')->select();';
 		$parse .= 'foreach ($__LIST__ as $key => $'.$tag['name'].') {';
 		$parse .= '?>';
 		$parse .= $content;
@@ -84,7 +85,26 @@ class Sent extends Taglib{
 		$map = implode(" and ", $where);
 
 		$parse  = $parse   = '<?php ';
-		$parse .= '$__LIST__ = model(\''.$name.'\')->list(\''.$map.'\',\''.$field.'\',\''.$limit.'\',\''.$order.'\')->all();';
+		$parse .= '$__LIST__ = model(\''.$name.'\')->where(\''.$map.'\')->field(\''.$field.'\')->limit(\''.$limit.'\')->order(\''.$order.'\')->select();';
+		$parse .= 'foreach ($__LIST__ as $key => $'.$tag['id'].') {';
+		$parse .= '?>';
+		$parse .= $content;
+		$parse .= '<?php } ?>';
+		return $parse;
+	}
+
+	public function tagrecom($tag, $content){
+		$doc_id     = empty($tag['doc_id']) ? '' : $tag['doc_id'];
+		$field     = empty($tag['field']) ? '*' : $tag['field'];
+		$limit        = empty($tag['limit']) ? 20 : $tag['limit'];
+		$order        = empty($tag['order']) ? 'id desc' : $tag['order'];
+
+		if (!$doc_id) {
+			return array();
+		}
+
+		$parse  = $parse   = '<?php ';
+		$parse .= '$__LIST__ = model(\'Document\')->recom('. $doc_id .',\'' .$field. '\',' .$limit. ',\'' .$order. '\');';
 		$parse .= 'foreach ($__LIST__ as $key => $'.$tag['id'].') {';
 		$parse .= '?>';
 		$parse .= $content;
@@ -106,7 +126,7 @@ class Sent extends Taglib{
 		$map = implode(" and ", $where);
 
 		$parse  = $parse   = '<?php ';
-		$parse .= '$__LIST__ = model(\'Link\')->list(\''.$map.'\',\''.$field.'\',\''.$limit.'\',\''.$order.'\')->all();';
+		$parse .= '$__LIST__ = model(\'Link\')->where(\''.$map.'\')->field(\''.$field.'\')->limit(\''.$limit.'\')->order(\''.$order.'\')->select();';
 		$parse .= 'foreach ($__LIST__ as $key => $'.$tag['name'].') {';
 		$parse .= '?>';
 		$parse .= $content;
