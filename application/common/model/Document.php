@@ -63,23 +63,18 @@ class Document extends \think\model\Merge{
 		return $status;
 	}
 
+	protected function getTagsAttr($value){
+		if ($value) {
+			return explode(',', $value);
+		}
+	}
+
 	public function extend($name){
 		if (is_numeric($name)) {
 			$name = db('model')->where(array('id'=>$name))->value('name');
 		}
 		self::$relationModel = array('document_' . $name);
 		return $this;
-	}
-
-	public function scopeList($query, $map, $field = '*', $limit = 10, $order = 'Document.id desc'){
-		if (!empty($map) && is_array($map)) {
-			foreach ($map as $key => $value) {
-				$where[$this->name . '.' . $key] = $value;
-			}
-		}else{
-			$where = $map;
-		}
-		$query->field($field)->where($where)->limit($limit)->order($order);
 	}
 
 	public function change(){
@@ -118,5 +113,23 @@ class Document extends \think\model\Merge{
 		$data = $this->get($id);
 
 		return $data;
+	}
+
+	public function recom($id, $field = '*', $limit = 10, $order = 'id desc'){
+		$tag = $this->where(array('id'=>$id))->value('tags');
+		$map = '';
+		if ($tag) {
+			$tags = explode(',', $tag);
+			foreach ($tags as $item) {
+				$where[] = 'tags LIKE "%' . $item . '%"';
+			}
+			$map = implode(' OR ', $where);
+		}
+		$list = $this->where($map)->field($field)->limit($limit)->order($order)->select();
+		if (empty($list)) {
+			return $list;
+		}else{
+			return $this->field($field)->limit($limit)->order($order)->select();
+		}
 	}
 }

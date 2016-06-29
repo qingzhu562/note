@@ -47,7 +47,7 @@ class Content extends Admin{
 		}
 		$grid_list = get_grid_list($this->modelInfo['list_grid']);
 		$order = "id desc";
-		$map = array();
+		$map = $this->buildMap();
 		$field = array_filter($grid_list['fields']);
 		if ($this->modelInfo['extend'] == 1) {
 			$map['model_id'] = $this->modelInfo['id'];
@@ -91,9 +91,14 @@ class Content extends Admin{
 				'info'   => $info,
 				'fieldGroup' => $this->getField($this->modelInfo)
 			);
+			if($this->modelInfo['template_add']){
+				$template = 'content/' . $this->modelInfo['template_add'];
+			}else{
+				$template = 'public/edit';
+			}
 			$this->assign($data);
 			$this->setMeta("添加".$this->modelInfo['title']);
-			return $this->fetch('public/edit');
+			return $this->fetch($template);
 		}
 	}
 
@@ -123,9 +128,14 @@ class Content extends Admin{
 				'info'   => $info,
 				'fieldGroup' => $this->getField($this->modelInfo)
 			);
+			if($this->modelInfo['template_edit']){
+				$template = 'content/' . $this->modelInfo['template_edit'];
+			}else{
+				$template = 'public/edit';
+			}
 			$this->assign($data);
 			$this->setMeta("编辑".$this->modelInfo['title']);
-			return $this->fetch('public/edit');
+			return $this->fetch($template);
 		}
 	}
 
@@ -155,17 +165,31 @@ class Content extends Admin{
 	 * 设置状态
 	 * @author molong <ycgpp@126.com>
 	 */
-	public function status(){
+	public function status($id, $status){
 		$model = $this->model;
-		$id = input('get.id','','trim,intval');
-		$status = input('get.status','','trim,intval');
 
 		$map['id'] = $id;
 		$result = $model::where($map)->setField('status',$status);
-		if ($result) {
+		if (false !== $result) {
 			return $this->success("操作成功！");
 		}else{
 			return $this->error("操作失败！！");
+		}
+	}
+
+	/**
+	 * 设置置顶
+	 * @author molong <ycgpp@126.com>
+	 */
+	public function settop($id, $is_top){
+		$model = $this->model;
+
+		$map['id'] = $id;
+		$result = $model::where($map)->setField('is_top',$is_top);
+		if (false !== $result) {
+			return $this->success("操作成功！", '');
+		}else{
+			return $this->error("操作失败！！", '');
 		}
 	}
 
@@ -217,6 +241,30 @@ class Content extends Admin{
 			}
 		}
 		return $data;
+	}
+
+	/**
+	 * 创建搜索
+	 * @return [array] [查询条件]
+	 */
+	protected function buildMap(){
+		$map = array();
+		$keyword = input('get.keyword', '', 'trim');
+		$category = input('get.category', '', 'trim');
+
+		if ($keyword) {
+			$map['title'] = array("LIKE", "%$keyword%");
+		}
+		if ($category){
+			$map['category_id'] = $category;
+		}
+
+		if ($this->modelInfo['extend'] == 1) {
+			$cate_list = parse_field_bind('category', $category, $this->modelInfo['id']);
+			$this->assign('cate_list', $cate_list);
+		}
+		$this->assign($this->request->get());
+		return $map;
 	}
 
 	/**

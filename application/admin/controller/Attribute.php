@@ -46,8 +46,7 @@ class Attribute extends Admin {
 	 * index方法
 	 * @author colin <colin@tensent.cn>
 	 */
-	public function index($model = null){
-		$model_id = input('get.model_id','','trim,intval');
+	public function index($model_id = null){
 		$map['model_id'] = $model_id;
 		if (!$model_id) {
 			return $this->error("非法操作！");

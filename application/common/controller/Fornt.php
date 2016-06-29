@@ -13,6 +13,11 @@ class Fornt extends Base{
 
 	public function _initialize(){
 		parent::_initialize();
+
+		//判读是否为关闭网站
+		if (\think\Config::get('web_site_close')) {
+			return $this->fetch('common@default/public/close');exit();
+		}
 		//设置SEO
 		$this->setSeo();
 

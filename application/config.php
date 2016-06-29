@@ -12,10 +12,15 @@ return array(
 	// 调试模式
 	'app_debug' => true,
 
+	'charset'   => 'UTF-8',
+	'lang_switch_on' => true,   // 开启语言包功能
+	'lang_list'     => ['zh-cn'], // 支持的语言列表
+
 	'data_auth_key'    => 'sent',
 
 	'base_url'             => BASE_PATH,
 	'url_route_on'         => true,
+	'url_common_param'     => false,
 
 	'template'             => array(
 		'taglib_build_in'  => 'cx,com\Sent'

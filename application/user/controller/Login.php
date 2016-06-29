@@ -71,11 +71,79 @@ class Login extends Fornt{
 		}
 	}
 
-	public function forget(){
-		
+	public function forget($email = '', $verify = ''){
+		if (IS_POST) {
+			//验证码验证
+			$this->checkVerify($verify);
+			if (!$email) {
+				return $this->error('邮件必填！', url('index/index/index'));
+			}
+			$result = false;
+			$user = db('Member')->where(array('email'=>$email))->find();
+			if (!empty($user)){
+				$time = time();
+				$token = authcode($user['uid'] . "\n\r" . $user['email'] . "\n\r" . $time, 'ENCODE');
+				config('url_common_param', true);
+				$url = url('user/login/find',array('time'=>$time, 'token'=>$token), 'html', true);
+				$html = \think\Lang::get('find_password', array('url'=>$url));
+
+				$result = send_email($user['email'], '找回密码确认邮件', $html);
+			}
+			if ($result) {
+				return $this->success("已发送邮件至您邮箱，请登录您的邮箱！", url('index/index/index'));
+			}else{
+				return $this->error('发送失败！', '');
+			}
+		}else{
+			return $this->fetch();
+		}
 	}
 
 	public function find(){
-		
+		//http://127.0.0.2/user/login/find.html?time=1467174578&token=b561PJhVI2OjWUPNLsAMdeW8AKZLw/RcqyXUHBa1mCiX2OUzvq0D69Rt40F/n7zfJKR05d7qA41G6/33NQ
+		if (IS_POST) {
+			$data = $this->request->post();
+			//验证码验证
+			$this->checkVerify($data['verify']);
+			if ($data['password'] !== $data['repassword']) {
+				return $this->error('确认密码和密码不同！','');
+			}
+
+			$token_decode = authcode($data['token']);
+			list($uid, $email, $time) = explode("\n\r", $token_decode);
+			
+			$save['salt'] = rand_string(6);
+			$save['password'] = md5($data['password'].$save['salt']);
+			$result = db('Member')->where(array('uid'=>$uid))->update($save);
+			if (false != $result) {
+				return $this->success('重置成功！');
+			}else{
+				return $this->success('重置失败！');
+			}
+		}else{
+			$time = input('get.time', '', 'trim');
+			$token = input('get.token', '', 'trim');
+			if (!$time || !$token) {
+				return $this->error('参数错误！','');
+			}
+
+			$token_decode = authcode($token);
+			list($uid, $email, $time) = explode("\n\r", $token_decode);
+
+			if ((time() - $time) > 3600 || (time() - $time) < 0) {
+				return $this->error('链接已失效！', '');
+			}
+			if ($time != $time) {
+				return $this->error('非法操作！', '');
+			}
+
+			$data = array(
+				'token'  => $token,
+				'email'  => $email,
+				'uid'  => $uid,
+			);
+			$this->assign($data);
+			return $this->fetch();
+		}
 	}
 }

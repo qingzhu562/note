@@ -11,6 +11,58 @@
 define('SENTCMS_VERSION', '3.0.20160408');
 define('SENT_ADDON_PATH', ROOT_PATH . DS . 'addons' . DS);
 
+//字符串解密加密
+function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
+    $ckey_length = 4;   // 随机密钥长度 取值 0-32;
+                // 加入随机密钥，可以令密文无任何规律，即便是原文和密钥完全相同，加密结果也会每次不同，增大破解难度。
+                // 取值越大，密文变动规律越大，密文变化 = 16 的 $ckey_length 次方
+                // 当此值为 0 时，则不产生随机密钥
+    $uc_key = config('data_auth_key') ? config('data_auth_key') : 'sentcms';
+    $key = md5($key ? $key : $uc_key);
+    $keya = md5(substr($key, 0, 16));
+    $keyb = md5(substr($key, 16, 16));
+    $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : '';
+
+    $cryptkey = $keya.md5($keya.$keyc);
+    $key_length = strlen($cryptkey);
+
+    $string = $operation == 'DECODE' ? base64_decode(substr($string, $ckey_length)) : sprintf('%010d', $expiry ? $expiry + time() : 0).substr(md5($string.$keyb), 0, 16).$string;
+
+    $string_length = strlen($string);
+    $result = '';
+    $box = range(0, 255);
+    $rndkey = array();
+    for($i = 0; $i <= 255; $i++) {
+        $rndkey[$i] = ord($cryptkey[$i % $key_length]);
+    }
+
+    for($j = $i = 0; $i < 256; $i++) {
+        $j = ($j + $box[$i] + $rndkey[$i]) % 256;
+        $tmp = $box[$i];
+        $box[$i] = $box[$j];
+        $box[$j] = $tmp;
+    }
+
+    for($a = $j = $i = 0; $i < $string_length; $i++) {
+        $a = ($a + 1) % 256;
+        $j = ($j + $box[$a]) % 256;
+        $tmp = $box[$a];
+        $box[$a] = $box[$j];
+        $box[$j] = $tmp;
+        $result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256]));
+    }
+
+    if($operation == 'DECODE') {
+        if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$keyb), 0, 16)) {
+            return substr($result, 26);
+        } else {
+            return '';
+        }
+    } else {
+        return $keyc.str_replace('=', '', base64_encode($result));
+    }
+}
+
 /**
  +----------------------------------------------------------
  * 产生随机字串，可用来自动生成密码 默认长度6位 字母和数字混合
@@ -59,80 +111,6 @@ function rand_string($len=6,$type='',$addChars='') {
         }
     }
     return $str;
-}
-
-/**
- * 系统加密方法
- * @param string $data 要加密的字符串
- * @param string $key 加密密钥
- * @param int    $expire 过期时间 单位 秒
- * @return string
- * @author 麦当苗儿 <zuojiazi@vip.qq.com>
- */
-function think_encrypt($data, $key = '', $expire = 0)
-{
-    $key = md5(empty($key) ? config('data_auth_key') : $key);
-    $data = base64_encode($data);
-    $x = 0;
-    $len = strlen($data);
-    $l = strlen($key);
-    $char = '';
-
-    for ($i = 0; $i < $len; $i++) {
-        if ($x == $l) $x = 0;
-        $char .= substr($key, $x, 1);
-        $x++;
-    }
-
-    $str = sprintf('%010d', $expire ? $expire + time() : 0);
-
-    for ($i = 0; $i < $len; $i++) {
-        $str .= chr(ord(substr($data, $i, 1)) + (ord(substr($char, $i, 1))) % 256);
-    }
-    return str_replace(array('+', '/', '='), array('-', '_', ''), base64_encode($str));
-}
-
-/**
- * 系统解密方法
- * @param  string $data 要解密的字符串 （必须是think_encrypt方法加密的字符串）
- * @param  string $key 加密密钥
- * @return string
- * @author 麦当苗儿 <zuojiazi@vip.qq.com>
- */
-function think_decrypt($data, $key = '')
-{
-    $key = md5(empty($key) ? config('data_auth_key') : $key);
-    $data = str_replace(array('-', '_'), array('+', '/'), $data);
-    $mod4 = strlen($data) % 4;
-    if ($mod4) {
-        $data .= substr('====', $mod4);
-    }
-    $data = base64_decode($data);
-    $expire = substr($data, 0, 10);
-    $data = substr($data, 10);
-
-    if ($expire > 0 && $expire < time()) {
-        return '';
-    }
-    $x = 0;
-    $len = strlen($data);
-    $l = strlen($key);
-    $char = $str = '';
-
-    for ($i = 0; $i < $len; $i++) {
-        if ($x == $l) $x = 0;
-        $char .= substr($key, $x, 1);
-        $x++;
-    }
-
-    for ($i = 0; $i < $len; $i++) {
-        if (ord(substr($data, $i, 1)) < ord(substr($char, $i, 1))) {
-            $str .= chr((ord(substr($data, $i, 1)) + 256) - ord(substr($char, $i, 1)));
-        } else {
-            $str .= chr(ord(substr($data, $i, 1)) - ord(substr($char, $i, 1)));
-        }
-    }
-    return base64_decode($str);
 }
 
 /**
@@ -1007,4 +985,21 @@ function getContentNav($type, $info){
         $html = '没有了……';
     }
     return $html;
+}
+
+function send_email($to, $subject, $message){
+    $config = array(
+        'protocol'  => 'smtp',
+        'smtp_host' => \think\Config::get('mail_host'),
+        'smtp_user' => \think\Config::get('mail_username'),
+        'smtp_pass' => \think\Config::get('mail_password')
+    );
+    $email = new \com\Email($config);
+    $email->from(\think\Config::get('mail_fromname'), \think\Config::get('web_site_title'));
+    $email->to($to);
+
+    $email->subject($subject);
+    $email->message($message);
+
+    return $email->send();
 }

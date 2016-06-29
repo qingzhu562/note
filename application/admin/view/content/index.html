@@ -11,6 +11,26 @@
 		</div>
 	</header>
 	<div class="main-box-body clearfix">
+		<div class="row">
+			<form method="get">
+				<div class="col-sm-12 col-md-4 col-lg-3">
+					<input type="text" class="form-control" name="keyword" value="{$keyword|default=''}" placeholder="请输入关键字">
+				</div>
+				{if isset($cate_list)}
+				<div class="col-sm-12 col-md-4 col-lg-3">
+					<select name="category" id="category" class="form-control">
+						<option value="">请选择栏目</option>
+						{volist name="cate_list" id="item"}
+						<option value="{$item['id']}" {if isset($category) && $item['id'] == $category}selected{/if}>{$item['title_show']}</option>
+						{/volist}
+					</select>
+				</div>
+				{/if}
+				<div class="col-sm-12 col-md-4">
+					<button class="btn btn-primary" type="submit">搜索</button>
+				</div>
+			</form>
+		</div>
 		<div class="table-responsive clearfix">
 
 			<div class="table-responsive clearfix">
@@ -46,9 +66,9 @@
 							<td>
 								{if isset($item['is_top'])}
 								{if $item['is_top']}
-								<a href="{:url('admin/content/is_top',array('id'=>$item['id'],'model_id'=>$model_id,'is_top'=>'0'))}" class="ajax-get">取消置顶</a>
+								<a href="{:url('admin/content/settop',array('id'=>$item['id'],'model_id'=>$model_id,'is_top'=>'0'))}" class="ajax-get">取消置顶</a>
 								{else/}
-								<a href="{:url('admin/content/is_top',array('id'=>$item['id'],'model_id'=>$model_id,'is_top'=>'1'))}" class="ajax-get">置顶</a>
+								<a href="{:url('admin/content/settop',array('id'=>$item['id'],'model_id'=>$model_id,'is_top'=>'1'))}" class="ajax-get">置顶</a>
 								{/if}
 								{/if}
 								{if isset($item['status'])}

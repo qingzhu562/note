@@ -57,7 +57,7 @@ class Upload extends User {
 	}
 
 	public function avatar(){
-		$file = \think\Input::file('UpFile');
+		$file = $this->request->file('UpFile');
 		$info = $file->rule('uniqid')->move('./uploads/avatar/'.setavatardir(session('user_auth.uid')), true, true);
 
 		$image = new \org\Image();
