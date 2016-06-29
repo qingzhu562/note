@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta charset="UTF-8">
+<title>找回密码</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/libs/font-awesome.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/common.css"/>
+<!-- <link href='//fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400' rel='stylesheet' type='text/css'> -->
+<link rel="stylesheet" type="text/css" href="__CSS__/member_login.css"/>
+<script src="__PUBLIC__/js/jquery.js"></script>
+<!--[if lt IE 9]>
+<script src="__PUBLIC__/js/html5shiv.js"></script>
+<script src="__PUBLIC__/js/respond.min.js"></script>
+<![endif]-->
+</head>
+<body>
+<div class="header-wrap">
+	<header class="public-head-layout wrapper">
+		<h1 class="site-logo">
+			<a href="{:url('index/index/index')}"><img src="__PUBLIC__/images/logo.png" class="pngFix"></a>
+		</h1>
+		<div class="nc-login-now">
+			
+		</div>
+	</header>
+</div>
+<div class="nc-login-layout">
+	<div class="left-pic"><img src="http://s.dxpd.cn/data/upload/shop/login/1.jpg" border="0"></div>
+	<div class="nc-login">
+		<div class="nc-login-mode">
+			<ul class="tabs-nav">
+				<li><a href="#default" class="tabulous_active">找回密码<i></i></a></li>
+			</ul>
+			<div id="tabs_container" class="tabs-container">
+				<div id="default" class="tabs-content">
+					<form id="login_form" class="nc-login-form" method="post">
+						<dl>
+							<dt>注册邮箱：</dt>
+							<dd>
+								<input type="text" class="text" autocomplete="off"  name="email" placeholder="注册邮箱" value="{$email}" id="email" readonly >
+							</dd>
+						</dl>
+						<dl>
+							<dt>设置密码：</dt>
+							<dd>
+								<input type="password" id="password" name="password" class="text" placeholder="6-20个大小写英文字母、符号或数字"/>
+							</dd>
+						</dl>
+						<dl>
+							<dt>确认密码：</dt>
+							<dd>
+								<input type="password" id="repassword" name="repassword" class="text" placeholder="请再次输入密码"/>
+							</dd>
+						</dl>
+						<div class="code-div mt15">
+							<dl>
+								<dt>验证码：</dt>
+								<dd>
+									<input type="text" name="verify" autocomplete="off" class="text w80" placeholder="输入验证码" id="verify" size="10" />
+								</dd>
+							</dl>
+							<span><img src="{:url('user/index/verify')}" id="codeimage"/> <a class="makecode" href="javascript:void(0)">看不清，换一张</a></span>
+						</div>
+						<div class="submit-div">
+							<input type="hidden" name="token" value="{$token}">
+							<input type="hidden" name="uid" value="{$uid}">
+							<input type="submit" class="submit" value="登&nbsp;&nbsp;&nbsp;录">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<div id="footer" class="wrapper">
+	<p><a href="{:url('index/index/index')}">首页</a>
+	| <a  href="{:url('user/index/index')}">会员中心</a>
+	</p>
+	Copyright 2015 <a href="http://www.tensent.cn" target="_blank">腾速科技</a> All rights reserved.<br/>
+</div>
+</body>
+</html>
+<script src="__PUBLIC__/js/messager.js"></script>
+<script type="text/javascript">
+$(function(){
+
+	$("form").submit(function(e){
+		e.preventDefault();
+		var self = $(this);
+		$.post(self.attr("action"), self.serialize(), success, "json");
+
+		function success(data){
+			if(data.code){
+				$.messager.show(data.msg, {placement: 'center',type:'success'});
+				setTimeout(function(){
+					window.location.href = data.url;
+				},3000);
+			} else {
+				$.messager.show(data.msg, {placement: 'center',type:'success'});
+				//刷新验证码
+				$(".makecode").click();
+			}
+		}
+	});
+	//初始化选中用户名输入框
+	$("#itemBox").find("input[name=username]").focus();
+	//刷新验证码
+	var verifyimg = $("#codeimage").attr("src");
+	$(".makecode").click(function(){
+		if( verifyimg.indexOf('?')>0){
+			$("#codeimage").attr("src", verifyimg+'&random='+Math.random());
+		}else{
+			$("#codeimage").attr("src", verifyimg.replace(/\?.*$/,'')+'?'+Math.random());
+		}
+	});
+
+	//placeholder兼容性
+	//如果支持 
+	function isPlaceholer(){
+		var input = document.createElement('input');
+		return "placeholder" in input;
+	}
+	//如果不支持
+	if(!isPlaceholer()){
+		$(".placeholder_copy").css({display:'block'})
+		$("#itemBox input").keydown(function(){
+			$(this).parents(".item").next(".placeholder_copy").css({display:'none'})                    
+		})
+		$("#itemBox input").blur(function(){
+			if($(this).val()==""){
+				$(this).parents(".item").next(".placeholder_copy").css({display:'block'});
+			}
+		})
+	}
+});
+</script>

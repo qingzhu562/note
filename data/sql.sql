@@ -3,10 +3,10 @@
 -- 
 -- Host     : 127.0.0.1
 -- Port     : 
--- Database : sentcms_www
+-- Database : nmg_www
 -- 
 -- Part : #1
--- Date : 2016-06-28 09:38:33
+-- Date : 2016-06-28 17:51:31
 -- -----------------------------
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -27,7 +27,7 @@ CREATE TABLE `sent_action` (
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态',
   `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='系统行为表';
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='系统行为表';
 
 -- -----------------------------
 -- Records of `sent_action`
@@ -83,7 +83,7 @@ CREATE TABLE `sent_ad` (
   `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '广告位状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='广告表';
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='广告表';
 
 -- -----------------------------
 -- Records of `sent_ad`
@@ -110,7 +110,7 @@ CREATE TABLE `sent_ad_place` (
   `template` varchar(150) DEFAULT NULL COMMENT '广告位模板',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '广告位状态',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='广告位表';
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='广告位表';
 
 -- -----------------------------
 -- Records of `sent_ad_place`
@@ -133,7 +133,7 @@ CREATE TABLE `sent_addons` (
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '安装时间',
   `has_adminlist` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否有后台列表',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='插件表';
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='插件表';
 
 -- -----------------------------
 -- Records of `sent_addons`
@@ -193,7 +193,7 @@ CREATE TABLE `sent_attribute` (
   `auto_type` varchar(25) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `model_id` (`model_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=55 DEFAULT CHARSET=utf8 COMMENT='模型属性表';
+) ENGINE=MyISAM AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COMMENT='模型属性表';
 
 -- -----------------------------
 -- Records of `sent_attribute`
@@ -218,7 +218,7 @@ INSERT INTO `sent_attribute` VALUES ('20', 'create_time', '创建时间', '10', 
 INSERT INTO `sent_attribute` VALUES ('21', 'update_time', '更新时间', '10', 'text', '0', '', '0', '', '1', '0', '1', '1453278665', '1383891233', '', '0', '', '0', '', '0', '0');
 INSERT INTO `sent_attribute` VALUES ('22', 'status', '数据状态', '4', 'select', '1', '', '0', '-1:删除\r\n0:禁用\r\n1:正常\r\n2:待审核\r\n3:草稿', '1', '0', '1', '1453278660', '1383891233', '', '0', '', '0', '', '0', '0');
 INSERT INTO `sent_attribute` VALUES ('24', 'content', '内容', '', 'editor', '', '', '1', '', '2', '0', '1', '1453859207', '1453859207', '', '0', '', '0', '', '0', '0');
-INSERT INTO `sent_attribute` VALUES ('25', 'tags', '标签', '20', 'tags', '', '', '1', '', '2', '0', '1', '1453881165', '1453881107', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('25', 'tags', '标签', '20', 'tags', '', '', '1', '', '1', '0', '1', '1453881165', '1453881107', '', '0', '', '0', '', '0', '0');
 INSERT INTO `sent_attribute` VALUES ('26', 'photo_list', '图片列表', '50', 'images', '', '', '1', '', '3', '0', '1', '1454052339', '1454052339', '', '0', '', '0', '', '0', '0');
 INSERT INTO `sent_attribute` VALUES ('27', 'content', '内容', '', 'editor', '', '', '1', '', '3', '0', '1', '1454052355', '1454052355', '', '0', '', '0', '', '0', '0');
 INSERT INTO `sent_attribute` VALUES ('28', 'title', '标题', '200', 'text', '', '', '1', '', '4', '0', '0', '0', '0', '', '0', '', '0', '', '0', '0');
@@ -227,7 +227,28 @@ INSERT INTO `sent_attribute` VALUES ('30', 'cover_id', '封面', '11', 'image', 
 INSERT INTO `sent_attribute` VALUES ('31', 'content', '内容', '', 'editor', '', '', '1', '', '4', '0', '0', '0', '0', '', '0', '', '0', '', '0', '0');
 INSERT INTO `sent_attribute` VALUES ('32', 'create_time', '创建时间', '11', 'datetime', '', '', '1', '', '4', '0', '0', '0', '0', '', '0', '', '0', '', '0', '0');
 INSERT INTO `sent_attribute` VALUES ('33', 'update_time', '更新时间', '11', 'datetime', '', '', '1', '', '4', '0', '0', '0', '0', '', '0', '', '0', '', '0', '0');
-INSERT INTO `sent_attribute` VALUES ('34', 'is_top', '是否置顶', '1', 'bool', '0', '', '1', '0:否\r\n1:是', '1', '0', '0', '1466041260', '1466041226', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('34', 'book_name', '书名', '500', 'text', '', '书名', '1', '', '10', '1', '0', '1465702694', '1465702578', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('35', 'book_list_no', '书目号', '20', 'text', '', '', '1', '', '10', '0', '0', '1465702614', '1465702614', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('36', 'book_bar_code', '条码', '50', 'text', '', '', '1', '', '10', '0', '0', '1465702677', '1465702632', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('37', 'book_no', '书号/标准号', '60', 'text', '', '', '1', '', '10', '0', '0', '1465702667', '1465702667', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('38', 'status', '状态', '1', 'select', '', '', '1', '1:启用\r\n0:禁用', '10', '0', '0', '1465703795', '1465703795', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('39', 'cover_id', '图书封面', '11', 'image', '', '', '1', '', '10', '0', '0', '1465703830', '1465703830', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('40', 'stand_class', '图书标准类型', '1', 'select', '', '', '1', '1:GB\r\n2:ZB\r\n3:GZ', '10', '0', '0', '1465713518', '1465713518', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('41', 'publish_date', '出版日期', '20', 'text', '', '', '1', '', '10', '0', '0', '1465713545', '1465713545', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('42', 'shop_place', '门市仓位', '20', 'text', '', '', '1', '', '10', '0', '0', '1465713574', '1465713574', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('43', 'storage_place', '内仓仓位', '20', 'text', '', '', '1', '', '10', '0', '0', '1465713591', '1465713591', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('44', 'book_name_en', '英文标准名称', '500', 'text', '', '', '1', '', '10', '0', '0', '1465713616', '1465713616', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('45', 'book_name_mn', '蒙文标准名称', '500', 'text', '', '', '1', '', '10', '0', '0', '1465713634', '1465713634', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('46', 'book_name_rs', '俄文标准名称', '500', 'text', '', '', '1', '', '10', '0', '0', '1465713652', '1465713652', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('47', 'remark', '备注', '', 'textarea', '', '', '1', '', '10', '0', '0', '1465714043', '1465714043', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('48', 'sort', '排序', '11', 'num', '', '', '1', '', '10', '0', '0', '1465714070', '1465714070', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('49', 'user_last_modify', '最后修改者', '11', 'textarea', '', '', '0', '', '10', '0', '0', '1465714134', '1465714093', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('50', 'date_last_modify', '最后修改日期', '11', 'datetime', '', '', '0', '', '10', '0', '0', '1465714562', '1465714122', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('51', 'price', '单价', '9,2', 'decimal', '', '', '1', '', '10', '0', '0', '1465714570', '1465714287', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('52', 'file', '图书文件', '11', 'attach', '', '', '1', '', '10', '0', '0', '1465714634', '1465714634', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('53', 'create_time', '发布时间', '11', 'datetime', '', '', '1', '', '10', '0', '0', '1465895610', '1465895610', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('54', 'content', '图书内容', '', 'editor', '', '', '1', '', '10', '0', '0', '1465895637', '1465895637', '', '0', '', '0', '', '0', '0');
+INSERT INTO `sent_attribute` VALUES ('55', 'is_top', '是否置顶', '1', 'bool', '0', '', '1', '0:否\r\n1:是', '1', '0', '0', '1466041260', '1466041226', '', '0', '', '0', '', '0', '0');
 
 -- -----------------------------
 -- Table structure for `sent_auth_extend`
@@ -242,6 +263,11 @@ CREATE TABLE `sent_auth_extend` (
   KEY `group_id` (`extend_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='用户组与分类的对应关系表';
 
+-- -----------------------------
+-- Records of `sent_auth_extend`
+-- -----------------------------
+INSERT INTO `sent_auth_extend` VALUES ('1', '3', '2');
+INSERT INTO `sent_auth_extend` VALUES ('1', '4', '2');
 
 -- -----------------------------
 -- Table structure for `sent_auth_group`
@@ -256,12 +282,12 @@ CREATE TABLE `sent_auth_group` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '用户组状态：为1正常，为0禁用,-1为删除',
   `rules` varchar(500) NOT NULL DEFAULT '' COMMENT '用户组拥有的规则id，多个规则 , 隔开',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- -----------------------------
 -- Records of `sent_auth_group`
 -- -----------------------------
-INSERT INTO `sent_auth_group` VALUES ('1', 'admin', '1', '网站编辑', '网站编辑，针对内容进行管理', '1', '2,1');
+INSERT INTO `sent_auth_group` VALUES ('1', 'admin', '1', '网站编辑', '网站编辑，针对内容进行管理', '1', '24,22,13,12,21,1,2');
 INSERT INTO `sent_auth_group` VALUES ('2', 'admin', '1', '网站运营', '针对网站SEO进行管理', '1', '21,20,14,12,3,19,18,17,16,15,13,1');
 
 -- -----------------------------
@@ -280,7 +306,7 @@ CREATE TABLE `sent_auth_group_access` (
 -- Records of `sent_auth_group_access`
 -- -----------------------------
 INSERT INTO `sent_auth_group_access` VALUES ('1', '2');
-INSERT INTO `sent_auth_group_access` VALUES ('14', '2');
+INSERT INTO `sent_auth_group_access` VALUES ('14', '1');
 
 -- -----------------------------
 -- Table structure for `sent_auth_rule`
@@ -297,12 +323,12 @@ CREATE TABLE `sent_auth_rule` (
   `condition` varchar(300) NOT NULL DEFAULT '' COMMENT '规则附加条件',
   PRIMARY KEY (`id`),
   KEY `module` (`module`,`status`,`type`)
-) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 -- -----------------------------
 -- Records of `sent_auth_rule`
 -- -----------------------------
-INSERT INTO `sent_auth_rule` VALUES ('1', 'admin', '2', 'admin/index/index', '后台首页', '首页管理', '1', '');
+INSERT INTO `sent_auth_rule` VALUES ('1', 'admin', '2', 'admin/order/index', '订单管理', '会员管理', '1', '');
 INSERT INTO `sent_auth_rule` VALUES ('2', 'admin', '2', 'admin/form/index', '自定义表单', '运营管理', '1', '');
 INSERT INTO `sent_auth_rule` VALUES ('3', 'admin', '2', 'admin/addons/hooks', '钩子列表', '扩展管理', '1', '');
 INSERT INTO `sent_auth_rule` VALUES ('4', 'admin', '2', 'admin/addons/index', '插件列表', '扩展管理', '1', '');
@@ -322,19 +348,48 @@ INSERT INTO `sent_auth_rule` VALUES ('17', 'admin', '2', 'admin/channel/index', 
 INSERT INTO `sent_auth_rule` VALUES ('18', 'admin', '2', 'admin/menu/index', '菜单管理', '系统管理', '1', '');
 INSERT INTO `sent_auth_rule` VALUES ('19', 'admin', '2', 'admin/config/group', '配置管理', '系统管理', '1', '');
 INSERT INTO `sent_auth_rule` VALUES ('20', 'admin', '2', 'admin/index/clear', '更新缓存', '首页管理', '1', '');
-INSERT INTO `sent_auth_rule` VALUES ('21', 'admin', '1', 'admin/config/add', '配置添加', '系统管理', '1', '');
+INSERT INTO `sent_auth_rule` VALUES ('21', 'admin', '1', 'admin/index/index', '后台首页', '首页管理', '1', '');
 INSERT INTO `sent_auth_rule` VALUES ('22', 'admin', '2', 'admin/content/index', '内容列表', '内容管理', '1', '');
 INSERT INTO `sent_auth_rule` VALUES ('23', 'admin', '2', 'admin/content/add', '内容添加', '内容管理', '1', '');
 INSERT INTO `sent_auth_rule` VALUES ('24', 'admin', '1', 'admin/content/edit', '内容编辑', '内容管理', '1', '');
 INSERT INTO `sent_auth_rule` VALUES ('25', 'admin', '1', 'admin/content/del', '内容删除', '内容管理', '1', '');
 INSERT INTO `sent_auth_rule` VALUES ('26', 'admin', '1', 'admin/content/status', '内容设置状态', '内容管理', '1', '');
-INSERT INTO `sent_auth_rule` VALUES ('27', 'admin', '1', 'admin/category/add', '栏目添加', '内容管理', '1', '');
-INSERT INTO `sent_auth_rule` VALUES ('28', 'admin', '1', 'admin/category/edit', '栏目编辑', '内容管理', '1', '');
-INSERT INTO `sent_auth_rule` VALUES ('29', 'admin', '1', 'admin/category/editable', '栏目单字编辑', '内容管理', '1', '');
-INSERT INTO `sent_auth_rule` VALUES ('30', 'admin', '1', 'admin/category/remove', '栏目删除', '内容管理', '1', '');
-INSERT INTO `sent_auth_rule` VALUES ('31', 'admin', '1', 'admin/category/merge', '栏目合并', '内容管理', '1', '');
-INSERT INTO `sent_auth_rule` VALUES ('32', 'admin', '1', 'admin/category/move', '栏目移动', '内容管理', '1', '');
-INSERT INTO `sent_auth_rule` VALUES ('33', 'admin', '1', 'admin/category/status', '栏目状态', '内容管理', '1', '');
+
+-- -----------------------------
+-- Table structure for `sent_book`
+-- -----------------------------
+DROP TABLE IF EXISTS `sent_book`;
+CREATE TABLE `sent_book` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户uid',
+  `book_name` varchar(500) NOT NULL COMMENT '书名',
+  `book_list_no` varchar(20) DEFAULT NULL,
+  `book_bar_code` varchar(50) DEFAULT NULL,
+  `book_no` varchar(60) DEFAULT NULL,
+  `status` int(1) DEFAULT NULL,
+  `cover_id` int(11) DEFAULT NULL,
+  `stand_class` int(1) DEFAULT NULL,
+  `publish_date` varchar(20) DEFAULT NULL,
+  `shop_place` varchar(20) DEFAULT NULL,
+  `storage_place` varchar(20) DEFAULT NULL,
+  `book_name_en` varchar(500) DEFAULT NULL,
+  `book_name_mn` varchar(500) DEFAULT NULL,
+  `book_name_rs` varchar(500) DEFAULT NULL,
+  `remark` text,
+  `sort` int(11) DEFAULT NULL,
+  `user_last_modify` tinytext,
+  `date_last_modify` int(11) DEFAULT NULL,
+  `price` decimal(9,2) DEFAULT NULL,
+  `file` varchar(11) DEFAULT NULL,
+  `create_time` int(11) DEFAULT NULL,
+  `content` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='图书';
+
+-- -----------------------------
+-- Records of `sent_book`
+-- -----------------------------
+INSERT INTO `sent_book` VALUES ('1', '0', 'PHP基础教程入门', '', '', '', '1', '29', '1', '2016-6', '', '', 'PHP基础教程入门', 'PHP基础教程入门', 'PHP基础教程入门', '', '10', '', '1465895710', '10.00', '', '0', '<p>PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门PHP基础教程入门</p>');
 
 -- -----------------------------
 -- Table structure for `sent_category`
@@ -377,8 +432,12 @@ CREATE TABLE `sent_category` (
 -- Records of `sent_category`
 -- -----------------------------
 INSERT INTO `sent_category` VALUES ('1', 'news', '新闻动态', '0', '0', '10', '', '', '', '', '', '', '', '', '2', '2,1', '0', '0', '1', '0', '0', '1', 'null', '1379474947', '1463561497', '1', '0', '');
-INSERT INTO `sent_category` VALUES ('2', 'company_news', '国内新闻', '1', '1', '10', '', '', '', '', '', '', '', '2,3', '2', '2,1,3', '0', '1', '1', '0', '1', '1', '', '1379475028', '1386839751', '1', '0', '');
+INSERT INTO `sent_category` VALUES ('2', 'company_news', '国内新闻', '1', '1', '10', '', '', '', '', '', '', '', '2,3', '2', '2,1,3', '0', '1', '1', '0', '1', '1', '', '1379475028', '1466522670', '1', '0', '');
 INSERT INTO `sent_category` VALUES ('3', '', '国外新闻', '1', '2', '10', '', '', '', '', '', '', '', '', '', '', '0', '1', '1', '0', '0', '', '', '0', '0', '1', '0', '');
+INSERT INTO `sent_category` VALUES ('4', '', '通知公告', '0', '0', '10', '', '', '', '', '', '', '', '', '', '', '0', '1', '1', '0', '0', '', '', '0', '1461729865', '1', '0', '');
+INSERT INTO `sent_category` VALUES ('5', '', '管理条例', '0', '0', '10', '', '', '', '', '', '', '', '', '', '', '0', '1', '1', '0', '0', '', '', '0', '1461729924', '1', '0', '');
+INSERT INTO `sent_category` VALUES ('6', '', '在线图书', '0', '0', '10', '', '', '', '', '', '', '', '', '', '', '0', '1', '1', '0', '0', '', '', '0', '1461729932', '1', '0', '');
+INSERT INTO `sent_category` VALUES ('7', '', '学生工作', '0', '0', '10', '', '', '', '', '', '', '', '', '', '', '0', '1', '1', '0', '0', '', '', '0', '1461729958', '1', '0', '');
 
 -- -----------------------------
 -- Table structure for `sent_channel`
@@ -401,12 +460,30 @@ CREATE TABLE `sent_channel` (
   `target` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '新窗口打开',
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- -----------------------------
 -- Records of `sent_channel`
 -- -----------------------------
 INSERT INTO `sent_channel` VALUES ('1', '0', '网站首页', 'index/index/index', '1', 'home', '', '', '', 'home', '1379475111', '1464490544', '1', '0');
+INSERT INTO `sent_channel` VALUES ('2', '0', '本院简介', 'index/content/detail?model_id=4&id=1', '2', '', '', '', '', 'news', '1379475131', '1379483713', '1', '0');
+INSERT INTO `sent_channel` VALUES ('3', '0', '组织机构', '#', '3', '', '', '', '', 'page', '1379475131', '1379483713', '1', '0');
+INSERT INTO `sent_channel` VALUES ('4', '0', '新闻动态', 'index/content/lists?model=article&id=1', '4', '', '', '', '', 'news', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('5', '0', '通知公告', 'index/content/lists?model=article&id=4', '5', '', '', '', '', '', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('6', '0', '管理条例', 'index/content/lists?model=article&id=5', '6', '', '', '', '', '', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('7', '0', '在线图书', 'index/book/index', '7', 'book', '', '', '', '', '0', '1464875426', '1', '0');
+INSERT INTO `sent_channel` VALUES ('8', '0', '学生工作', 'index/content/lists?model=article&id=7', '8', '', '', '', '', '', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('9', '3', '院领导', 'index/content/detail?model_id=4&id=2', '1', '', '', '', '', '', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('10', '3', '办公室', 'index/content/detail?model_id=4&id=3', '2', '', '', '', '', '', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('11', '3', '档案室', 'index/content/detail?model_id=4&id=4', '3', '', '', '', '', '', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('12', '3', 'MODIS数据中心', 'index/content/detail?model_id=4&id=5', '4', '', '', '', '', '', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('13', '3', '3S综合应用中心', 'index/content/detail?model_id=4&id=6', '5', '', '', '', '', '', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('14', '3', 'GIS二次开发中心', 'index/content/detail?model_id=4&id=7', '6', '', '', '', '', '', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('15', '3', '遥感数据综合应用中心', 'index/content/detail?model_id=4&id=8', '7', '', '', '', '', '', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('16', '3', '蒙古高原研究中心', 'index/content/detail?model_id=4&id=9', '9', '', '', '', '', '', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('17', '3', '资源与环境高校开放实验室', 'index/content/detail?model_id=4&id=10', '10', '', '', '', '', '', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('18', '4', '国内动态', 'index/content/lists?model=article&id=2', '1', '', '', '', '', '', '0', '0', '1', '0');
+INSERT INTO `sent_channel` VALUES ('19', '4', '国外动态', 'index/content/lists?model=article&id=3', '1', '', '', '', '', '', '0', '0', '1', '0');
 
 -- -----------------------------
 -- Table structure for `sent_config`
@@ -429,7 +506,7 @@ CREATE TABLE `sent_config` (
   PRIMARY KEY (`id`),
   KEY `type` (`type`),
   KEY `group` (`group`)
-) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 -- -----------------------------
 -- Records of `sent_config`
@@ -442,13 +519,13 @@ INSERT INTO `sent_config` VALUES ('6', 'data_backup_part_size', 'text', '数据�
 INSERT INTO `sent_config` VALUES ('7', 'data_backup_compress', 'bool', '数据库备份文件是否启用压缩', '99', '0:不压缩\r\n1:启用压缩', '压缩备份文件需要PHP环境支持gzopen,gzwrite函数', '', '1381713345', '1447306018', '1', '1', '9');
 INSERT INTO `sent_config` VALUES ('8', 'data_backup_compress_level', 'select', '数据库备份文件压缩级别', '99', '1:普通\r\n4:一般\r\n9:最高', '数据库备份文件的压缩级别，该配置在开启压缩时生效', '', '1381713408', '1447305979', '1', '9', '10');
 INSERT INTO `sent_config` VALUES ('9', 'develop_mode', 'bool', '开启开发者模式', '99', '0:关闭\r\n1:开启', '是否开启开发者模式', '', '1383105995', '1447305960', '1', '1', '11');
-INSERT INTO `sent_config` VALUES ('10', 'allow_visit', 'textarea', '不受限控制器方法', '99', '', '', '', '1386644047', '1438075615', '1', '0:article/draftbox\r\n1:article/mydocument\r\n2:Category/tree\r\n3:Index/verify\r\n4:file/upload\r\n5:file/download\r\n6:user/updatePassword\r\n7:user/updateNickname\r\n8:user/submitPassword\r\n9:user/submitNickname\r\n10:file/uploadpicture', '0');
-INSERT INTO `sent_config` VALUES ('11', 'deny_visit', 'textarea', '超管专限控制器方法', '99', '', '仅超级管理员可访问的控制器方法', '', '1386644141', '1438075628', '1', '0:Addons/addhook\r\n1:Addons/edithook\r\n2:Addons/delhook\r\n3:Addons/updateHook\r\n4:Admin/getMenus\r\n5:Admin/recordList\r\n6:AuthManager/updateRules\r\n7:AuthManager/tree', '0');
+INSERT INTO `sent_config` VALUES ('10', 'allow_visit', 'textarea', '不受限控制器方法', '99', '', '', '', '1386644047', '1438075615', '1', '0:upload/upload\r\n1:upload/ueditor\r\n2:upload/delete\r\n3:upload/downLocalFile', '0');
+INSERT INTO `sent_config` VALUES ('11', 'deny_visit', 'textarea', '超管专限控制器方法', '99', '', '仅超级管理员可访问的控制器方法', '', '1386644141', '1438075628', '1', '', '0');
 INSERT INTO `sent_config` VALUES ('12', 'admin_allow_ip', 'text', '后台允许访问IP', '99', '', '多个用逗号分隔，如果不配置表示不限制IP访问', '', '1387165454', '1452307198', '1', '', '12');
 INSERT INTO `sent_config` VALUES ('13', 'show_page_trace', 'bool', '是否显示页面Trace', '99', '0:关闭\r\n1:开启', '是否显示页面Trace信息', '', '1387165685', '1447306056', '1', '0', '1');
-INSERT INTO `sent_config` VALUES ('14', 'web_site_title', 'text', '网站标题', '1', '', '网站标题前台显示标题', '', '1378898976', '1379235274', '1', 'SentCMS网站管理系统', '0');
-INSERT INTO `sent_config` VALUES ('15', 'web_site_url', 'text', '网站URL', '1', '', '网站网址', '', '1378898976', '1379235274', '1', 'http://www.tensent.cn', '1');
-INSERT INTO `sent_config` VALUES ('16', 'web_site_description', 'textarea', '网站描述', '1', '', '网站搜索引擎描述', '', '1378898976', '1379235841', '1', 'SentCMS网站管理系统', '3');
+INSERT INTO `sent_config` VALUES ('14', 'web_site_title', 'text', '网站标题', '1', '', '网站标题前台显示标题', '', '1378898976', '1379235274', '1', '内蒙古师范大学', '0');
+INSERT INTO `sent_config` VALUES ('15', 'web_site_url', 'text', '网站URL', '1', '', '网站网址', '', '1378898976', '1379235274', '1', 'http://n.dxpd.cn', '1');
+INSERT INTO `sent_config` VALUES ('16', 'web_site_description', 'textarea', '网站描述', '1', '', '网站搜索引擎描述', '', '1378898976', '1379235841', '1', '内蒙古师范大学', '3');
 INSERT INTO `sent_config` VALUES ('17', 'web_site_keyword', 'textarea', '网站关键字', '1', '', '网站搜索引擎关键字', '', '1378898976', '1381390100', '1', 'SentCMS网站管理系统,SentCMS', '6');
 INSERT INTO `sent_config` VALUES ('18', 'web_site_close', 'bool', '关闭站点', '1', '0:否,1:是', '站点关闭后其他用户不能访问，管理员可以正常访问', '', '1378898976', '1447321395', '1', '0', '4');
 INSERT INTO `sent_config` VALUES ('19', 'web_site_icp', 'text', '网站备案号', '1', '', '设置在网站底部显示的备案号，如“赣ICP备13006622号', '', '1378900335', '1379235859', '1', '赣ICP备13006622号', '7');
@@ -466,6 +543,11 @@ INSERT INTO `sent_config` VALUES ('30', 'mail_fromname', 'text', '发件人姓�
 INSERT INTO `sent_config` VALUES ('31', 'mail_ishtml', 'select', '是否HTML格式邮件', '3', '0:否,1:是', '是否HTML格式邮件', '', '1455690888', '1455690888', '1', '1', '0');
 INSERT INTO `sent_config` VALUES ('32', 'mail_charset', 'text', '邮件编码', '3', '', '设置发送邮件的编码', '', '1455690920', '1455690920', '1', 'UTF8', '0');
 INSERT INTO `sent_config` VALUES ('33', 'wechat_name', 'text', '微信名称', '4', '', '填写微信名称', '', '1459136529', '1461898406', '1', '', '0');
+INSERT INTO `sent_config` VALUES ('34', '', 'text', '', '0', '', '', '', '1467043125', '1467043125', '1', '', '0');
+INSERT INTO `sent_config` VALUES ('35', '', 'text', '', '0', '', '', '', '1467043131', '1467043131', '1', '', '0');
+INSERT INTO `sent_config` VALUES ('36', '', 'text', '', '0', '', '', '', '1467043157', '1467043157', '1', '', '0');
+INSERT INTO `sent_config` VALUES ('37', '', 'text', '', '0', '', '', '', '1467043213', '1467043213', '1', '', '0');
+INSERT INTO `sent_config` VALUES ('38', '', 'text', '', '0', '', '', '', '1467043250', '1467043250', '1', '', '0');
 
 -- -----------------------------
 -- Table structure for `sent_district`
@@ -477,7 +559,7 @@ CREATE TABLE `sent_district` (
   `level` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `upid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=45052 DEFAULT CHARSET=utf8 COMMENT='中国省市区乡镇数据表';
+) ENGINE=MyISAM AUTO_INCREMENT=524 DEFAULT CHARSET=utf8 COMMENT='中国省市区乡镇数据表';
 
 -- -----------------------------
 -- Records of `sent_district`
@@ -1029,6 +1111,7 @@ CREATE TABLE `sent_document` (
   `extend` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '扩展统计字段',
   `level` int(10) NOT NULL DEFAULT '0' COMMENT '优先级',
   `is_top` int(2) NOT NULL DEFAULT '0' COMMENT '是否置顶',
+  `tags` varchar(20) DEFAULT NULL,
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '数据状态',
@@ -1039,12 +1122,12 @@ CREATE TABLE `sent_document` (
 -- -----------------------------
 -- Records of `sent_document`
 -- -----------------------------
-INSERT INTO `sent_document` VALUES ('5', '1', '', '测试', '2', '', '3', '0', '0', '0', '0', '1463648554', '0', '2', '0', '0', '0', '0', '1463648554', '1463648554', '1');
-INSERT INTO `sent_document` VALUES ('4', '1', '', '南昌腾速科技有限公司关于春节放假通知', '3', '南昌腾速科技有限公司关于春节放假通知', '2', '0', '0', '0', '0', '1461809278', '0', '5', '0', '0', '0', '0', '1461809278', '1461809278', '1');
-INSERT INTO `sent_document` VALUES ('6', '1', '', '我校辅导员赴天津观摩全国辅导员职业技能大赛第一赛区复赛', '2', '', '2', '0', '0', '0', '0', '1461809225', '0', '3', '0', '0', '0', '0', '1461809225', '1461809225', '1');
-INSERT INTO `sent_document` VALUES ('7', '1', '', '我校举办高校教师教学发展主题培训会', '3', '', '2', '0', '0', '0', '0', '1461809234', '0', '9', '0', '0', '0', '0', '1461809234', '1461809234', '1');
-INSERT INTO `sent_document` VALUES ('11', '1', '', '测试文档标题', '2', '', '2', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '1465207747', '1');
-INSERT INTO `sent_document` VALUES ('12', '1', '', '测试文章的添加功能', '2', '测试文章的添加功能', '2', '1', '0', '0', '0', '1465207807', '0', '2', '0', '0', '0', '0', '1465207807', '1465207807', '2');
+INSERT INTO `sent_document` VALUES ('5', '1', '', '测试', '2', '', '3', '0', '0', '0', '0', '1463648554', '0', '2', '0', '0', '0', '0', '测试,sentcms,文档', '1463648554', '1463648554', '1');
+INSERT INTO `sent_document` VALUES ('4', '1', '', '南昌腾速科技有限公司关于春节放假通知', '3', '南昌腾速科技有限公司关于春节放假通知', '2', '0', '0', '0', '0', '1461809278', '0', '6', '0', '0', '0', '0', '测试,sentcms,文档', '1461809278', '1461809278', '1');
+INSERT INTO `sent_document` VALUES ('6', '1', '', '我校辅导员赴天津观摩全国辅导员职业技能大赛第一赛区复赛', '2', '', '2', '0', '0', '0', '0', '1461809225', '0', '3', '0', '0', '0', '0', '测试,sentcms,文档', '1461809225', '1461809225', '1');
+INSERT INTO `sent_document` VALUES ('7', '1', '', '我校举办高校教师教学发展主题培训会', '3', '', '2', '0', '0', '0', '0', '1461809234', '0', '10', '0', '0', '0', '0', '测试,sentcms,文档', '1461809234', '1461809234', '1');
+INSERT INTO `sent_document` VALUES ('11', '1', '', '测试文档标题', '2', '', '2', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '测试,sentcms,文档', '0', '1465207747', '1');
+INSERT INTO `sent_document` VALUES ('12', '1', '', '测试文章的添加功能', '2', '测试文章的添加功能', '2', '1', '0', '0', '0', '1465207807', '0', '4', '0', '0', '0', '0', '测试,sentcms,文档', '1465207807', '1465207807', '2');
 
 -- -----------------------------
 -- Table structure for `sent_document_article`
@@ -1053,20 +1136,19 @@ DROP TABLE IF EXISTS `sent_document_article`;
 CREATE TABLE `sent_document_article` (
   `doc_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `content` text,
-  `tags` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`doc_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='文章';
 
 -- -----------------------------
 -- Records of `sent_document_article`
 -- -----------------------------
-INSERT INTO `sent_document_article` VALUES ('2', '<p>我校辅导员赴天津观摩全国辅导员职业技能大赛第一赛区复赛</p>', '');
-INSERT INTO `sent_document_article` VALUES ('4', '<p>南昌腾速科技有限公司关于春节放假通知</p>', '');
-INSERT INTO `sent_document_article` VALUES ('6', '<p>我校辅导员赴天津观摩全国辅导员职业技能大赛第一赛区复赛</p>', '');
-INSERT INTO `sent_document_article` VALUES ('7', '<p>我校举办高校教师教学发展主题培训会</p>', '');
-INSERT INTO `sent_document_article` VALUES ('11', '<p>测试文档标题</p>', '');
-INSERT INTO `sent_document_article` VALUES ('8', '<p>市场陈列</p>', '');
-INSERT INTO `sent_document_article` VALUES ('12', '<p>测试文章的添加功能</p>', '');
+INSERT INTO `sent_document_article` VALUES ('2', '<p>我校辅导员赴天津观摩全国辅导员职业技能大赛第一赛区复赛</p>');
+INSERT INTO `sent_document_article` VALUES ('4', '<p>南昌腾速科技有限公司关于春节放假通知</p>');
+INSERT INTO `sent_document_article` VALUES ('6', '<p>我校辅导员赴天津观摩全国辅导员职业技能大赛第一赛区复赛</p>');
+INSERT INTO `sent_document_article` VALUES ('7', '<p>我校举办高校教师教学发展主题培训会</p>');
+INSERT INTO `sent_document_article` VALUES ('11', '<p>测试文档标题</p>');
+INSERT INTO `sent_document_article` VALUES ('8', '<p>市场陈列</p>');
+INSERT INTO `sent_document_article` VALUES ('12', '<p>测试文章的添加功能</p>');
 
 -- -----------------------------
 -- Table structure for `sent_document_photo`
@@ -1103,7 +1185,12 @@ CREATE TABLE `sent_file` (
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_md5` (`md5`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='文件表';
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='文件表';
+
+-- -----------------------------
+-- Records of `sent_file`
+-- -----------------------------
+INSERT INTO `sent_file` VALUES ('1', 'sql.sql', '576027ac8b70f.sql', '20160614/', 'sql', '', '101150', 'c8b5613759bf6fca2c39a049f8467675', 'a4050af93ccab5b4dc2423d7295d156c4992e973', '0', '', '0');
 
 -- -----------------------------
 -- Table structure for `sent_hooks`
@@ -1159,7 +1246,22 @@ CREATE TABLE `sent_link` (
 -- -----------------------------
 -- Records of `sent_link`
 -- -----------------------------
-INSERT INTO `sent_link` VALUES ('1', '1', '腾速科技', 'http://www.tensent.cn', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('5', '1', '腾速科技', 'http://www.tensent.cn', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('6', '2', '学生', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('7', '2', '教职工', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('8', '2', '校友', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('9', '2', '访客', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('10', '2', '申请入读', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('11', '3', '办公电话', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('12', '3', '二级学院', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('13', '3', '管理机构', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('14', '3', '科研院所', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('15', '3', '师大校历', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('16', '4', '信息门户', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('17', '4', '电子邮件', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('18', '4', '图书馆', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('19', '4', '校园网登陆/注销', '#', '0', '', '0', '0', '1462496026', '0', '1');
+INSERT INTO `sent_link` VALUES ('20', '4', 'VPN服务', '#', '0', '', '0', '0', '1462496026', '0', '1');
 
 -- -----------------------------
 -- Table structure for `sent_member`
@@ -1190,12 +1292,12 @@ CREATE TABLE `sent_member` (
   `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '会员状态',
   PRIMARY KEY (`uid`),
   KEY `status` (`status`)
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='会员表';
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
 -- -----------------------------
 -- Records of `sent_member`
 -- -----------------------------
-INSERT INTO `sent_member` VALUES ('1', 'admin', 'e927747ef39033eca386584ef290949c', '系统管理员', 'admin@admin.com', '', '1', '0000-00-00', '707479167', '0', '测试用户签名', '0', '0', '0', '0', 'YsIplN', '132', '0', '1455846185', '2130706433', '1467077781', '1');
+INSERT INTO `sent_member` VALUES ('1', 'admin', 'e927747ef39033eca386584ef290949c', '系统管理员', 'admin@admin.com', '', '1', '0000-00-00', '707479167', '0', '测试用户签名', '0', '0', '0', '0', 'YsIplN', '143', '0', '1455846185', '2130706433', '1467042947', '1');
 
 -- -----------------------------
 -- Table structure for `sent_member_extend`
@@ -1203,7 +1305,7 @@ INSERT INTO `sent_member` VALUES ('1', 'admin', 'e927747ef39033eca386584ef290949
 DROP TABLE IF EXISTS `sent_member_extend`;
 CREATE TABLE `sent_member_extend` (
   `uid` int(11) NOT NULL COMMENT '用户UID',
-  `education` int(10) DEFAULT 0,
+  `education` int(10) DEFAULT '0',
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -1308,6 +1410,7 @@ INSERT INTO `sent_menu` VALUES ('22', '广告管理', 'admin', 'cc', '5', '0', '
 INSERT INTO `sent_menu` VALUES ('23', '插件列表', 'admin', 'usb', '6', '0', 'admin/addons/index', '0', '', '插件管理', '0', '0');
 INSERT INTO `sent_menu` VALUES ('24', '钩子列表', 'admin', 'code', '6', '0', 'admin/addons/hooks', '0', '', '插件管理', '0', '0');
 INSERT INTO `sent_menu` VALUES ('25', '自定义表单', 'admin', '', '5', '0', 'admin/form/index', '0', '', '运营管理', '0', '0');
+INSERT INTO `sent_menu` VALUES ('27', '订单管理', 'admin', '', '4', '0', 'admin/order/index', '0', '', '订单管理', '0', '0');
 
 -- -----------------------------
 -- Table structure for `sent_model`
@@ -1345,9 +1448,85 @@ CREATE TABLE `sent_model` (
 -- Records of `sent_model`
 -- -----------------------------
 INSERT INTO `sent_model` VALUES ('1', 'document', '通用模型', '0', '', '', '1', '1', '{\"1\":[\"17\",\"16\",\"19\",\"20\",\"14\",\"13\",\"4\",\"3\",\"2\",\"5\",\"12\",\"11\",\"10\"]}', '1:基础,2:扩展', '1,7,8,9,10,2,11,12,13,3,4,14,25,15,5,6,23,22,24', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', '10', '', '', '', '', '', '1450088499', '1454054412', '1', 'MyISAM');
-INSERT INTO `sent_model` VALUES ('2', 'article', '文章', '1', 'file-word-o', '', '0', '1', '{\"1\":[\"3\",\"2\",\"4\",\"25\",\"12\",\"5\",\"24\",\"55\"],\"2\":[\"11\",\"10\",\"13\",\"19\",\"17\",\"16\",\"14\",\"20\"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', '10', '', '', '', '', '', '1453859167', '1467019566', '1', 'MyISAM');
-INSERT INTO `sent_model` VALUES ('3', 'photo', '图片', '1', 'file-image-o', '', '0', '1', '{\"1\":[\"3\",\"2\",\"4\",\"12\",\"26\",\"5\",\"27\",\"55\"],\"2\":[\"11\",\"10\",\"19\",\"13\",\"16\",\"17\",\"14\",\"20\"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', '10', '', '', '', '', '', '1454052310', '1467019679', '1', 'MyISAM');
-INSERT INTO `sent_model` VALUES ('4', 'page', '单页', '2', 'file-text-o', '', '0', '1', '{\"1\":[\"28\",\"30\",\"31\",\"32\",\"33\"]}', '1:基础', '', '', '', 'id:ID\r\ntitle:标题\r\nupdate_time:更新时间', '10', '', '', '', '', '', '1456296668', '1467019686', '1', 'MyISAM');
+INSERT INTO `sent_model` VALUES ('2', 'article', '文章', '1', 'file-word-o', '', '1', '1', '{\"1\":[\"3\",\"2\",\"4\",\"25\",\"12\",\"5\",\"24\",\"55\"],\"2\":[\"11\",\"10\",\"13\",\"19\",\"17\",\"16\",\"14\",\"20\"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', '10', '', '', '', '', '', '1453859167', '1467107375', '1', 'MyISAM');
+INSERT INTO `sent_model` VALUES ('3', 'photo', '图片', '1', 'file-image-o', '', '1', '1', '{\"1\":[\"3\",\"2\",\"4\",\"12\",\"25\",\"26\",\"5\",\"27\",\"55\"],\"2\":[\"11\",\"10\",\"19\",\"13\",\"16\",\"17\",\"14\",\"20\"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', '10', '', '', '', '', '', '1454052310', '1467107399', '1', 'MyISAM');
+INSERT INTO `sent_model` VALUES ('4', 'page', '单页', '2', 'file-text-o', '', '1', '1', '{\"1\":[\"28\",\"30\",\"31\",\"32\",\"33\"]}', '1:基础', '', '', '', 'id:ID\r\ntitle:标题\r\nupdate_time:更新时间', '10', '', '', '', '', '', '1456296668', '1464401211', '1', 'MyISAM');
+INSERT INTO `sent_model` VALUES ('10', 'book', '图书', '2', 'book', '', '1', '1', '{\"1\":[\"34\",\"39\",\"45\",\"44\",\"46\",\"41\",\"51\",\"47\",\"54\",\"38\"],\"2\":[\"52\",\"53\",\"43\",\"48\",\"42\",\"40\",\"37\",\"36\",\"35\"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\nbook_name:书名', '10', '', '', '', '', '', '1465702527', '1465895688', '1', 'MyISAM');
+
+-- -----------------------------
+-- Table structure for `sent_module`
+-- -----------------------------
+DROP TABLE IF EXISTS `sent_module`;
+CREATE TABLE `sent_module` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL COMMENT '模块名',
+  `alias` varchar(30) NOT NULL COMMENT '中文名',
+  `version` varchar(20) NOT NULL COMMENT '版本号',
+  `is_com` tinyint(4) NOT NULL COMMENT '是否商业版',
+  `show_nav` tinyint(4) NOT NULL COMMENT '是否显示在导航栏中',
+  `summary` varchar(200) NOT NULL COMMENT '简介',
+  `developer` varchar(50) NOT NULL COMMENT '开发者',
+  `website` varchar(200) NOT NULL COMMENT '网址',
+  `entry` varchar(50) NOT NULL COMMENT '前台入口',
+  `is_setup` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否已安装',
+  `sort` int(11) NOT NULL DEFAULT '0' COMMENT '模块排序',
+  `icon` varchar(20) NOT NULL,
+  `can_uninstall` tinyint(4) NOT NULL,
+  `admin_entry` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `name_2` (`name`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='模块管理表';
+
+-- -----------------------------
+-- Records of `sent_module`
+-- -----------------------------
+INSERT INTO `sent_module` VALUES ('1', 'Home', '网站主页', '1.0.0', '0', '1', '首页模块，主要用于展示网站内容', '南昌腾速科技有限公司', 'http://www.tensent.cn', 'Home/index/index', '1', '0', 'home', '0', 'Admin/index/index');
+INSERT INTO `sent_module` VALUES ('2', 'User', '用户中心', '1.0.0', '0', '1', '用户中心模块，系统核心模块', '南昌腾速科技有限公司', 'http://www.tensent.cn', 'User/index/index', '1', '0', 'user', '0', 'Admin/User/index');
+
+-- -----------------------------
+-- Table structure for `sent_order`
+-- -----------------------------
+DROP TABLE IF EXISTS `sent_order`;
+CREATE TABLE `sent_order` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `order_no` varchar(30) NOT NULL COMMENT '订单编号',
+  `uid` int(11) NOT NULL COMMENT '用户UID',
+  `price_count` decimal(9,2) DEFAULT NULL COMMENT '订单总价',
+  `pay_type` varchar(20) NOT NULL DEFAULT 'wechat' COMMENT '支付方式',
+  `pay_status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '支付状态',
+  `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态',
+  `create_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+  `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单表';
+
+-- -----------------------------
+-- Records of `sent_order`
+-- -----------------------------
+INSERT INTO `sent_order` VALUES ('31', 'SN201606181948059396', '14', '10.00', 'alipay', '0', '1', '1466250485', '1466250488');
+
+-- -----------------------------
+-- Table structure for `sent_order_product`
+-- -----------------------------
+DROP TABLE IF EXISTS `sent_order_product`;
+CREATE TABLE `sent_order_product` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `order_no` varchar(30) NOT NULL COMMENT '订单编号',
+  `product_id` int(11) NOT NULL COMMENT '产品ID',
+  `num` int(11) NOT NULL COMMENT '购买数量',
+  `price` int(11) NOT NULL COMMENT '购买单价',
+  `price_count` int(11) NOT NULL COMMENT '购买总价',
+  `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态',
+  `craete_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+  `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单产品';
+
+-- -----------------------------
+-- Records of `sent_order_product`
+-- -----------------------------
+INSERT INTO `sent_order_product` VALUES ('27', 'SN201606181948059396', '1', '1', '10', '10', '0', '0', '1466250485');
 
 -- -----------------------------
 -- Table structure for `sent_page`
@@ -1363,8 +1542,21 @@ CREATE TABLE `sent_page` (
   `create_time` int(11) DEFAULT NULL,
   `update_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='单页';
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='单页';
 
+-- -----------------------------
+-- Records of `sent_page`
+-- -----------------------------
+INSERT INTO `sent_page` VALUES ('1', '0', '本院简介', '4', '15', '<p>测试数据</p>', '1463587200', '1465703665');
+INSERT INTO `sent_page` VALUES ('2', '0', '院领导', '4', '15', '<p>测试数据</p>', '1463587200', '1465703665');
+INSERT INTO `sent_page` VALUES ('3', '0', '办公室', '4', '15', '<p>测试数据</p>', '1463587200', '1465703665');
+INSERT INTO `sent_page` VALUES ('4', '0', '档案室', '4', '15', '<p>测试数据</p>', '1463587200', '1465703665');
+INSERT INTO `sent_page` VALUES ('5', '0', 'MODIS数据中心', '4', '15', '<p>MODIS数据中心</p>', '1463587200', '1465703665');
+INSERT INTO `sent_page` VALUES ('6', '0', '3S综合应用中心', '4', '15', '<p>3S综合应用中心</p>', '1463587200', '1465703665');
+INSERT INTO `sent_page` VALUES ('7', '0', 'GIS二次开发中心', '4', '15', '<p>GIS二次开发中心</p>', '1463587200', '1465703665');
+INSERT INTO `sent_page` VALUES ('8', '0', '遥感数据综合应用中心', '4', '15', '<p>遥感数据综合应用中心</p>', '1463587200', '1465703665');
+INSERT INTO `sent_page` VALUES ('9', '0', '蒙古高原研究中心', '4', '15', '<p>蒙古高原研究中心</p>', '1463587200', '1465703665');
+INSERT INTO `sent_page` VALUES ('10', '0', '资源与环境高校开放实验室', '4', '15', '<p>资源与环境高校开放实验室</p>', '1463587200', '1465703665');
 
 -- -----------------------------
 -- Table structure for `sent_picture`
@@ -1379,8 +1571,40 @@ CREATE TABLE `sent_picture` (
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
+-- -----------------------------
+-- Records of `sent_picture`
+-- -----------------------------
+INSERT INTO `sent_picture` VALUES ('1', '/uploads/picture/2016-05-11/5733139be0794.png', '', '81ce977a5d7c5ca65e569e8b219d495d', '631d88934fdc0b8b076be11b16dd0b2198393db7', '1', '0');
+INSERT INTO `sent_picture` VALUES ('2', '/uploads/picture/2016-05-11/573313b0b542b.jpg', '', '30d8360d72b8094157a3437d55bdee0a', 'f74226c1ea337c8c20e54491ab74093936d2bede', '1', '0');
+INSERT INTO `sent_picture` VALUES ('3', '/uploads/picture/2016-05-11/5733141fae525.png', '', 'a0e7ccb947ef0aa95dc0ce50a5de7c05', '700123d0749aaecebeae5f54334fa279502a57f6', '1', '0');
+INSERT INTO `sent_picture` VALUES ('4', '/uploads/picture/2016-05-11/57331457e098e.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', '1', '0');
+INSERT INTO `sent_picture` VALUES ('5', '/uploads/picture/2016-05-11/573314ac38d86.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', '1', '0');
+INSERT INTO `sent_picture` VALUES ('6', '/uploads/picture/2016-05-11/573314fd2c3f5.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', '1', '0');
+INSERT INTO `sent_picture` VALUES ('7', '/uploads/picture/2016-05-11/5733151e7101d.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', '1', '0');
+INSERT INTO `sent_picture` VALUES ('8', '/uploads/picture/2016-05-11/5733153062aec.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', '1', '0');
+INSERT INTO `sent_picture` VALUES ('9', '/uploads/picture/2016-05-11/573315afad7a1.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', '1', '0');
+INSERT INTO `sent_picture` VALUES ('10', '/uploads/picture/2016-05-11/57331680ae053.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', '1', '0');
+INSERT INTO `sent_picture` VALUES ('11', '/uploads/picture/2016-05-11/5733169e11942.jpg', '', '30d8360d72b8094157a3437d55bdee0a', 'f74226c1ea337c8c20e54491ab74093936d2bede', '1', '0');
+INSERT INTO `sent_picture` VALUES ('12', '/uploads/picture/2016-05-11/5733170c02baf.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', '1', '0');
+INSERT INTO `sent_picture` VALUES ('13', '/uploads/picture/2016-05-11/5733172bf2a85.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', '1', '0');
+INSERT INTO `sent_picture` VALUES ('14', '/uploads/picture/2016-05-11/573317546db5d.png', '', 'd8822e1e7e27716374812021498d1321', 'ce86e20800e6f43f73e4664cdd1c93daa0137151', '1', '0');
+INSERT INTO `sent_picture` VALUES ('15', '/uploads/picture/2016-06-04/575258deaaf50.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', '1', '0');
+INSERT INTO `sent_picture` VALUES ('16', '/uploads/picture/2016-06-05/57539462a20b8.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', '1', '0');
+INSERT INTO `sent_picture` VALUES ('17', '/uploads/picture/2016-06-05/575395e576640.jpg', '', 'f236e7fa3dc02ff1cc87031098797387', '76f41d4c21af5e433b1a48bf8da0e3a78b3d979f', '1', '0');
+INSERT INTO `sent_picture` VALUES ('18', '/uploads/picture/2016-06-05/575409f67941d.jpg', '', 'f236e7fa3dc02ff1cc87031098797387', '76f41d4c21af5e433b1a48bf8da0e3a78b3d979f', '1', '0');
+INSERT INTO `sent_picture` VALUES ('19', '/uploads/picture/2016-06-07/5756cbed3ea40.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', '1', '0');
+INSERT INTO `sent_picture` VALUES ('20', '/uploads/picture/20160607/5756cc480b490.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', '1', '0');
+INSERT INTO `sent_picture` VALUES ('21', '/uploads/picture/20160607/5756ccf66a5d3.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', '1', '0');
+INSERT INTO `sent_picture` VALUES ('22', '/uploads/picture/20160607/5756cd41b0f8b.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', '1', '0');
+INSERT INTO `sent_picture` VALUES ('23', '/uploads/picture/20160607/5756cd7e83a32.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', '1', '0');
+INSERT INTO `sent_picture` VALUES ('24', '/uploads/picture/20160607/5756cd96596b5.jpg', '', '8544ae8d8a6ad9e2c048a4c0da94f695', 'ca6b5aaceefbd0e58298c71196ef7c0b54edbaa9', '1', '0');
+INSERT INTO `sent_picture` VALUES ('25', '/uploads/picture/20160612/575d0904d24fd.jpg', '', '342afbd18af9f4bc2cf02fdc2026161b', '7a13cb1452742e3bfaaa2887c826426d530cd1d1', '1', '0');
+INSERT INTO `sent_picture` VALUES ('26', '/uploads/picture/20160612/575d09236a74c.jpg', '', '342afbd18af9f4bc2cf02fdc2026161b', '7a13cb1452742e3bfaaa2887c826426d530cd1d1', '1', '0');
+INSERT INTO `sent_picture` VALUES ('27', '/uploads/picture/20160612/575d0a80c8648.jpg', '', '342afbd18af9f4bc2cf02fdc2026161b', '7a13cb1452742e3bfaaa2887c826426d530cd1d1', '1', '0');
+INSERT INTO `sent_picture` VALUES ('28', '/uploads/picture/20160612/575d0ae42797e.jpg', '', '342afbd18af9f4bc2cf02fdc2026161b', '7a13cb1452742e3bfaaa2887c826426d530cd1d1', '1', '0');
+INSERT INTO `sent_picture` VALUES ('29', '/uploads/picture/20160612/575d0b19451af.jpg', '', '342afbd18af9f4bc2cf02fdc2026161b', '7a13cb1452742e3bfaaa2887c826426d530cd1d1', '1', '0');
 
 -- -----------------------------
 -- Table structure for `sent_seo_rule`
@@ -1398,12 +1622,12 @@ CREATE TABLE `sent_seo_rule` (
   `seo_description` text NOT NULL COMMENT 'SEO描述',
   `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- -----------------------------
 -- Records of `sent_seo_rule`
 -- -----------------------------
-INSERT INTO `sent_seo_rule` VALUES ('1', '整站标题', '', '', '', '1', 'SentCMS网站管理系统', 'SentCMS网站管理系统', 'SentCMS网站管理系统', '7');
+INSERT INTO `sent_seo_rule` VALUES ('1', '整站标题', '', '', '', '1', '内蒙古师范大学', '内蒙古师范大学', '内蒙古师范大学', '7');
 
 -- -----------------------------
 -- Table structure for `sent_sync_login`

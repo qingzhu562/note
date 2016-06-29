@@ -1,14 +1,202 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>SentCMS3.0网站管理系统</title>
-</head>
-<body>
-	<ul>
-		<li><a href="http://www.tensent.cn" target="_blank">南昌腾速科技有限公司</a></li>
-		<li><a href="http://git.oschina.net/sentcms/sentcms" target="_blank">SentCMS3.0版本库</a></li>
-		<li><a href="doc.sentcms.com" target="_blank">SentCMS3.0开发文档</a></li>
-	</ul>
-</body>
-</html>
+{extend name="public/base"/}
+{block name="banner"}
+{:ad('banner')}
+{/block}
+{block name="body"}
+	<div class="pull-left index-left">
+		<div class="left-box">
+			<div class="news-tabs pull-left">
+				<div class="news-title hd">
+					<ul>
+						<li><a href="{:url('index/content/lists',array('model'=>'article','id'=>2))}">国内动态</a></li>
+						<li><a href="{:url('index/content/lists',array('model'=>'article','id'=>3))}">国外动态</a></li>
+					</ul>
+					<a href="{:url('index/content/lists',array('model'=>'article','id'=>1))}" class="more">更多+</a>
+				</div>
+				<div class="news-body bd">
+					<ul>
+						{doc model="2" name="item" cid="2"}
+						<li><a href="{:url('index/content/detail',array('model_id'=>$item['model_id'],'id'=>$item['id']))}">{$item['title']|msubstr=###,0,16}</a><span>{$item['create_time']|date='m-d',###}</span></li>
+						{/doc}
+					</ul>
+					<ul>
+						{doc model="2" name="item" cid="3"}
+						<li><a href="{:url('index/content/detail',array('model_id'=>$item['model_id'],'id'=>$item['id']))}">{$item['title']|msubstr=###,0,16}</a><span>{$item['create_time']|date='m-d',###}</span></li>
+						{/doc}
+					</ul>
+				</div>
+			</div>
+			<div class="news-tabs pull-right">
+				<div class="news-title hd">
+					<ul>
+						<li><a href="{:url('index/content/lists',array('model'=>'article','id'=>2))}">国内动态</a></li>
+						<li><a href="{:url('index/content/lists',array('model'=>'article','id'=>3))}">国外动态</a></li>
+					</ul>
+					<a href="{:url('index/content/lists',array('model'=>'article','id'=>1))}" class="more">更多+</a>
+				</div>
+				<div class="news-body bd">
+					<ul>
+						{doc model="2" name="item" cid="2"}
+						<li><a href="{:url('index/content/detail',array('model_id'=>$item['model_id'],'id'=>$item['id']))}">{$item['title']|msubstr=###,0,16}</a><span>{$item['create_time']|date='m-d',###}</span></li>
+						{/doc}
+					</ul>
+					<ul>
+						{doc model="2" name="item" cid="3"}
+						<li><a href="{:url('index/content/detail',array('model_id'=>$item['model_id'],'id'=>$item['id']))}">{$item['title']|msubstr=###,0,16}</a><span>{$item['create_time']|date='m-d',###}</span></li>
+						{/doc}
+					</ul>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<script type="text/javascript">
+			$(".news-tabs").slide();
+		</script>
+		<div class="left-box">
+			<div class="group">
+				<div class="title">
+					<span class="icon"><i class="fa fa-file-o"></i></span>
+					<span class="tit">
+						<span class="c">科研成果</span>
+						<span class="e">Scientific research work</span>
+					</span>
+					<a href="{:url('index/content/lists',array('model'=>'article','id'=>1))}" class="more">更多>> </a>
+				</div>
+				<div class="body">
+					<ul>
+						{doc model="2" name="item" cid="3"}
+						<li><a href="{:url('index/content/detail',array('model_id'=>$item['model_id'],'id'=>$item['id']))}">{$item['title']|msubstr=###,0,16}</a><span>{$item['create_time']|date='m-d',###}</span></li>
+						{/doc}
+					</ul>
+				</div>
+			</div>
+			<div class="group">
+				<div class="title">
+					<span class="icon"><i class="fa fa-file-o"></i></span>
+					<span class="tit">
+						<span class="c">科研工作</span>
+						<span class="e">Scientific research work</span>
+					</span>
+					<a href="{:url('index/content/lists',array('model'=>'article','id'=>1))}" class="more">更多>> </a>
+				</div>
+				<div class="body">
+					<ul>
+						{doc model="2" name="item" cid="3"}
+						<li><a href="{:url('index/content/detail',array('model_id'=>$item['model_id'],'id'=>$item['id']))}">{$item['title']|msubstr=###,0,16}</a><span>{$item['create_time']|date='m-d',###}</span></li>
+						{/doc}
+					</ul>
+				</div>
+			</div>
+			<div class="group">
+				<div class="title">
+					<span class="icon"><i class="fa fa-file-o"></i></span>
+					<span class="tit">
+						<span class="c">科研动态</span>
+						<span class="e">Scientific research work</span>
+					</span>
+					<a href="{:url('index/content/lists',array('model'=>'article','id'=>1))}" class="more">更多>> </a>
+				</div>
+				<div class="body">
+					<ul>
+						{doc model="2" name="item" cid="3"}
+						<li><a href="{:url('index/content/detail',array('model_id'=>$item['model_id'],'id'=>$item['id']))}">{$item['title']|msubstr=###,0,16}</a><span>{$item['create_time']|date='m-d',###}</span></li>
+						{/doc}
+					</ul>
+				</div>
+			</div>
+			<div class="group">
+				<div class="title">
+					<span class="icon"><i class="fa fa-file-o"></i></span>
+					<span class="tit">
+						<span class="c">国外文献</span>
+						<span class="e">Scientific research work</span>
+					</span>
+					<a href="{:url('index/content/lists',array('model'=>'article','id'=>1))}" class="more">更多>> </a>
+				</div>
+				<div class="body">
+					<ul>
+						{doc model="2" name="item" cid="3"}
+						<li><a href="{:url('index/content/detail',array('model_id'=>$item['model_id'],'id'=>$item['id']))}">{$item['title']|msubstr=###,0,16}</a><span>{$item['create_time']|date='m-d',###}</span></li>
+						{/doc}
+					</ul>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+
+		<!-- 在线图书 -->
+		<div class="book">
+			<div class="title">
+				<span><i class="fa fa-book"></i> 在线图书</span>
+				<div class="hd">
+					<a class="next"></a>
+					<ul></ul>
+					<a class="prev"></a>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="body bd">
+				<div class="ulwrap">
+					<ul><!-- 把每次滚动的n个li放到1个ul里面 -->
+					{list name="book" id="item" limit="4"}
+						<li>
+							<div class="pic"><a href="{:url('index/book/detail',array('id'=>$item['id']))}" target="_blank"><img src="{:get_cover($item['cover_id'],'path')}" /></a></div>
+							<div class="title"><a href="{:url('index/book/detail',array('id'=>$item['id']))}" target="_blank">{$item['book_name']}</a></div>
+						</li>
+					{/list}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$(".book").slide({titCell:".hd ul",mainCell:".body .ulwrap",autoPage:true,effect:"leftLoop",autoPlay:true,vis:3});
+		</script>
+	</div>
+	<div class="pull-right index-right">
+		
+		<!-- 本院新闻 -->
+		<div class="right-box">
+			<div class="title">
+				<span>本院新闻</span>
+			</div>
+			<div class="body list">
+				<ul>
+					{doc model="2" name="item" cid="1"}
+					<li><a href="{:url('index/content/detail',array('model_id'=>$item['model_id'],'id'=>$item['id']))}">{$item['title']|msubstr=###,0,16}</a></li>
+					{/doc}
+				</ul>
+				<a href="{:url('index/content/lists',array('model'=>'article','id'=>1))}" class="more">查看更多>> </a>
+			</div>
+		</div>
+
+		<!-- 通知公告 -->
+		<div class="right-box">
+			<div class="title">
+				<span>通知公告</span>
+			</div>
+			<div class="body list">
+				<ul>
+					{doc model="2" name="item" cid="4"}
+					<li><a href="{:url('index/content/detail',array('model'=>'article','id'=>$item['id']))}">{$item['title']|msubstr=###,0,16}</a></li>
+					{/doc}
+				</ul>
+				<a href="{:url('index/content/lists',array('model'=>'article','id'=>4))}" class="more">查看更多>> </a>
+			</div>
+		</div>
+
+		<!-- 通知公告 -->
+		<div class="right-box">
+			<div class="title">
+				<span>常用链接</span>
+			</div>
+			<div class="body">
+				<ul class="link">
+					{link name="item" type="1"}
+					<li><a href="{$item['url']}" target="_blank"><i class="fa fa-link"></i> {$item['title']}</a></li>
+					{/link}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+{/block}

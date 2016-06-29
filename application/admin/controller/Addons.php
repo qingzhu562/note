@@ -244,14 +244,9 @@ class Addons extends Admin {
 	public function addhook(){
 		$hooks = model('Hooks');
 		if (IS_POST) {
-			$data = input();
-			if ($data) {
-				$result = $hooks->change($data);
-				if ($result !== false) {
-					return $this->success("修改成功");
-				}else{
-					return $this->error($hooks->getError());
-				}
+			$result = $hooks->change();
+			if ($result !== false) {
+				return $this->success("修改成功");
 			}else{
 				return $this->error($hooks->getError());
 			}
@@ -270,14 +265,9 @@ class Addons extends Admin {
 	public function edithook($id){
 		$hooks = model('Hooks');
 		if (IS_POST) {
-			$data = input('post.');
-			if ($data) {
-				$result = $hooks->change($data);
-				if ($result !== false) {
-					return $this->success("修改成功");
-				}else{
-					return $this->error($hooks->getError());
-				}
+			$result = $hooks->change();
+			if ($result !== false) {
+				return $this->success("修改成功");
 			}else{
 				return $this->error($hooks->getError());
 			}
