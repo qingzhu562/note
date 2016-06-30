@@ -50,8 +50,9 @@ class Content extends Admin{
 		$map = $this->buildMap();
 		$field = array_filter($grid_list['fields']);
 		if ($this->modelInfo['extend'] == 1) {
-			$map['model_id'] = $this->modelInfo['id'];
 			array_push($field, 'is_top');
+		}else{
+			unset($map['model_id']);
 		}
 		
 		$list = $this->model->where($map)->field($field)->order($order)->paginate(15);
@@ -249,21 +250,27 @@ class Content extends Admin{
 	 */
 	protected function buildMap(){
 		$map = array();
-		$keyword = input('get.keyword', '', 'trim');
-		$category = input('get.category', '', 'trim');
-
-		if ($keyword) {
-			$map['title'] = array("LIKE", "%$keyword%");
-		}
-		if ($category){
-			$map['category_id'] = $category;
+		$data = $this->request->get();
+		foreach ($data as $key => $value) {
+			if ($value) {
+				if ($key == 'keyword') {
+					$map['title'] = array("LIKE", "%$value%");
+				}elseif($key == 'category'){
+					$map['category_id'] = $value;
+				}elseif($key == 'create_time'){
+					$map['create_time'] = array('BETWEEN',array(strtotime($value[0]),strtotime($value[1])));
+				}else{
+					$map[$key] = $value;
+				}
+			}
 		}
 
 		if ($this->modelInfo['extend'] == 1) {
+			$category = isset($data['category']) ? $data['category'] : '';
 			$cate_list = parse_field_bind('category', $category, $this->modelInfo['id']);
 			$this->assign('cate_list', $cate_list);
 		}
-		$this->assign($this->request->get());
+		$this->assign($data);
 		return $map;
 	}
 

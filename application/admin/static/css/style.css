@@ -3,6 +3,7 @@ html,body {
 	-webkit-font-smoothing:antialiased;
 }
 a.badge{color: #ffffff;}
+.pt-5{padding-top: 5px;}
 textarea{resize:none; min-height: 80px;}
 @media (max-width:419px) {
 	html,body {

@@ -55,7 +55,7 @@ class Loader
                 return false;
             }
 
-            includeFile($file);
+            __include_file($file);
             return true;
         }
     }
@@ -142,35 +142,88 @@ class Loader
     {
         if (is_array($namespace)) {
             foreach ($namespace as $prefix => $paths) {
-                self::setPsr4($prefix . '\\', rtrim($paths, DS));
+                self::addPsr4($prefix . '\\', rtrim($paths, DS), true);
             }
         } else {
-            self::setPsr4($namespace . '\\', rtrim($path, DS));
+            self::addPsr4($namespace . '\\', rtrim($path, DS), true);
         }
     }
 
-    // 注册Psr0空间
-    private static function setPsr0($prefix, $paths)
+    // 添加Ps0空间
+    private static function addPsr0($prefix, $paths, $prepend = false)
     {
         if (!$prefix) {
-            self::$fallbackDirsPsr0 = (array)$paths;
+            if ($prepend) {
+                self::$fallbackDirsPsr0 = array_merge(
+                    (array)$paths,
+                    self::$fallbackDirsPsr0
+                );
+            } else {
+                self::$fallbackDirsPsr0 = array_merge(
+                    self::$fallbackDirsPsr0,
+                    (array)$paths
+                );
+            }
+
+            return;
+        }
+
+        $first = $prefix[0];
+        if (!isset(self::$prefixesPsr0[$first][$prefix])) {
+            self::$prefixesPsr0[$first][$prefix] = (array)$paths;
+
+            return;
+        }
+        if ($prepend) {
+            self::$prefixesPsr0[$first][$prefix] = array_merge(
+                (array)$paths,
+                self::$prefixesPsr0[$first][$prefix]
+            );
         } else {
-            self::$prefixesPsr0[$prefix[0]][$prefix] = (array)$paths;
+            self::$prefixesPsr0[$first][$prefix] = array_merge(
+                self::$prefixesPsr0[$first][$prefix],
+                (array)$paths
+            );
         }
     }
 
-    // 注册Psr4空间
-    private static function setPsr4($prefix, $paths)
+
+    // 添加Psr4空间
+    private static function addPsr4($prefix, $paths, $prepend = false)
     {
         if (!$prefix) {
-            self::$fallbackDirsPsr4 = (array)$paths;
-        } else {
+            // Register directories for the root namespace.
+            if ($prepend) {
+                self::$fallbackDirsPsr4 = array_merge(
+                    (array)$paths,
+                    self::$fallbackDirsPsr4
+                );
+            } else {
+                self::$fallbackDirsPsr4 = array_merge(
+                    self::$fallbackDirsPsr4,
+                    (array)$paths
+                );
+            }
+        } elseif (!isset(self::$prefixDirsPsr4[$prefix])) {
+            // Register directories for a new namespace.
             $length = strlen($prefix);
             if ('\\' !== $prefix[$length - 1]) {
                 throw new \InvalidArgumentException("A non-empty PSR-4 prefix must end with a namespace separator.");
             }
             self::$prefixLengthsPsr4[$prefix[0]][$prefix] = $length;
             self::$prefixDirsPsr4[$prefix]                = (array)$paths;
+        } elseif ($prepend) {
+            // Prepend directories for an already registered namespace.
+            self::$prefixDirsPsr4[$prefix] = array_merge(
+                (array)$paths,
+                self::$prefixDirsPsr4[$prefix]
+            );
+        } else {
+            // Append directories for an already registered namespace.
+            self::$prefixDirsPsr4[$prefix] = array_merge(
+                self::$prefixDirsPsr4[$prefix],
+                (array)$paths
+            );
         }
     }
 
@@ -197,7 +250,9 @@ class Loader
             'traits'   => LIB_PATH . 'traits' . DS,
         ]);
         // 加载类库映射文件
-        self::addClassMap(includeFile(THINK_PATH . 'classmap' . EXT));
+        if (is_file(RUNTIME_PATH . 'classmap' . EXT)) {
+            self::addClassMap(__include_file(RUNTIME_PATH . 'classmap' . EXT));
+        }
 
         // Composer自动加载支持
         if (is_dir(VENDOR_PATH . 'composer')) {
@@ -214,14 +269,14 @@ class Loader
         if (is_file(VENDOR_PATH . 'composer/autoload_namespaces.php')) {
             $map = require VENDOR_PATH . 'composer/autoload_namespaces.php';
             foreach ($map as $namespace => $path) {
-                self::setPsr0($namespace, $path);
+                self::addPsr0($namespace, $path);
             }
         }
 
         if (is_file(VENDOR_PATH . 'composer/autoload_psr4.php')) {
             $map = require VENDOR_PATH . 'composer/autoload_psr4.php';
             foreach ($map as $namespace => $path) {
-                self::setPsr4($namespace, $path);
+                self::addPsr4($namespace, $path);
             }
         }
 
@@ -236,7 +291,7 @@ class Loader
             $includeFiles = require VENDOR_PATH . 'composer/autoload_files.php';
             foreach ($includeFiles as $fileIdentifier => $file) {
                 if (empty(self::$autoloadFiles[$fileIdentifier])) {
-                    requireFile($file);
+                    __require_file($file);
                     self::$autoloadFiles[$fileIdentifier] = true;
                 }
             }
@@ -253,16 +308,18 @@ class Loader
     public static function import($class, $baseUrl = '', $ext = EXT)
     {
         static $_file = [];
+        $key   = $class . $baseUrl;
         $class = str_replace(['.', '#'], [DS, '.'], $class);
-        if (isset($_file[$class . $baseUrl])) {
+        if (isset($_file[$key])) {
             return true;
         }
 
         if (empty($baseUrl)) {
             list($name, $class) = explode(DS, $class, 2);
-            if (isset(self::$prefixDirsPsr4[$name])) {
+
+            if (isset(self::$prefixDirsPsr4[$name . '\\'])) {
                 // 注册的命名空间
-                $baseUrl = self::$prefixDirsPsr4[$name];
+                $baseUrl = self::$prefixDirsPsr4[$name . '\\'];
             } elseif ('@' == $name) {
                 //加载当前模块应用类库
                 $baseUrl = App::$modulePath;
@@ -292,8 +349,8 @@ class Loader
             if (IS_WIN && pathinfo($filename, PATHINFO_FILENAME) != pathinfo(realpath($filename), PATHINFO_FILENAME)) {
                 return false;
             }
-            includeFile($filename);
-            $_file[$class . $baseUrl] = true;
+            __include_file($filename);
+            $_file[$key] = true;
             return true;
         }
         return false;
@@ -483,12 +540,12 @@ class Loader
  * @param $file
  * @return mixed
  */
-function includeFile($file)
+function __include_file($file)
 {
     return include $file;
 }
 
-function requireFile($file)
+function __require_file($file)
 {
     return require $file;
 }

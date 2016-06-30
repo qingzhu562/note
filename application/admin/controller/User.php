@@ -118,11 +118,8 @@ class User extends Admin{
 	 * del
 	 * @author colin <colin@tensent.cn>
 	 */
-	public function del(){
-		$ids = input('post.ids');
-		//多条删除和单条删除
-		empty($ids) ? $ids = input('get.id') : $ids = $ids;
-		$uid = array('IN',is_array($ids) ? implode(',',$ids) : $ids);
+	public function del($id){
+		$uid = array('IN',is_array($id) ? implode(',',$id) : $id);
 		//获取用户信息
 		$find = $this->getUserinfo($uid);
 		model('User')->where(array('uid'=>$uid))->delete();

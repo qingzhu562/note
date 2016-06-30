@@ -23,9 +23,7 @@ class Group extends Admin {
 
 
 	//会员分组首页控制器
-	public function index(){
-		$type  = input('get.type','admin','trim');
-
+	public function index($type = 'admin'){
 		$map['module'] = $type;
 
 		$list = db('AuthGroup')->where($map)->order('id desc')->paginate(10);
@@ -112,9 +110,7 @@ class Group extends Admin {
 	}
 
 	//权限节点控制器
-	public function access(){
-		$type  = input('get.type','admin','trim');
-
+	public function access($type = 'admin'){
 		$map['module'] = $type;
 
 		$list = db('AuthRule')->where($map)->order('id desc')->paginate(10);
@@ -253,8 +249,7 @@ class Group extends Admin {
 		}
 	}
 
-	public function delnode(){
-		$id = input('id','','trim,intval');
+	public function delnode($id){
 		if (!$id) {
 			return $this->error("非法操作！");
 		}

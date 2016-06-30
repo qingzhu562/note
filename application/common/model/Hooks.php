@@ -64,19 +64,6 @@ class Hooks extends Base {
 		return $keylist;
 	}
 
-	public function change($data){
-		if (!empty($data)) {
-			if ($data['id']) {
-				$this->save($data,array('id'=>$data['id']));
-			}else{
-				$this->save($data);
-			}
-		}else{
-			$this->error = "非法操作！";
-			return false;
-		}
-	}
-
 	public function addHooks($addons_name){
 		$addons_class = get_addon_class($addons_name);//获取插件名
 		if(!class_exists($addons_class)){
@@ -94,5 +81,5 @@ class Hooks extends Base {
 			return false;
 		}
 		$methods = get_class_methods($addons_class);
-	} 
+	}
 }

@@ -1,0 +1,124 @@
+{extend name="public/base"/}
+{block name="style"}
+<!-- datepicker statr -->
+<link href="__PUBLIC__/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="__PUBLIC__/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="__PUBLIC__/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<!-- datepicker end -->
+{/block}
+{block name="body"}
+<div class="main-box clearfix">
+	<header class="main-box-header clearfix">
+		<div class="pull-left">
+			<h2>{$meta_title}</h2>
+		</div>
+		<div class="pull-right">
+			<a class="btn btn-primary" href="{:url('admin/content/add?model_id='.$model_id)}">新 增</a>
+			<button class="btn btn-danger ajax-post confirm" url="{:url('admin/content/del?model_id='.$model_id)}" target-form="ids">删 除</button>
+		</div>
+	</header>
+	<div class="main-box-body clearfix">
+		<div class="row">
+			<form method="get">
+				<div class="col-sm-12 col-md-4 pt-5">
+					<div class="input-group">
+						<div class="input-group-addon">书名：</div>
+						<input type="text" class="form-control" name="book_name" value="{$book_name|default=''}" placeholder="书名">
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-4 pt-5">
+					<div class="input-group">
+						<div class="input-group-addon">发布时间：</div>
+						<div class="col-sm-5">
+							<input type="text" class="form-control create_time" name="create_time[]" id="create_time" placeholder="开始时间" value="{$create_time[0]|default=''}" readonly>
+						</div>
+						<div class="col-sm-5">
+							<input type="text" class="form-control create_time" name="create_time[]" id="create_time" placeholder="结束时间" value="{$create_time[1]|default=''}" readonly>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-4 pt-5">
+					<div class="input-group">
+						<div class="input-group-addon">标准类型：</div>
+						<select class="form-control" name="stand_class"></select>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-4 pt-5">
+					<div class="input-group">
+						<div class="input-group-addon">编号：</div>
+						<input type="text" class="form-control" name="book_no" value="{$book_no|default=''}" placeholder="编号">
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-4 pt-5">
+					<button class="btn btn-primary" type="submit">搜索</button>
+				</div>
+			</form>
+		</div>
+		<div class="table-responsive clearfix">
+
+			<div class="table-responsive clearfix">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th width="30"><input class="checkbox check-all" type="checkbox"></th>
+							{volist name="grid['grids']" id="item"}
+							<th>{$item['title']}</th>
+							{/volist}
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{if condition="empty($list)"}
+						{php}
+						$cow = count($grid['grids'])+2;
+						{/php}
+						<tr>
+							<td colspan="{$cow}" align="center">暂无数据！</td>
+						</tr>
+						{else/}
+						{volist name="list" id="item"}
+						<tr>
+							<td><input class="ids row-selected" type="checkbox" name="id[]" value="{$item['id']}"></td>
+							{volist name="grid['grids']" id="vo"}
+							{if isset($vo['format'])}
+							<td>{$item[$vo['field'][0]]|$vo['format']}</td>
+							{else/}
+							<td>{$item[$vo['field'][0]]}</td>
+							{/if}
+							{/volist}
+							<td>
+								{if isset($item['status'])}
+								{if $item['status']}
+								<a href="{:url('admin/content/status',array('id'=>$item['id'],'model_id'=>$model_id,'status'=>'0'))}" class="ajax-get">取消审核</a>
+								{else/}
+								<a href="{:url('admin/content/status',array('id'=>$item['id'],'model_id'=>$model_id,'status'=>'1'))}" class="ajax-get">审核</a>
+								{/if}
+								{/if}
+								<a href="{:url('admin/content/edit',array('id'=>$item['id'],'model_id'=>$model_id))}" >编辑</a>
+								<a href="{:url('admin/content/del',array('id'=>$item['id'],'model_id'=>$model_id))}" class="ajax-get confirm">删除</a>
+							</td>
+						</tr>
+						{/volist}
+						{/if}
+					</tbody>
+				</table>
+			</div>
+			{$page}
+		</div>
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+$(function(){
+	$('.create_time').fdatepicker({
+		format: 'yyyy-mm-dd',
+		pickTime: true
+	});
+
+	$('.height_btn').click(function(){
+		$('.height').show();
+	});
+})
+</script>
+{/block}
