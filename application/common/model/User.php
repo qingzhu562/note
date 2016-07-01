@@ -12,19 +12,14 @@ namespace app\common\model;
 /**
 * 用户模型
 */
-class User extends \think\model\Merge{
+class User extends Base{
 
 	protected $name = "Member";
-	protected static $relationModel = array('MemberExtend');
 	protected $createTime = 'reg_time';
 	protected $updateTime = 'last_login_time';
-	protected $fk = 'user_id';
-	protected $mapFields = array(
-		'uid'        =>  'Member.uid',
-		'user_id'        =>  'MemberExtend.uid',
-	);
+
 	protected $type = array(
-		'id'  => 'integer',
+		'uid'  => 'integer',
 	);
 	protected $insert = array('salt', 'password', 'status', 'reg_time');
 	protected $update = array();
@@ -54,9 +49,19 @@ class User extends \think\model\Merge{
 		array('name'=>'nickname','title'=>'昵称','type'=>'text','help'=>''),
 		array('name'=>'sex','title'=>'性别','type'=>'select','option'=>array('0'=>'保密','1'=>'男','2'=>'女'),'help'=>''),
 		array('name'=>'email','title'=>'邮箱','type'=>'text','help'=>'用户邮箱，用于找回密码等安全操作'),
+		array('name'=>'mobile','title'=>'联系电话','type'=>'text','help'=>''),
 		array('name'=>'qq','title'=>'QQ','type'=>'text','help'=>''),
-		array('name'=>'score','title'=>'用户积分','type'=>'text','help'=>''),
 		array('name'=>'signature','title'=>'用户签名','type'=>'textarea','help'=>''),
+	);
+
+	public $userextend = array(
+		array('name'=>'company','title'=>'单位名称','type'=>'text','help'=>''),
+		array('name'=>'company_addr','title'=>'单位地址','type'=>'text','help'=>''),
+		array('name'=>'company_contact','title'=>'单位联系人','type'=>'text','help'=>''),
+		array('name'=>'company_zip','title'=>'单位邮编','type'=>'text','help'=>''),
+		array('name'=>'company_depart','title'=>'所属部门','type'=>'text','help'=>''),
+		array('name'=>'company_post','title'=>'所属职务','type'=>'text','help'=>''),
+		array('name'=>'company_type','title'=>'单位类型','type'=>'select', 'option'=>'', 'help'=>''),
 	);
 
 	protected function setStatusAttr($value){
@@ -72,6 +77,11 @@ class User extends \think\model\Merge{
 	*/
 	public function login($username = '', $password = '', $type = 1){
 		$map = array();
+		if (\think\Validate::is($username,'email')) {
+			$type = 2;
+		}elseif (preg_match("/^1[34578]{1}\d{9}$/",$username)) {
+			$type = 3;
+		}
 		switch ($type) {
 			case 1:
 				$map['username'] = $username;
@@ -111,11 +121,6 @@ class User extends \think\model\Merge{
 	 * @param  integer $user 用户信息数组
 	 */
 	function register($username, $password, $repassword, $email, $isautologin = true){
-		if ($password !== $repassword) {
-			$this->error = "密码和确认密码不相同";
-			return false;
-		}
-
 		$data['username'] = $username;
 		$data['salt'] = rand_string(6);
 		$data['password'] = $password;
@@ -123,6 +128,7 @@ class User extends \think\model\Merge{
 		$result = $this->validate(true)->save($data);
 		if ($result) {
 			$this->data['uid'] = $result;
+			$this->extend()->save($data);
 			if ($isautologin) {
 				$this->autoLogin($this->data);
 			}
@@ -147,8 +153,8 @@ class User extends \think\model\Merge{
 			'last_login_time' => time(),
 			'last_login_ip'   => get_client_ip(1),
 		);
-		$this->db()->where(array('uid'=>$user['uid']))->update($data);
-		$user = $this->db()->where(array('uid'=>$user['uid']))->find();
+		$this->where(array('uid'=>$user['uid']))->update($data);
+		$user = $this->where(array('uid'=>$user['uid']))->find();
 
 		/* 记录登录SESSION和COOKIES */
 		$auth = array(
@@ -167,7 +173,7 @@ class User extends \think\model\Merge{
 	}
 
 	public function getInfo($uid){
-		$data = $this->db()->where(array('uid'=>$uid))->find();
+		$data = $this->where(array('uid'=>$uid))->find();
 		if ($data) {
 			return $data->toArray();
 		}else{
@@ -178,7 +184,12 @@ class User extends \think\model\Merge{
 	public function change(){
 		$data = input('post.');
 		if ($data['uid']) {
-			return $this->save($data, array('uid'=>$data['uid']));
+			$result = $this->validate('member.edit')->save($data, array('uid'=>$data['uid']));
+			if ($result) {
+				$result = $this->extend->save($data, array('uid'=>$data['uid']));
+			}else{
+				return false;
+			}
 		}else{
 			$this->error = "非法操作！";
 			return false;
@@ -209,6 +220,10 @@ class User extends \think\model\Merge{
 		$data['password'] = md5($data['password'].$data['salt']);
 		$data['uid'] = $uid;
 		return $this->db()->where(array('uid'=>$uid))->update($data);
+	}
+
+	public function extend(){
+		return $this->hasOne('MemberExtend', 'uid');
 	}
 
 	protected function checkPassword($username,$password){

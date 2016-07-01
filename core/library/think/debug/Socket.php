@@ -9,7 +9,7 @@
 // | Author: luofei614 <weibo.com/luofei614>
 // +----------------------------------------------------------------------
 
-namespace think\log\driver;
+namespace think\debug;
 
 /**
  * github: https://github.com/luofei614/SocketLog
@@ -55,20 +55,20 @@ class Socket
     }
 
     /**
-     * 日志写入接口
+     * 调试输出接口
      * @access public
      * @param array $logs 日志信息
      * @return bool
      */
-    public function save(array $logs = [])
+    public function output(array $logs = [])
     {
         if (!$this->check()) {
             return false;
         }
-        $runtime    = number_format(microtime(true), 8, '.', '') - START_TIME;
+        $runtime    = number_format(microtime(true), 8, '.', '') - THINK_START_TIME;
         $reqs       = number_format(1 / number_format($runtime, 8), 2);
         $time_str   = " [运行时间：{$runtime}s][吞吐率：{$reqs}req/s]";
-        $memory_use = number_format((memory_get_usage() - START_MEM) / 1024, 2);
+        $memory_use = number_format((memory_get_usage() - THINK_START_MEM) / 1024, 2);
         $memory_str = " [内存消耗：{$memory_use}kb]";
         $file_load  = " [文件加载：" . count(get_included_files()) . "]";
 

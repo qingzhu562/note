@@ -51,20 +51,27 @@ class Order extends User{
 		if (!$order_id) {
 			$price_count = '0.00';
 			$list = $this->cart->all();
-			foreach ($list as $key => $value) {
-				$price_count += $value['price_count'];
+			if ($list) {
+				foreach ($list as $key => $value) {
+					$price_count += $value['price_count'];
+				}
+
+				$data = array(
+					'list'   => $list,
+					'price_count' => $price_count
+				);
+
+				//生成订单
+				$map['id'] = $this->order->createOrder($data);
 			}
-
-			$data = array(
-				'list'   => $list,
-				'price_count' => $price_count
-			);
-
-			//生成订单
-			$map['id'] = $this->order->createOrder($data);
 		}else{
 			$map['id'] = $order_id;
 		}
+
+		if (!isset($map['id'])) {
+			return $this->error('非法操作！');
+		}
+
 		$order = $this->order->where($map)->find();
 
 		$data = array(

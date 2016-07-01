@@ -79,7 +79,7 @@ time { color: #777;}
 .nc-login-form dl { background-color: #FFF; width: 398px; height: 52px; margin-top: -1px; border: solid 1px #E6E6E6; position: relative; z-index: 1; overflow: hidden;}
 .nc-login-form dl.focus { border-color: #7ABD54; z-index: 3;}
 .nc-login-form dl.error { border-color: #F87622 !important; z-index: 2;}
-.nc-login-form dl dt { font-size: 14px; line-height: 20px; color: #666; width: 72px; padding: 16px 0 16px 20px; float: left;}
+.nc-login-form dl dt { font-size: 14px; line-height: 20px; color: #333333; width: 72px; padding: 16px 0 16px 20px; float: left;}
 .nc-login-form dl dd { height: 28px; float: left; padding: 12px 0;}
 .nc-login-form dl dd .text { font-family: "microsoft yahei"; font-size: 14px; line-height: 28px; width: 290px; height: 28px; padding: 0; border: none 0;}
 

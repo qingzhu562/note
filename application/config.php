@@ -92,9 +92,14 @@ return array(
 	),
 
 	'log'                => array(
-		// 日志记录方式，支持 file socket trace sae
+		// 日志记录方式，支持 file sae
 		'type' => 'file',
 		// 日志保存目录
 		'path' => LOG_PATH,
-	)
+	),
+	// 页面Trace信息
+	// 'trace' =>array(
+	// 	//支持Html,Console 设为false则不显示
+	// 	'type'  =>  false,
+	// )
 );

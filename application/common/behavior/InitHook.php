@@ -3,7 +3,7 @@ namespace app\common\behavior;
 
 class InitHook {
 
-	public function run(&$content){
+	public function run(&$request){
 
 		//初始化某些配置信息
         if (cache('db_config_data')) {

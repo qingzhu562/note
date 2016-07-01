@@ -9,7 +9,7 @@
 // | Author: yangweijie <yangweijiester@gmail.com>
 // +----------------------------------------------------------------------
 
-namespace think\debug\trace;
+namespace think\debug;
 
 use think\Cache;
 use think\Config;
@@ -34,7 +34,7 @@ class Console
     }
 
     /**
-     * 日志写入接口
+     * 调试输出接口
      * @access public
      * @param array $log 日志信息
      * @return bool
@@ -42,9 +42,9 @@ class Console
     public function output(array $log = [])
     {
         // 获取基本信息
-        $runtime = number_format(microtime(true), 8, '.', '') - START_TIME;
+        $runtime = number_format(microtime(true), 8, '.', '') - THINK_START_TIME;
         $reqs    = number_format(1 / $runtime, 2);
-        $mem     = number_format((memory_get_usage() - START_MEM) / 1024, 2);
+        $mem     = number_format((memory_get_usage() - THINK_START_MEM) / 1024, 2);
 
         if (isset($_SERVER['HTTP_HOST'])) {
             $uri = $_SERVER['SERVER_PROTOCOL'] . ' ' . $_SERVER['REQUEST_METHOD'] . ' : ' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -126,12 +126,12 @@ JS;
                     }
                     break;
                 case '错误':
-                    $msg    = str_replace(PHP_EOL, '\n', $m);
+                    $msg    = str_replace("\n", '\n', $m);
                     $style  = 'color:#F4006B;font-size:14px;';
                     $line[] = "console.error(\"%c{$msg}\", \"{$style}\");";
                     break;
                 case 'sql':
-                    $msg    = str_replace(PHP_EOL, '\n', $m);
+                    $msg    = str_replace("\n", '\n', $m);
                     $style  = "color:#009bb4;";
                     $line[] = "console.log(\"%c{$msg}\", \"{$style}\");";
                     break;

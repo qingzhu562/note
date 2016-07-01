@@ -63,5 +63,8 @@
 
 * 第一步、修改数据库配置文件 application/database.php
 * 第二步、通过数据库导入工具，比如phpmyadmin导入数据，数据sql文件data/sql.sql
+* 第三步、登录后台，后台地址 http://域名/admin
 
-初始账号：admin，密码：admin888
+> 系统必须开启伪静态
+
+初始账号：admin，密码：admin888 

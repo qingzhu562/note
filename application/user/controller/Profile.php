@@ -24,8 +24,13 @@ class Profile extends User{
 			}
 		}else{
 			$group['基础资料'] = $user->useredit;
+			$group['扩展信息'] = $user->userextend;
 
-			$info = $user->getInfo(session('user_auth.uid'));
+			$info = $user->where(array('uid'=>session('user_auth.uid')))->find();
+
+			if ($info->extend) {
+				$info = array_merge($info->toArray(), $info->extend->toArray());
+			}
 			$data = array(
 				'fieldGroup' => $group,
 				'info'       => $info
