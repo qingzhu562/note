@@ -34,9 +34,6 @@ class User extends Base{
 			array('title'=>'密码修改', 'url'=>'user/profile/editpw', 'icon'=>'key'),
 			array('title'=>'更换头像', 'url'=>'user/profile/avatar', 'icon'=>'male'),
 		);
-		$menu['订单管理'] = array(
-			array('title'=>'我的订单', 'url'=>'user/order/index', 'icon'=>'shopping-bag'),
-		);
 		$contetnmenu = $this->getContentMenu();
 		if (!empty($contetnmenu)) {
 			$menu['内容管理'] = $contetnmenu;
