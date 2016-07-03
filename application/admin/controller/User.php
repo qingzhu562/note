@@ -52,9 +52,9 @@ class User extends Admin{
 				$userinfo = array('nickname' => $data['username'], 'status' => 1,'reg_time'=>time(),'last_login_time'=>time(),'last_login_ip'=>get_client_ip(1));
 				/*保存信息*/
 				if(!db('Member')->where(array('uid'=>$uid))->update($userinfo)){
-					return $this->error('用户添加失败！');
+					return $this->error('用户添加失败！', '');
 				} else {
-					return $this->success('用户添加成功！',url('index'));
+					return $this->success('用户添加成功！', url('admin/user/index'));
 				}
 			}else{
 				return $this->error($model->getError());
@@ -92,7 +92,7 @@ class User extends Admin{
 			$reuslt = $model->save($data,array('uid'=>$data['uid']));
 			
 			if (false != $reuslt) {
-				return $this->success('修改成功！',url('index'));
+				return $this->success('修改成功！', url('admin/user/index'));
 			}else{
 				return $this->error('修改失败！', '');
 			}
