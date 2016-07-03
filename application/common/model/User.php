@@ -124,6 +124,7 @@ class User extends Base{
 		$data['username'] = $username;
 		$data['salt'] = rand_string(6);
 		$data['password'] = $password;
+		$data['repassword'] = $repassword;
 		$data['email'] = $email;
 		$result = $this->validate(true)->save($data);
 		if ($result) {

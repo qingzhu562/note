@@ -44,15 +44,12 @@ class User extends Admin{
 	public function add(){
 		$model = \think\Loader::model('User');
 		if(IS_POST){
-			$username = input('post.username', '', 'trim');
-			$email = input('post.email', '', 'trim');
-			$password = input('post.password', '', 'trim');
-			$repassword = input('post.repassword', '', 'trim');
+			$data = $this->request->param();
 			//创建注册用户
-			$uid = $model->register($username, $password, $repassword, false);
+			$uid = $model->register($data['username'], $data['password'], $data['repassword'], $data['email'], false);
 
 			if(0 < $uid){
-				$userinfo = array('nickname' => $username, 'email' => $email, 'status' => 1,'reg_time'=>time(),'last_login_time'=>time(),'last_login_ip'=>get_client_ip(1));
+				$userinfo = array('nickname' => $data['username'], 'status' => 1,'reg_time'=>time(),'last_login_time'=>time(),'last_login_ip'=>get_client_ip(1));
 				/*保存信息*/
 				if(!db('Member')->where(array('uid'=>$uid))->update($userinfo)){
 					return $this->error('用户添加失败！');
@@ -60,7 +57,7 @@ class User extends Admin{
 					return $this->success('用户添加成功！',url('index'));
 				}
 			}else{
-				return $this->error($this->showRegError($uid));
+				return $this->error($model->getError());
 			}
 		}else{
 			$data = array(
@@ -85,18 +82,16 @@ class User extends Admin{
 			}
 
 			//为空
-			if(empty($data['password'])){
+			if($data['password'] == ''){
 				unset($data['password']);
 				unset($data['salt']);
-				$model->save($data);
 			}else{
 				$data['salt'] = rand_string();
 				$data['password'] = md5($password.$data['salt']);
-				//不为空
-				$model->save($data,array('uid'=>$data['uid']));
 			}
+			$reuslt = $model->save($data,array('uid'=>$data['uid']));
 			
-			if ($reuslt) {
+			if (false != $reuslt) {
 				return $this->success('修改成功！',url('index'));
 			}else{
 				return $this->error('修改失败！', '');
