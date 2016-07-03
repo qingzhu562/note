@@ -226,8 +226,8 @@ class Menu extends Admin{
 	 */
 	public function sort(){
 	    if(IS_GET){
-	        $ids = input('get.ids');
-	        $pid = input('get.pid');
+	        $ids = input('ids');
+	        $pid = input('pid');
 
 	        //获取排序的数据
 	        $map = array('status'=>array('gt',-1));

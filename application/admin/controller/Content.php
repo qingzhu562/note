@@ -145,7 +145,7 @@ class Content extends Admin{
 	 * @author molong <ycgpp@126.com>
 	 */
 	public function del(){
-		$id = input('get.id','','trim');
+		$id = input('id','','trim');
 		$ids = input('post.ids',array());
 		array_push($ids, $id);
 		if (empty($ids)) {

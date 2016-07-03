@@ -56,7 +56,7 @@ class Link extends Admin{
 	//修改
 	public function edit(){
 		$link = model('Link');
-		$id = input('get.id','','trim,intval');
+		$id = input('id','','trim,intval');
 		if(IS_POST){
 			$data = input('post.');
 			if ($data) {

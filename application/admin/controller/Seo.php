@@ -49,7 +49,7 @@ class Seo extends Admin{
 
 	public function add(){
 		if (IS_POST) {
-			$data = input('post.');
+			$data = $this->request->post();
 			if ($data) {
 				$result = model('SeoRule')->save($data);
 				if ($result) {
@@ -72,7 +72,7 @@ class Seo extends Admin{
 
 	public function edit($id = null){
 		if (IS_POST) {
-			$data = input('post.');
+			$data = $this->request->post();
 			if ($data) {
 				$result = model('SeoRule')->save($data,array('id'=>$data['id']));
 				if (false !== $result) {

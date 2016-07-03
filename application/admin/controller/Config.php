@@ -77,10 +77,10 @@ class Config extends Admin{
 	 */
 	public function add() {
 		if (IS_POST) {
-			$Config = model('Config');
-			$data = input('post.');
+			$config = model('Config');
+			$data = $this->request->post();
 			if ($data) {
-				$id = $Config->validate(true)->save($data);
+				$id = $config->validate(true)->save($data);
 				if ($id) {
 					cache('db_config_data', null);
 					//记录行为
@@ -92,7 +92,7 @@ class Config extends Admin{
 				}
 			} 
 			else {
-				return $this->error($Config->getError());
+				return $this->error($config->getError());
 			}
 		} 
 		else {
@@ -109,20 +109,20 @@ class Config extends Admin{
 	 */
 	public function edit($id = 0) {
 		if (IS_POST) {
-			$Config = model('Config');
-			$data = input('post.');
+			$config = model('Config');
+			$data = $this->request->post();
 			if ($data) {
-				$result = $Config->validate('Config.edit')->save($data,array('id'=>$data['id']));
+				$result = $config->validate('Config.edit')->save($data,array('id'=>$data['id']));
 				if (false !== $result) {
 					cache('db_config_data', null);
 					//记录行为
 					action_log('update_config', 'config', $data['id'], session('user_auth.uid'));
 					return $this->success('更新成功', Cookie('__forward__'));
 				} else {
-					return $this->error($Config->getError(), '');
+					return $this->error($config->getError(), '');
 				}
 			}else {
-				return $this->error($Config->getError());
+				return $this->error($config->getError());
 			}
 		}else{
 			$info = array();
@@ -181,7 +181,7 @@ class Config extends Admin{
 	 */
 	public function sort() {
 		if (IS_GET) {
-			$ids = input('get.ids');
+			$ids = input('ids');
 			//获取排序的数据
 			$map = array('status' => array('gt', -1));
 			if (!empty($ids)) {

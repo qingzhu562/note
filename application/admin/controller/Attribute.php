@@ -69,7 +69,7 @@ class Attribute extends Admin {
 	 * @author colin <colin@tensent.cn>
 	 */
 	public function add(){
-		$model_id = input('get.model_id','','trim,intval');
+		$model_id = input('model_id','','trim,intval');
 		if(IS_POST){
 			$result = $this->model->change();
 			if ($result) {
@@ -104,7 +104,7 @@ class Attribute extends Admin {
 				return $this->error($this->model->getError(),'');
 			}
 		}else{
-			$id = input('get.id','','trim,intval');
+			$id = input('id','','trim,intval');
 			$info = db('Attribute')->find($id);
 			$data = array(
 				'info'        => $info,

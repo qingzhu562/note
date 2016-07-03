@@ -172,7 +172,7 @@ class User extends Admin{
 	 */
 	private function getUserinfo($uid = null,$pass = null,$errormsg = null){
 		$user = model('User');
-		$uid = $uid ? $uid : input('get.id');
+		$uid = $uid ? $uid : input('id');
 		//如果无UID则修改当前用户
 		$uid = $uid ? $uid : session('user_auth.uid');
 		$map['uid'] = $uid;

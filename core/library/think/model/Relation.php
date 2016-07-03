@@ -197,7 +197,7 @@ class Relation
                     if (!empty($range)) {
                         // 查询关联数据
                         $data = $this->eagerlyManyToMany($model, [
-                            'pivot.' . $foreignKey => [
+                            'pivot.' . $localKey => [
                                 'in',
                                 $range,
                             ],
@@ -277,7 +277,7 @@ class Relation
                     if (isset($result->$pk)) {
                         $pk = $result->$pk;
                         // 查询管理数据
-                        $data = $this->eagerlyManyToMany($model, ['pivot.' . $foreignKey => $pk], $relation, $subRelation);
+                        $data = $this->eagerlyManyToMany($model, ['pivot.' . $localKey => $pk], $relation, $subRelation);
 
                         // 关联数据封装
                         if (!isset($data[$pk])) {
@@ -317,7 +317,7 @@ class Relation
             // 设置关联模型属性
             $list[$relation] = [];
         }
-        $result->setAttr($relation, new $model($list[$relation]));
+        $result->setAttr($relation, (new $model($list[$relation]))->isUpdate(true));
     }
 
     /**
@@ -374,7 +374,7 @@ class Relation
                 }
             }
             $set->pivot                = new Pivot($pivot, $this->middle);
-            $data[$set->$foreignKey][] = $set;
+            $data[$pivot[$localKey]][] = $set;
         }
         return $data;
     }

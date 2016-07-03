@@ -17,7 +17,7 @@ class Channel extends Admin{
 	}
 
 	public function index(){
-		$pid = input('get.pid', 0);
+		$pid = input('pid', 0);
 		/* 获取频道列表 */
 		//$map  = array('status' => array('gt', -1), 'pid'=>$pid);
 		$map = array('status' => array('gt', -1));
@@ -50,7 +50,7 @@ class Channel extends Admin{
 	public function add() {
 		if (IS_POST) {
 			$Channel = model('Channel');
-			$data = input('post.');
+			$data = $this->request->post();
 			if ($data) {
 				$id = $Channel->save($data);
 				if ($id) {
@@ -64,7 +64,7 @@ class Channel extends Admin{
 				$this->error($Channel->getError());
 			}
 		} else {
-			$pid = input('get.pid', 0);
+			$pid = input('pid', 0);
 			//获取父导航
 			if (!empty($pid)) {
 				$parent = db('Channel')->where(array('id' => $pid))->field('title')->find();
@@ -86,7 +86,7 @@ class Channel extends Admin{
 	public function edit($id = 0) {
 		if (IS_POST) {
 			$Channel = model('Channel');
-			$data = input('post.');
+			$data = $this->request->post();
 			if ($data) {
 				if (false !== $Channel->save($data,array('id'=>$data['id']))) {
 					//记录行为
@@ -107,7 +107,7 @@ class Channel extends Admin{
 				return $this->error('获取配置信息错误');
 			}
 			
-			$pid = input('get.pid', 0);
+			$pid = input('pid', 0);
 			//获取父导航
 			if (!empty($pid)) {
 				$parent = db('Channel')->where(array('id' => $pid))->field('title')->find();
@@ -148,8 +148,8 @@ class Channel extends Admin{
 	 */
 	public function sort() {
 		if (IS_GET) {
-			$ids = input('get.ids');
-			$pid = input('get.pid');
+			$ids = input('ids');
+			$pid = input('pid');
 			//获取排序的数据
 			$map = array('status' => array('gt', -1));
 			if (!empty($ids)) {

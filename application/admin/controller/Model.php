@@ -148,7 +148,7 @@ class Model extends Admin{
 	 * @author colin <colin@tensent.cn>
 	 */
 	public function status(){
-		$map['id'] = input('post.ids/a') ? input('post.ids/a') : input('get.ids/a');
+		$map['id'] = $this->request->param('ids');
 		if(null == $map['id'])return $this->error('参数不正确！');
 
 		$data['status'] = input('get.status');

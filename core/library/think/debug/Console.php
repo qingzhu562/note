@@ -15,6 +15,8 @@ use think\Cache;
 use think\Config;
 use think\Db;
 use think\Debug;
+use think\Request;
+use think\Response;
 
 /**
  * 浏览器调试输出
@@ -36,11 +38,20 @@ class Console
     /**
      * 调试输出接口
      * @access public
-     * @param array $log 日志信息
+     * @param Response  $response Response对象
+     * @param array     $log 日志信息
      * @return bool
      */
-    public function output(array $log = [])
+    public function output(Response $response, array $log = [])
     {
+        $request     = Request::instance();
+        $contentType = $response->getHeader('Content-Type');
+        $accept      = $request->header('accept');
+        if (strpos($accept, 'application/json') === 0 || $request->isAjax()) {
+            return false;
+        } elseif (!empty($contentType) && strpos($contentType, 'html') === false) {
+            return false;
+        }
         // 获取基本信息
         $runtime = number_format(microtime(true), 8, '.', '') - THINK_START_TIME;
         $reqs    = number_format(1 / $runtime, 2);
@@ -49,13 +60,13 @@ class Console
         if (isset($_SERVER['HTTP_HOST'])) {
             $uri = $_SERVER['SERVER_PROTOCOL'] . ' ' . $_SERVER['REQUEST_METHOD'] . ' : ' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         } else {
-            $uri = "cmd:" . implode(' ', $_SERVER['argv']);
+            $uri = 'cmd:' . implode(' ', $_SERVER['argv']);
         }
 
         // 页面Trace信息
         $base = [
             '请求信息' => date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']) . ' ' . $uri,
-            '运行时间' => "{$runtime}s [ 吞吐率：{$reqs}req/s ] 内存消耗：{$mem}kb 文件加载：" . count(get_included_files()),
+            '运行时间' => number_format($runtime, 6) . 's [ 吞吐率：' . $reqs . 'req/s ] 内存消耗：' . $mem . 'kb 文件加载：' . count(get_included_files()),
             '查询信息' => Db::$queryTimes . ' queries ' . Db::$executeTimes . ' writes ',
             '缓存信息' => Cache::$readTimes . ' reads,' . Cache::$writeTimes . ' writes',
             '配置加载' => count(Config::get()),

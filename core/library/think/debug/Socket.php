@@ -11,6 +11,8 @@
 
 namespace think\debug;
 
+use think\Response;
+
 /**
  * github: https://github.com/luofei614/SocketLog
  * @author luofei614<weibo.com/luofei614>
@@ -20,24 +22,22 @@ class Socket
     public $port = 1116; //SocketLog 服务的http的端口号
 
     protected $config = [
-        'enable'              => true, //是否记录日志的开关
+        // socket服务器地址
         'host'                => 'localhost',
-        //是否显示利于优化的参数，如果允许时间，消耗内存等
-        'optimize'            => false,
+        // 是否显示加载的文件列表
         'show_included_files' => false,
-        'error_handler'       => false,
-        //日志强制记录到配置的client_id
+        // 日志强制记录到配置的client_id
         'force_client_ids'    => [],
-        //限制允许读取日志的client_id
+        // 限制允许读取日志的client_id
         'allow_client_ids'    => [],
     ];
 
     protected $css = [
-        'sql'           => 'color:#009bb4;',
-        'sql_warn'      => 'color:#009bb4;font-size:14px;',
-        'error_handler' => 'color:#f4006b;font-size:14px;',
-        'page'          => 'color:#40e2ff;background:#171717;',
-        'big'           => 'font-size:20px;color:red;',
+        'sql'      => 'color:#009bb4;',
+        'sql_warn' => 'color:#009bb4;font-size:14px;',
+        'error'    => 'color:#f4006b;font-size:14px;',
+        'page'     => 'color:#40e2ff;background:#171717;',
+        'big'      => 'font-size:20px;color:red;',
     ];
 
     protected $allowForceClientIds = []; //配置强制推送且被授权的client_id
@@ -57,25 +57,26 @@ class Socket
     /**
      * 调试输出接口
      * @access public
-     * @param array $logs 日志信息
+     * @param Response  $response Response对象
+     * @param array     $log 日志信息
      * @return bool
      */
-    public function output(array $logs = [])
+    public function output(Response $response, array $log = [])
     {
         if (!$this->check()) {
             return false;
         }
         $runtime    = number_format(microtime(true), 8, '.', '') - THINK_START_TIME;
         $reqs       = number_format(1 / number_format($runtime, 8), 2);
-        $time_str   = " [运行时间：{$runtime}s][吞吐率：{$reqs}req/s]";
+        $time_str   = ' [运行时间：' . number_format($runtime, 6) . 's][吞吐率：' . $reqs . 'req/s]';
         $memory_use = number_format((memory_get_usage() - THINK_START_MEM) / 1024, 2);
-        $memory_str = " [内存消耗：{$memory_use}kb]";
-        $file_load  = " [文件加载：" . count(get_included_files()) . "]";
+        $memory_str = ' [内存消耗：' . $memory_use . 'kb]';
+        $file_load  = ' [文件加载：' . count(get_included_files()) . ']';
 
         if (isset($_SERVER['HTTP_HOST'])) {
             $current_uri = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         } else {
-            $current_uri = "cmd:" . implode(' ', $_SERVER['argv']);
+            $current_uri = 'cmd:' . implode(' ', $_SERVER['argv']);
         }
         // 基本信息
         $trace[] = [
@@ -84,7 +85,7 @@ class Socket
             'css'  => $this->css['page'],
         ];
 
-        foreach ($logs as $type => $val) {
+        foreach ($log as $type => $val) {
             $trace[] = [
                 'type' => 'groupCollapsed',
                 'msg'  => '[ ' . $type . ' ]',
@@ -110,7 +111,7 @@ class Socket
         if ($this->config['show_included_files']) {
             $trace[] = [
                 'type' => 'groupCollapsed',
-                'msg'  => 'included_files',
+                'msg'  => '[ file ]',
                 'css'  => '',
             ];
             $trace[] = [
@@ -171,9 +172,6 @@ class Socket
 
     protected function check()
     {
-        if (!$this->config['enable']) {
-            return false;
-        }
         $tabid = $this->getClientArg('tabid');
         //是否记录日志的检查
         if (!$tabid && !$this->config['force_client_ids']) {
@@ -225,7 +223,7 @@ class Socket
     }
 
     /**
-     * @param null $host - $host of socket server
+     * @param string $host - $host of socket server
      * @param string $message - 发送的消息
      * @param string $address - 地址
      * @return bool

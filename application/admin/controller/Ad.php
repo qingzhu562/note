@@ -63,7 +63,7 @@ class Ad extends Admin {
 	public function edit($id = null){
 		$place = model('AdPlace');
 		if (IS_POST) {
-			$data = input('post.','');
+			$data = $this->request->post();
 			if ($data) {
 				$result = $place->save($data,array('id'=>$data['id']));
 				if ($result) {
@@ -122,7 +122,7 @@ class Ad extends Admin {
 	public function addad($id){
 		$ad = model('ad');
 		if (IS_POST) {
-			$data = input('post.');
+			$data = $this->request->post();
 			if ($data) {
 				$result = $ad->save($data);
 				if ($result) {
@@ -148,7 +148,7 @@ class Ad extends Admin {
 	public function editad($id = null){
 		$ad = model('ad');
 		if (IS_POST) {
-			$data = input('post.');
+			$data = $this->request->post();
 			if ($data) {
 				$result = $ad->save($data,array('id'=>$data['id']));
 				if ($result) {

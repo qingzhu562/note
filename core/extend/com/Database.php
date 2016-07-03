@@ -207,6 +207,6 @@ class Database{
      * 析构方法，用于关闭文件资源
      */
     public function __destruct(){
-        $this->config['compress'] ? @gzclose($this->fp) : @fclose($this->fp);
+        //$this->config['compress'] ? @gzclose($this->fp) : @fclose($this->fp);
     }
 }
