@@ -330,3 +330,18 @@ $(function() {
 		msg.show();
 	};
 });
+
+/**
+ * 置顶函数
+ * @param  {[type]} obj [description]
+ * @return {[type]}     [description]
+ */
+function go_to_top(obj){
+	var scrTop = $(window).scrollTop();
+	var windowTop = $(window).height();
+	if ((windowTop-300)<scrTop){
+		$("#"+obj).fadeIn("slow");
+	}else{
+		$("#"+obj).fadeOut("slow");
+	}	
+}
