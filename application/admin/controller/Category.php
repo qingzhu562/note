@@ -240,9 +240,9 @@ class Category extends Admin{
 		$map['id'] = array('IN',$ids);
 		$result = db('Category')->where($map)->setField('status', $status);
 		if ($result) {
-			return $this->success("设置成功！",'');
+			return $this->success("设置成功！");
 		}else{
-			return $this->error("设置失败！",'');
+			return $this->error("设置失败！");
 		}
 	}
 }

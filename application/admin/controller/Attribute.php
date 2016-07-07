@@ -101,7 +101,7 @@ class Attribute extends Admin {
 			if ($result) {
 				return $this->success("修改成功！",url('Attribute/index',array('model_id'=>$_POST['model_id'])));
 			}else{
-				return $this->error($this->model->getError(),'');
+				return $this->error($this->model->getError());
 			}
 		}else{
 			$id = input('id','','trim,intval');

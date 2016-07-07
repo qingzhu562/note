@@ -1,24 +1,14 @@
 <div class="banner">
-	<div class="warp">
-		<div class="banner-side">
-			<ul>
-				{volist name="ad" id="item"}
-				<li>
-					<a href="{$item['url']}" target="_blank">
-					<img src="{:get_cover($item['cover_id'],'path')}">
-					<div class="title"><span>{$item['title']}</span></div>
-					</a>
-				</li>
-				{/volist}
-			</ul>
-			<ol class="dots">
-				{volist name="ad" id="item"}
-				<li class="dot">{$item['title']}</li>
-				{/volist}
-			</ol>
-		</div>
-	</div>
+	<ul>
+		{volist name="ad" id="item"}
+		<li style="background:{$item['bgcolor']|default='#95FCBD'};" title="{$item['title']}">{$item['content']}</li>
+		{/volist}
+	</ul>
 </div>
 <script type="text/javascript">
-$(".banner-side").slide({mainCell:"ul",titCell:".dots .dot",autoPlay:true});
+$(function() {
+    $('.banner').unslider({
+    	dots: true,               //  Display dot navigation
+    });
+});
 </script>

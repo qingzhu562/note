@@ -55,7 +55,7 @@ class Content extends Admin{
 			unset($map['model_id']);
 		}
 		
-		$list = $this->model->where($map)->field($field)->order($order)->paginate(15);
+		$list = $this->model->where($map)->order($order)->paginate(15);
 
 		$data = array(
 			'grid'  => $grid_list,
@@ -158,7 +158,7 @@ class Content extends Admin{
 		if ($result) {
 			return $this->success("删除成功！");
 		}else{
-			return $this->error("删除失败！", '', "");
+			return $this->error("删除失败！");
 		}
 	}
 
@@ -188,9 +188,9 @@ class Content extends Admin{
 		$map['id'] = $id;
 		$result = $model::where($map)->setField('is_top',$is_top);
 		if (false !== $result) {
-			return $this->success("操作成功！", '');
+			return $this->success("操作成功！");
 		}else{
-			return $this->error("操作失败！！", '');
+			return $this->error("操作失败！！");
 		}
 	}
 

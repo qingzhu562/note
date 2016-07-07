@@ -127,8 +127,8 @@ class Content extends Fornt{
 		$data = array(
 			'info'    => $info
 		);
-		if ($name) {
-			$teamplate = 'content/'.$this->modelInfo['name'].'/'.$name;
+		if (isset($info['template_detail']) && $info['template_detail']) {
+			$teamplate = 'content/'.$this->modelInfo['name'].'/'.$info['template_detail'];
 		}else{
 			$teamplate = 'content/'.$this->modelInfo['name'].'/detail';
 		}

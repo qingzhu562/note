@@ -27,7 +27,7 @@ class Syslogin extends Addons{
         'version'=>'0.1'
     );
 
-    public function loginBottom(){
+    public function loginBottomAddon(){
 
     }
 

@@ -33,8 +33,10 @@ class Hooks extends Base {
 	}
 
 	protected function setAddonsAttr($value){
-		$string = implode(",", $value[1]);
-		return $string;
+		if ($value[1]) {
+			$string = implode(",", $value[1]);
+			return $string;
+		}
 	}
 
 	protected function getTypeTextAttr($value, $data){
@@ -71,7 +73,30 @@ class Hooks extends Base {
 			return false;
 		}
 		$methods = get_class_methods($addons_class);
-		dump($methods);
+		foreach ($methods as $item) {
+			if ('Addon' === substr($item, -5, 5)) {
+				$info = $this->where('name', substr($item, 0, -5))->find();
+				if (null == $info) {
+					$save = array(
+						'name'   => $addons_name,
+						'description'  => '',
+						'type'         => 1,
+						'addons'       => array($addons_name),
+						'update_time'  => time(),
+						'status'       => 1
+					);
+					$this->save($save);
+				}else{
+					if ($info['addons']) {
+						# code...
+					}else{
+						$addons = substr($item, 0, -5);
+					}
+					$this->where('name', $addons_name)->setField('addons', $addons);
+				}
+			}
+		}
+		return true;
 	}
 
 	public function removeHooks($addons_name){

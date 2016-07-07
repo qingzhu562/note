@@ -203,7 +203,7 @@ class Config extends Admin{
 				$res = db('Config')->where(array('id' => $value))->setField('sort', $key + 1);
 			}
 			if ($res !== false) {
-				return $this->success('排序成功！', '', Cookie('__forward__'));
+				return $this->success('排序成功！', Cookie('__forward__'));
 			} 
 			else {
 				return $this->error('排序失败！');

@@ -153,8 +153,8 @@ class Group extends Admin {
 			return $this->error("非法操作！");
 		}
 		if (IS_POST) {
-			$rule = input('rule',array());
-			$extend_rule = input('extend_rule',array());
+			$rule = $this->request->post('rule/a', array());
+			$extend_rule = $this->request->post('extend_rule/a', array());
 			$extend_result = $rule_result = false;
 			//扩展权限
 			$extend_data = array();
@@ -175,7 +175,7 @@ class Group extends Admin {
 			if ($rule_result !== false || $extend_result !== false) {
 				return $this->success("授权成功！", url('admin/group/index'));
 			}else{
-				return $this->error("授权失败！", '');
+				return $this->error("授权失败！");
 			}
 		}else{
 			$group = $this->group->where(array('id'=>$id))->find();

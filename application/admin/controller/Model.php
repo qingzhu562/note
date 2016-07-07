@@ -139,7 +139,7 @@ class Model extends Admin{
 		if($res['status']){
 			return $this->success($res['info'], url('index'));
 		}else{
-			return $this->error($res['info'], '');
+			return $this->error($res['info']);
 		}
 	}
 	

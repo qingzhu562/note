@@ -94,7 +94,7 @@ class User extends Admin{
 			if (false != $reuslt) {
 				return $this->success('修改成功！', url('admin/user/index'));
 			}else{
-				return $this->error('修改失败！', '');
+				return $this->error('修改失败！');
 			}
 		}else{
 			$info = $this->getUserinfo();
@@ -240,19 +240,19 @@ class User extends Admin{
 			//获取参数
 			$password = input('post.old');
 			if(empty($password)){
-				return $this->error('请输入原密码','');
+				return $this->error('请输入原密码');
 			}
 			$data['password'] = input('post.password');
 			if (empty($data['password'])) {
-				return $this->error('请输入新密码','');
+				return $this->error('请输入新密码');
 			}
 			$repassword = input('post.repassword');
 			if (empty($repassword)) {
-				return $this->error('请输入确认密码','');
+				return $this->error('请输入确认密码');
 			}
 			
 			if ($data['password'] !== $repassword) {
-				return $this->error('您输入的新密码与确认密码不一致','');
+				return $this->error('您输入的新密码与确认密码不一致');
 			}
 			$res = $user->updateUserFields(UID, $password, $data);
 			if ($res) {

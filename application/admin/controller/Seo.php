@@ -55,7 +55,7 @@ class Seo extends Admin{
 				if ($result) {
 					return $this->success("添加成功！");
 				}else{
-					return $this->error("添加失败！","");
+					return $this->error("添加失败！");
 				}
 			}else{
 				return $this->error($this->model->getError());
@@ -78,7 +78,7 @@ class Seo extends Admin{
 				if (false !== $result) {
 					return $this->success("修改成功！");
 				}else{
-					return $this->error("修改失败！","");
+					return $this->error("修改失败！");
 				}
 			}else{
 				return $this->error($this->model->getError());
