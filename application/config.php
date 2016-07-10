@@ -10,7 +10,7 @@
 return array(
 
 	// 调试模式
-	'app_debug' => true,
+	'app_debug' => false,
 
 	'charset'   => 'UTF-8',
 	'lang_switch_on' => true,   // 开启语言包功能
@@ -98,8 +98,8 @@ return array(
 		'path' => LOG_PATH,
 	),
 	// 页面Trace信息
-	// 'trace' =>array(
-	// 	//支持Html,Console 设为false则不显示
-	// 	'type'  =>  false,
-	// )
+	'trace' =>array(
+		//支持Html,Console 设为false则不显示
+		'type'  =>  'Html',
+	)
 );

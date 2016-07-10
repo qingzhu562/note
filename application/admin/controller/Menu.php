@@ -19,7 +19,7 @@ class Menu extends Admin{
 	public function index(){
 		$map = array();
 		$title      =   trim(input('get.title'));
-		$list       =   db("Menu")->where($map)->field(true)->order('sort asc,id asc')->select();
+		$list       =   db("Menu")->where($map)->field(true)->order('sort asc,id asc')->column('*','id');
 		int_to_string($list,array('hide'=>array(1=>'是',0=>'否'),'is_dev'=>array(1=>'是',0=>'否')));
 
 		if (!empty($list)) {

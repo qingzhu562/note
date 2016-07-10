@@ -17,9 +17,6 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th width="60">
-							<input class="check-all" type="checkbox" value="">
-						</th>
 						<th width="200">备份名称</th>
 						<th width="80">卷数</th>
 						<th width="80">压缩</th>
@@ -32,7 +29,6 @@
 				<tbody>
 					{volist name="list" id="data"}
 					<tr>
-						<td><input class="ids" type="checkbox" name="tables[]"></td>
 						<td>{$data.time|date='Ymd-His',###}</td>
 						<td>{$data.part}</td>
 						<td>{$data.compress}</td>

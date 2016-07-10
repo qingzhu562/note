@@ -55,11 +55,13 @@ class Model extends Base{
 					if($data['extend'] == 1){
 						//默认文档前缀
 						$tablename = 'document_'.$data['name'];
+						$is_auto_increment = false;
 					}else{
 						$tablename = $data['name'];
+						$is_auto_increment = true;
 					}
 					$sql = $db->start_table($tablename)
-						->create_id('id', 11 , '主键' , false);
+						->create_id('id', 11 , '主键' , $is_auto_increment);
 					if ($data['extend'] != 1) {
 						$sql = $sql->create_uid();
 					}

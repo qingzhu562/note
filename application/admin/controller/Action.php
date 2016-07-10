@@ -140,9 +140,9 @@ class Action extends Admin {
 		$result = db('Action')->where($map)->setField('status',$status);
 		if ($result !== false) {
 			action_log('setstatus_action', 'Action', $id, session('user_auth.uid'));
-			return $this->success('设置'.$message.'状态成功！','');
+			return $this->success('设置'.$message.'状态成功！');
 		}else{
-			return $this->error('设置'.$message.'状态失败！','');
+			return $this->error('设置'.$message.'状态失败！');
 		}
 	}
 	

@@ -104,7 +104,10 @@ $(function(){
 
 		function success(data){
 			if(data.code){
-				window.location.href = data.url;
+				$.messager.show(data.msg, {placement: 'center',type:'success'});
+				setTimeout(function(){
+					window.location.href = data.url;
+				},2000);
 			} else {
 				$.messager.show(data.msg, {placement: 'center',type:'success'});
 				//刷新验证码

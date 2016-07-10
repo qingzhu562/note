@@ -24,6 +24,10 @@ class Content extends Base{
 		'cover_id'  => 'integer',
 	);
 
+	protected function setUidAttr(){
+		return session('user_auth.uid');
+	}
+
 	protected function setCreateTimeAttr($value){
 		return $value ? strtotime($value) : time();
 	}
@@ -41,7 +45,7 @@ class Content extends Base{
 		return date('Y-m-d H:i:s',$value);
 	}
 
-	public function setInfo($name){
+	public function extend($name){
 		$this->name = $name;
 		return $this;
 	}

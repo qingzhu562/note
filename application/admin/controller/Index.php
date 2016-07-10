@@ -27,8 +27,8 @@ class Index extends Admin{
 			$this->checkVerify($verify);
 
 			$user = model('User');
-			$info = $user->login($username,$password);
-			if ($info) {
+			$uid = $user->login($username,$password);
+			if ($uid > 0) {
 				return $this->success('登录成功！',url('admin/index/index'));
 			}else{
 				switch($uid) {

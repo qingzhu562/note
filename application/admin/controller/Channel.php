@@ -21,7 +21,7 @@ class Channel extends Admin{
 		/* 获取频道列表 */
 		//$map  = array('status' => array('gt', -1), 'pid'=>$pid);
 		$map = array('status' => array('gt', -1));
-		$list = db('Channel')->where($map)->order('sort asc,id asc')->select();
+		$list = db('Channel')->where($map)->order('sort asc,id asc')->column('*','id');
 
         if (!empty($list)) {
             $tree = new \com\Tree();
@@ -173,10 +173,10 @@ class Channel extends Admin{
 			if ($res !== false) {
 				return $this->success('排序成功！',url('admin/channel/index'));
 			} else {
-				return $this->error('排序失败！','');
+				return $this->error('排序失败！');
 			}
 		} else {
-			return $this->error('非法请求！','');
+			return $this->error('非法请求！');
 		}
 	}
 

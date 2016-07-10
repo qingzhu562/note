@@ -82,11 +82,16 @@ class Addons extends \app\common\model\Base {
 
     public function install($data){
         if ($data) {
-            $result = $this->save($data);
-            if ($result) {
-                model('Hooks')->addHooks($data['name']);
-                return true;
+            $info = $this->where('name', $data['name'])->find();
+            if (null == $info) {
+                $result = $this->save($data);
+                if ($result) {
+                    return model('Hooks')->addHooks($data['name']);
+                }else{
+                    return false;
+                }
             }else{
+                $this->error = "已安装！";
                 return false;
             }
         }else{

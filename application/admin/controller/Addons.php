@@ -60,10 +60,10 @@ class Addons extends Admin {
 				if ($result) {
 					return $this->success("创建成功！",url('admin/addons/index'));
 				}else{
-					return $this->error("创建失败！",'');
+					return $this->error("创建失败！");
 				}
 			}else{
-				return $this->error($this->addons->getError(),'');
+				return $this->error($this->addons->getError());
 			}
 		}else{
 			$hooks = db('Hooks')->field('name,description')->select();
@@ -111,7 +111,7 @@ class Addons extends Admin {
 				return $this->error($this->addons->getError());
 			}
 		}else{
-			return $this->error('插件不存在','');
+			return $this->error('插件不存在');
 		}
 	}
 
@@ -123,7 +123,7 @@ class Addons extends Admin {
 		if($result === false){
 			return $this->error($this->addons->getError(),'');
 		}else{
-			return $this->success('卸载成功！','');
+			return $this->success('卸载成功！');
 		}
 	}
 
@@ -166,7 +166,7 @@ class Addons extends Admin {
 		}else{
 			$id = input('id','','trim,intval');
 			if (!$id) {
-				return $this->error("非法操作！",'');
+				return $this->error("非法操作！");
 			}
 			$info = $this->addons->find($id);
 			if (!empty($info)) {

@@ -8,7 +8,7 @@
 // +----------------------------------------------------------------------
 
 // SentCMS常量定义
-define('SENTCMS_VERSION', '3.0.20160408');
+define('SENTCMS_VERSION', '3.0.20160630');
 define('SENT_ADDON_PATH', ROOT_PATH . DS . 'addons' . DS);
 
 //字符串解密加密
@@ -261,6 +261,22 @@ function get_cover($cover_id, $field = null){
     return empty($field) ? $picture : $picture[$field];
 }
 
+/**
+ * 获取多图地址
+ * @param array $covers
+ * @return 返回图片列表
+ * @author molong <molong@tensent.cn>
+ */
+function get_cover_list($covers){
+    if ($covers == '') {
+        return false;
+    }
+    $cover_list = explode(',', $covers);
+    foreach ($cover_list as $item) {
+        $list[] = get_cover($item, 'path');
+    }
+    return $list;
+}
 
 /**
  * 字符串命名风格转换

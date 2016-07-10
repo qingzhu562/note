@@ -11,6 +11,7 @@
 
 namespace think;
 
+use InvalidArgumentException;
 use think\Cache;
 use think\Db;
 use think\db\Query;
@@ -33,6 +34,7 @@ use think\paginator\Collection as PaginatorCollection;
  * @method static integer avg($field = '*') AVG查询
  * @method static setField($field, $value = '')
  * @method static Query where($field, $op = null, $condition = null) 指定AND查询条件
+ * @method static static findOrFail($data = null) 查找单条记录 如果不存在则抛出异常
  *
  */
 abstract class Model implements \JsonSerializable, \ArrayAccess
@@ -171,7 +173,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
     {
         if (!is_null($relation)) {
             // 执行关联查询
-            return $this->db->relation($relation);
+            return $this->db()->relation($relation);
         }
 
         // 获取关联对象实例
@@ -204,7 +206,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
     {}
 
     /**
-     * 设置数据对象值（不进行修改器处理）
+     * 设置数据对象值
      * @access public
      * @param mixed $data 数据或者属性名
      * @param mixed $value 值
@@ -212,12 +214,20 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      */
     public function data($data, $value = null)
     {
-        if (is_object($data)) {
-            $this->data = get_object_vars($data);
-        } elseif (is_array($data)) {
-            $this->data = $data;
-        } else {
+        if (is_string($data)) {
             $this->data[$data] = $value;
+        } else {
+            if (is_object($data)) {
+                $data = get_object_vars($data);
+            }
+            if (true === $value) {
+                // 数据对象赋值
+                foreach ($data as $key => $value) {
+                    $this->setAttr($key, $value, $data);
+                }
+            } else {
+                $this->data = $data;
+            }
         }
         return $this;
     }
@@ -227,6 +237,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      * @access public
      * @param string $name 字段名 留空获取全部
      * @return mixed
+     * @throws InvalidArgumentException
      */
     public function getData($name = null)
     {
@@ -235,7 +246,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         } elseif (array_key_exists($name, $this->data)) {
             return $this->data[$name];
         } else {
-            return false;
+            throw new InvalidArgumentException('property not exists:' . $this->class . '->' . $name);
         }
     }
 
@@ -350,10 +361,17 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      * @access public
      * @param string $name 名称
      * @return mixed
+     * @throws InvalidArgumentException
      */
     public function getAttr($name)
     {
-        $value = $this->getData($name);
+        try {
+            $notFound = false;
+            $value    = $this->getData($name);
+        } catch (InvalidArgumentException $e) {
+            $notFound = true;
+            $value    = null;
+        }
 
         // 检测属性获取器
         $method = 'get' . Loader::parseName($name, 1) . 'Attr';
@@ -362,11 +380,15 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         } elseif (isset($this->type[$name])) {
             // 类型转换
             $value = $this->readTransform($value, $this->type[$name]);
-        } elseif (false === $value && method_exists($this, $name)) {
-            // 不存在该字段 获取关联数据
-            $value = $this->relation()->getRelation($name);
-            // 保存关联对象值
-            $this->data[$name] = $value;
+        } elseif ($notFound) {
+            if (method_exists($this, $name) && !method_exists('\think\Model', $name)) {
+                // 不存在该字段 获取关联数据
+                $value = $this->relation()->getRelation($name);
+                // 保存关联对象值
+                $this->data[$name] = $value;
+            } else {
+                throw new InvalidArgumentException('property not exists:' . $this->class . '->' . $name);
+            }
         }
         return $value;
     }
@@ -450,19 +472,19 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
     /**
      * 转换当前模型对象为数组
      * @access public
+     * @param array $allow 允许输出的属性列表
      * @return array
      */
-    public function toArray()
+    public function toArray($allow = [])
     {
         $item = [];
-        if (!empty($this->append)) {
-            foreach ($this->append as $name) {
-                $item[$name] = $this->getAttr($name);
-            }
+        if (empty($allow)) {
+            $allow = array_keys($this->data);
         }
+        $allow = array_diff($allow, $this->hidden);
         foreach ($this->data as $key => $val) {
-            // 如果是隐藏属性不输出
-            if (in_array($key, $this->hidden)) {
+            // 属性过滤输出
+            if (!in_array($key, $allow)) {
                 continue;
             }
 
@@ -481,18 +503,25 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                 $item[$key] = $this->getAttr($key);
             }
         }
+        // 追加属性（必须定义获取器）
+        if (!empty($this->append)) {
+            foreach ($this->append as $name) {
+                $item[$name] = $this->getAttr($name);
+            }
+        }
         return !empty($item) ? $item : [];
     }
 
     /**
      * 转换当前模型对象为JSON字符串
      * @access public
-     * @param integer $options json参数
+     * @param array     $allow 允许输出的属性列表
+     * @param integer   $options json参数
      * @return string
      */
-    public function toJson($options = JSON_UNESCAPED_UNICODE)
+    public function toJson($allow = [], $options = JSON_UNESCAPED_UNICODE)
     {
-        return json_encode($this->toArray(), $options);
+        return json_encode($this->toArray($allow), $options);
     }
 
     /**
@@ -557,7 +586,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         // 检测字段
         if (!empty($this->field)) {
             if (true === $this->field) {
-                $this->field = $this->db->getTableInfo('', 'fields');
+                $this->field = $this->db()->getTableInfo('', 'fields');
             }
             foreach ($this->data as $key => $val) {
                 if (!in_array($key, $this->field)) {
@@ -989,8 +1018,8 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         if ($name instanceof Query) {
             return $name;
         }
-        $model = new static();
-        $params = func_get_args();
+        $model     = new static();
+        $params    = func_get_args();
         $params[0] = $model->db();
         if ($name instanceof \Closure) {
             call_user_func_array($name, $params);
@@ -1277,13 +1306,17 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      */
     public function __isset($name)
     {
-        if (array_key_exists($name, $this->data)) {
-            return true;
-        } elseif ($this->getAttr($name)) {
-            return true;
-        } else {
+        try {
+            if (array_key_exists($name, $this->data)) {
+                return true;
+            } else {
+                $this->getAttr($name);
+                return true;
+            }
+        } catch (InvalidArgumentException $e) {
             return false;
         }
+
     }
 
     /**

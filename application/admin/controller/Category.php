@@ -19,12 +19,8 @@ class Category extends Admin{
 
 	public function index(){
 		$map  = array('status' => array('gt', -1));
-		$row = db('Category')->where($map)->order('sort asc,id asc')->select();
+		$list = db('Category')->where($map)->order('sort asc,id asc')->column('*','id');
 		
-		$list = array();
-		foreach ($row as $key => $value) {
-			$list[$value['id']] = $value;
-		}
         if (!empty($list)) {
             $tree = new \com\Tree();
             $list = $tree->toFormatTree($list);
@@ -240,9 +236,9 @@ class Category extends Admin{
 		$map['id'] = array('IN',$ids);
 		$result = db('Category')->where($map)->setField('status', $status);
 		if ($result) {
-			return $this->success("设置成功！",'');
+			return $this->success("设置成功！");
 		}else{
-			return $this->error("设置失败！",'');
+			return $this->error("设置失败！");
 		}
 	}
 }
