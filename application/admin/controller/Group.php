@@ -97,7 +97,7 @@ class Group extends Admin {
 
 	//会员分组删除控制器
 	public function del(){
-		$id = array_unique((array)$this->param['id']);
+		$id = $this->getArrayParam('id');
 		if (empty($id)) {
 			return $this->error("非法操作！");
 		}

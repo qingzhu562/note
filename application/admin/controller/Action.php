@@ -103,7 +103,7 @@ class Action extends Admin {
 	 * @author colin <colin@tensent.cn>
 	 */
 	public function del(){
-		$id = array_unique((array)$this->param['id']);
+		$id = $this->getArrayParam('id');
 		if(empty($id)){
 			return $this->error("非法操作！",'');
 		}
@@ -122,7 +122,7 @@ class Action extends Admin {
 	 * @author colin <colin@tensent.cn>
 	 */
 	public function setstatus(){
-		$id = array_unique((array)$this->param['id']);
+		$id = $this->getArrayParam('id');
 		if(empty($id)){
 			return $this->error("非法操作！",'');
 		}
@@ -189,7 +189,7 @@ class Action extends Admin {
 	 * @author huajie <banhuajie@163.com>
 	 */
 	public function dellog() {
-		$id = array_unique((array)$this->param['id']);
+		$id = $this->getArrayParam('id');
 		if(empty($id)){
 			return $this->error("非法操作！",'');
 		}

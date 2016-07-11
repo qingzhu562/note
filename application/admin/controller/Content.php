@@ -145,7 +145,7 @@ class Content extends Admin{
 	 * @author molong <ycgpp@126.com>
 	 */
 	public function del(){
-		$id = array_unique((array)$this->param['id']);
+		$id = $this->getArrayParam('id');
 		if (empty($id)) {
 			return $this->error("非法操作！");
 		}

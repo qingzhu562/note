@@ -148,4 +148,15 @@ class Base extends \think\Controller{
 		$this->assign('request',$this->request);
 		$this->assign('param',$this->param);
 	}
+
+	/**
+	 * 获取单个参数的数组形式
+	 */
+	protected function getArrayParam($param){
+		if (isset($this->param['id'])) {
+			return array_unique((array)$this->param[$param]);
+		}else{
+			return array();
+		}
+	}
 }

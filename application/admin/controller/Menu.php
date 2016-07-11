@@ -49,19 +49,15 @@ class Menu extends Admin{
 	    if(IS_POST){
 	        $Menu = model('Menu');
 	        $data = input('post.');
-	        if($data){
-	            $id = $Menu->save($data);
-	            if($id){
-	                session('admin_menu_list',null);
-	                //记录行为
-	                action_log('update_menu', 'Menu', $id, session('user_auth.uid'));
-	                return $this->success('新增成功', Cookie('__forward__'));
-	            } else {
-	                return $this->error('新增失败');
-	            }
-	        } else {
-	            return $this->error($Menu->getError());
-	        }
+            $id = $Menu->save($data);
+            if($id){
+                session('admin_menu_list',null);
+                //记录行为
+                action_log('update_menu', 'Menu', $id, session('user_auth.uid'));
+                return $this->success('新增成功', Cookie('__forward__'));
+            } else {
+                return $this->error('新增失败');
+            }
 	    } else {
 	        $this->assign('info',array('pid'=>input('pid')));
 	        $menus = db('Menu')->select();
@@ -87,18 +83,14 @@ class Menu extends Admin{
 	    if(IS_POST){
 	        $Menu = model('Menu');
 	        $data = input('post.');
-	        if($data){
-	            if($Menu->save($data,array('id'=>$data['id']))!== false){
-	                session('admin_menu_list',null);
-	                //记录行为
-	                action_log('update_menu', 'Menu', $data['id'], session('user_auth.uid'));
-	                return $this->success('更新成功', Cookie('__forward__'));
-	            } else {
-	                return $this->error('更新失败');
-	            }
-	        } else {
-	            return $this->error($Menu->getError());
-	        }
+            if($Menu->save($data,array('id'=>$data['id']))!== false){
+                session('admin_menu_list',null);
+                //记录行为
+                action_log('update_menu', 'Menu', $data['id'], session('user_auth.uid'));
+                return $this->success('更新成功', Cookie('__forward__'));
+            } else {
+                return $this->error('更新失败');
+            }
 	    } else {
 	        $info = array();
 	        /* 获取数据 */
@@ -123,9 +115,9 @@ class Menu extends Admin{
 	 * @author yangweijie <yangweijiester@gmail.com>
 	 */
 	public function del(){
-		$id = array_unique((array)$this->param['id']);
+		$id = $this->getArrayParam('id');
 
-	    if ( empty($id) ) {
+	    if (empty($id) ) {
 	        return $this->error('请选择要操作的数据!');
 	    }
 

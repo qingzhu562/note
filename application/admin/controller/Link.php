@@ -85,7 +85,7 @@ class Link extends Admin{
 
 	//删除
 	public function delete(){
-		$id = array_unique((array)$this->param['id']);
+		$id = $this->getArrayParam('id');
 		if (empty($id)) {
 			return $this->error('非法操作！');
 		}

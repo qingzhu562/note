@@ -127,7 +127,7 @@ class Channel extends Admin{
 	 * @author 麦当苗儿 <zuojiazi@vip.qq.com>
 	 */
 	public function del() {
-		$id = array_unique((array)$this->param['id']);
+		$id = $this->getArrayParam('id');
 		
 		if (empty($id)) {
 			return $this->error('请选择要操作的数据!');
