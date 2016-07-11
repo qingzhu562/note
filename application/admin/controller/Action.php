@@ -41,17 +41,13 @@ class Action extends Admin {
 	public function add(){
 		$model = model('Action');
 		if(IS_POST){
-			$data = $model->create();
-			if(!$data){
-				return $this->error($model->getError());
+			$data = input('post.');
+			$result = $model->save();
+			if ($result) {
+				action_log('add_action', 'Action', $result, session('user_auth.uid'));
+				return $this->success('添加成功！',url('index'));
 			}else{
-				$result = $model->add();
-				if ($result) {
-					action_log('add_action', 'Action', $result, session('user_auth.uid'));
-					return $this->success('添加成功！',url('index'));
-				}else{
-					return $this->error($model->getError());
-				}
+				return $this->error($model->getError());
 			}
 		}else{
 			$data = array(
@@ -70,18 +66,13 @@ class Action extends Admin {
 	public function edit($id = null){
 		$model = model('Action');
 		if(IS_POST){
-			$model = D('Action');
-			$data = $model->create();
-			if(!$data){
-				return $this->error($model->getError());
+			$data = input('post.');
+			$result = $model->save($data, array('id'=>$data['id']));
+			if ($result !== false) {
+				action_log('edit_action', 'Action', $id, session('user_auth.uid'));
+				return $this->success('编辑成功！',url('index'));
 			}else{
-				$result = $model->save();
-				if ($result !== false) {
-					action_log('edit_action', 'Action', $id, session('user_auth.uid'));
-					return $this->success('编辑成功！',url('index'));
-				}else{
-					return $this->error($model->getError());
-				}
+				return $this->error($model->getError());
 			}
 		}else{
 			$info = $model::where(array('id'=>$id))->find();
