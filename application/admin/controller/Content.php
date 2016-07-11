@@ -55,7 +55,9 @@ class Content extends Admin{
 			unset($map['model_id']);
 		}
 		
-		$list = $this->model->where($map)->order($order)->paginate(15);
+		$list = $this->model->where($map)->order($order)->paginate(15, false, array(
+				'query'  => $this->request->param()
+			));
 
 		$data = array(
 			'grid'  => $grid_list,
