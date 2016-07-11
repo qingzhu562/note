@@ -262,10 +262,12 @@ class Content extends Admin{
 				}
 			}
 		}
-
+		if (isset($map['page'])) {
+			unset($map['page']);
+		}
 		if ($this->modelInfo['extend'] == 1) {
 			$category = isset($data['category']) ? $data['category'] : '';
-			$cate_list = parse_field_bind('category', $category, $this->modelInfo['id']);
+			$cate_list = parse_field_bind('category', $category, 0);
 			$this->assign('cate_list', $cate_list);
 		}
 		$this->assign($data);

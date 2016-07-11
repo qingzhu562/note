@@ -121,7 +121,7 @@ class Upload {
 		$data['m_time'] = $info->getMTime();	//获取最后修改时间
 		$data['owner'] = $info->getOwner();	//文件拥有者
 		$data['savepath'] = $info->getPath();	//不带文件名的文件路径
-		$data['url'] = $data['path'] = substr($info->getPathname(), 1);	//全路径
+		$data['url'] = $data['path'] = str_replace("\\", '/', substr($info->getPathname(), 1));	//全路径
 		$data['size'] = $info->getSize();	//文件大小，单位字节
 		$data['is_file'] = $info->isFile();	//是否是文件
 		$data['is_execut'] = $info->isExecutable();	//是否可执行

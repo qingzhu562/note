@@ -1382,6 +1382,16 @@ CREATE TABLE `sent_picture` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
+DROP TABLE IF EXISTS `sent_rewrite`;
+CREATE TABLE `sent_rewrite` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id自增',
+  `rule` varchar(255) NOT NULL DEFAULT '' COMMENT '规则',
+  `url` varchar(255) NOT NULL DEFAULT '' COMMENT 'url',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+)  ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='伪静态表';
+
 -- -----------------------------
 -- Table structure for `sent_seo_rule`
 -- -----------------------------
