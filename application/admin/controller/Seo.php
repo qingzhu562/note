@@ -97,11 +97,11 @@ class Seo extends Admin{
 	}
 
 	public function del(){
-		$id = input('id','','trim,intval');
-		if (!$id) {
+		$id = array_unique((array)$this->param['id']);
+		if (empty($id)) {
 			return $this->error("非法操作！");
 		}
-		$result = db('SeoRule')->where(array('id'=>$id))->delete();
+		$result = db('SeoRule')->where(array('id'=>array('IN',$id)))->delete();
 		if ($result) {
 			return $this->success("删除成功！");
 		}else{

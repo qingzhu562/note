@@ -97,11 +97,11 @@ class Group extends Admin {
 
 	//会员分组删除控制器
 	public function del(){
-		$id = input('id','','trim,intval');
-		if (!$id) {
+		$id = array_unique((array)$this->param['id']);
+		if (empty($id)) {
 			return $this->error("非法操作！");
 		}
-		$result = $this->group->where(array('id'=>$id))->delete();
+		$result = $this->group->where(array('id'=>array('IN', $id)))->delete();
 		if ($result) {
 			return $this->success("删除成功！");
 		}else{
@@ -113,7 +113,7 @@ class Group extends Admin {
 	public function access($type = 'admin'){
 		$map['module'] = $type;
 
-		$list = db('AuthRule')->where($map)->order('id desc')->paginate(10);
+		$list = db('AuthRule')->where($map)->order('id desc')->paginate(15);
 
 		$data = array(
 			'list'   => $list,

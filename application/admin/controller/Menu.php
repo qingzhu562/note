@@ -123,7 +123,7 @@ class Menu extends Admin{
 	 * @author yangweijie <yangweijiester@gmail.com>
 	 */
 	public function del(){
-	    $id = array_unique((array)input('id',0));
+		$id = array_unique((array)$this->param['id']);
 
 	    if ( empty($id) ) {
 	        return $this->error('请选择要操作的数据!');
@@ -133,7 +133,7 @@ class Menu extends Admin{
 	    if(db('Menu')->where($map)->delete()){
 	        session('admin_menu_list',null);
 	        //记录行为
-	        action_log('update_menu', 'Menu', $id, UID);
+	        action_log('update_menu', 'Menu', $id, session('user_auth.uid'));
 	        return $this->success('删除成功');
 	    } else {
 	        return $this->error('删除失败！');

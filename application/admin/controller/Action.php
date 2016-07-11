@@ -103,23 +103,17 @@ class Action extends Admin {
 	 * @author colin <colin@tensent.cn>
 	 */
 	public function del(){
-		if (IS_POST) {
-			$ids = input('ids/a',array());
-			$id = input('id','');
-			array_push($ids, $id);
-			if(empty($ids)){
-				return $this->error("非法操作！",'');
-			}
-			$map['id'] = array('IN',$ids);
-			$result = db('Action')->where($map)->delete();
-			if ($result) {
-				action_log('delete_action', 'Action', $id, session('user_auth.uid'));
-				return $this->success('删除成功！');
-			}else{
-				return $this->error('删除失败！');
-			}
+		$id = array_unique((array)$this->param['id']);
+		if(empty($id)){
+			return $this->error("非法操作！",'');
+		}
+		$map['id'] = array('IN',$id);
+		$result = db('Action')->where($map)->delete();
+		if ($result) {
+			action_log('delete_action', 'Action', $id, session('user_auth.uid'));
+			return $this->success('删除成功！');
 		}else{
-			return $this->error("非法操作！");
+			return $this->error('删除失败！');
 		}
 	}
 
@@ -128,15 +122,13 @@ class Action extends Admin {
 	 * @author colin <colin@tensent.cn>
 	 */
 	public function setstatus(){
-		$ids = input('ids/a',array());
-		$id = input('id','');
-		array_push($ids, $id);
-		if(empty($ids)){
+		$id = array_unique((array)$this->param['id']);
+		if(empty($id)){
 			return $this->error("非法操作！",'');
 		}
 		$status = input('get.status','','trim,intval');
 		$message = !$status ? '禁用' : '启用';
-		$map['id'] = array('IN',$ids);
+		$map['id'] = array('IN',$id);
 		$result = db('Action')->where($map)->setField('status',$status);
 		if ($result !== false) {
 			action_log('setstatus_action', 'Action', $id, session('user_auth.uid'));
@@ -193,17 +185,15 @@ class Action extends Admin {
 	}
 	/**
 	 * 删除日志
-	 * @param mixed $ids
+	 * @param mixed $id
 	 * @author huajie <banhuajie@163.com>
 	 */
 	public function dellog() {
-		$ids = input('ids/a',array());
-		$id = input('id','');
-		array_push($ids, $id);
-		if(empty($ids)){
+		$id = array_unique((array)$this->param['id']);
+		if(empty($id)){
 			return $this->error("非法操作！",'');
 		}
-		$map['id'] = array('IN',$ids);
+		$map['id'] = array('IN',$id);
 		$res = db('ActionLog')->where($map)->delete();
 		if ($res !== false) {
 			action_log('delete_actionlog', 'ActionLog', $id, session('user_auth.uid'));

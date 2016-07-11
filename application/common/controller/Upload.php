@@ -14,14 +14,16 @@ class Upload {
 	public function upload(){
 		$upload_type = input('get.filename','images','trim');
 		$config = $this->$upload_type();
-		$upload = new \org\Upload($config, $config['driver']);
-		$info = $upload->upload($_FILES);
-		if (false !== $info) {
-			$fileinfo = $this->save($config, $upload_type, $info['file']);
-            $return['info'] = $fileinfo;
+		// 获取表单上传文件 例如上传了001.jpg
+		$file = request()->file('file');
+		$info = $file->move($config['rootPath'], true, false);
+
+		if($info){
+            $return['status'] = 1;
+			$return['info'] = $this->save($config, $upload_type, $info);
 		}else{
             $return['status'] = 0;
-            $return['info']   = $upload->getError();
+            $return['info']   = $file->getError();
 		}
 		
 		echo json_encode($return);
@@ -68,20 +70,10 @@ class Upload {
 	 * @access public
 	 */
 	public function save($config, $type, $file){
+		$file = $this->parse_file($file);
 		$file['status'] = 1;
-		if ($type == 'images') {
-			$dbname = 'picture';
-			$file['path'] = substr($config['rootPath'], 1).$file['savepath'].$file['savename'];	//
-		}else{
-			$dbname = 'file';
-			$file['url'] = substr($config['rootPath'], 1).$file['savepath'].$file['savename'];
-		}
-		$data = db($dbname)->where(array('md5'=>$file['md5']))->find();
-		if (!empty($data)) {
-			return $data;
-		}else{
-			$id = db($dbname)->insertGetId($file);
-		}
+		$dbname = ($type == 'images') ? 'picture' : 'file';
+		$id = db($dbname)->insertGetId($file);
 		
 		if ($id) {
 			$data = db($dbname)->where(array('id'=>$id))->find();
@@ -118,5 +110,25 @@ class Upload {
 			$this->error = '文件已被删除！';
 			return false;
 		}
+	}
+
+	protected function parse_file($info){
+		$data['create_time'] = $info->getATime();	//最后访问时间
+		$data['savename'] = $info->getBasename();	//获取无路径的basename
+		$data['c_time'] = $info->getCTime();	//获取inode修改时间
+		$data['ext'] = $info->getExtension();	//文件扩展名
+		$data['name'] = $info->getFilename();	//获取文件名
+		$data['m_time'] = $info->getMTime();	//获取最后修改时间
+		$data['owner'] = $info->getOwner();	//文件拥有者
+		$data['savepath'] = $info->getPath();	//不带文件名的文件路径
+		$data['url'] = $data['path'] = substr($info->getPathname(), 1);	//全路径
+		$data['size'] = $info->getSize();	//文件大小，单位字节
+		$data['is_file'] = $info->isFile();	//是否是文件
+		$data['is_execut'] = $info->isExecutable();	//是否可执行
+		$data['is_readable'] = $info->isReadable();	//是否可读
+		$data['is_writable'] = $info->isWritable();	//是否可写
+		$data['md5'] = md5_file($info->getPathname());
+		$data['sha1'] = sha1_file($info->getPathname());
+		return $data;
 	}
 }

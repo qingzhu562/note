@@ -90,9 +90,9 @@ class Ad extends Admin {
 	}
 
 	public function del(){
-		$id = input('id','');
+		$id = array_unique((array)$this->param['id']);
 
-		if (!$id) {
+		if (empty($id)) {
 			return $this->error("非法操作！");
 		}
 		$map['id'] = array('IN',$id);
@@ -175,9 +175,9 @@ class Ad extends Admin {
 	}
 
 	public function delad(){
-		$id = input('id','');
+		$id = array_unique((array)$this->param['id']);
 
-		if (!$id) {
+		if (empty($id)) {
 			return $this->error("非法操作！");
 		}
 		$map['id'] = array('IN',$id);

@@ -34,6 +34,7 @@
 					<table class="table table-striped table-hover">
 						<thead>
 							<tr>
+								<th width="30"><input class="checkbox check-all" type="checkbox"></th>
 								<th width="60">ID</th>
 								<th>组名</th>
 								<th>标识</th>
@@ -45,6 +46,7 @@
 						<tbody>
 							{volist name="list" id="item"}
 							<tr>
+								<th width="30"><input class="ids row-selected" type="checkbox" name="id[]" value="{$item['id']}"></th>
 								<td>{$item['id']}</td>
 								<td>{$item['title']}</td>
 								<td>{$item['name']}</td>

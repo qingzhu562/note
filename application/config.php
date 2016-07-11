@@ -10,7 +10,7 @@
 return array(
 
 	// 调试模式
-	'app_debug' => false,
+	'app_debug' => true,
 
 	'charset'   => 'UTF-8',
 	'lang_switch_on' => true,   // 开启语言包功能

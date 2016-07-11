@@ -29,7 +29,7 @@
 			<tbody>
 				{volist name="list" id="vo"}
 				<tr>
-		            <td><input class="ids" type="checkbox" name="ids[]" value="{$vo['id']}" /></td>
+		            <td><input class="ids" type="checkbox" name="id[]" value="{$vo['id']}" /></td>
 					<td>{$vo['id']} </td>
 					<td>{:get_action($vo['action_id'],'title')}</td>
 					<td>{:get_nickname($vo['user_id'])}</td>
