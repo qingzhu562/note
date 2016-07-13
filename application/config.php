@@ -39,7 +39,7 @@ return array(
 		// 子目录创建方式，[0]-函数名，[1]-参数，多个参数使用数组
 		'subName'      => ['date', 'Ymd'],
 		//保存根路径
-		'rootPath'     => './uploads/attachment/',
+		'rootPath'     => './uploads/attachment',
 		// 保存路径
 		'savePath'     => '',
 		// 上传文件命名规则，[0]-函数名，[1]-参数，多个参数使用数组
@@ -58,7 +58,7 @@ return array(
 		// 子目录创建方式，[0]-函数名，[1]-参数，多个参数使用数组
 		'subName'      => ['date', 'Ymd'],
 		//保存根路径
-		'rootPath'     => './uploads/editor/',
+		'rootPath'     => './uploads/editor',
 		// 保存路径
 		'savePath'     => '',
 		// 上传文件命名规则，[0]-函数名，[1]-参数，多个参数使用数组
@@ -77,7 +77,7 @@ return array(
 		// 子目录创建方式，[0]-函数名，[1]-参数，多个参数使用数组
 		'subName'      => ['date', 'Ymd'],
 		//保存根路径
-		'rootPath'     => './uploads/picture/',
+		'rootPath'     => './uploads/picture',
 		// 保存路径
 		'savePath'     => '',
 		// 上传文件命名规则，[0]-函数名，[1]-参数，多个参数使用数组

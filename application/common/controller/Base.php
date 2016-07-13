@@ -90,10 +90,10 @@ class Base extends \think\Controller{
 		foreach ($seo as $key => $value) {
 			if (is_array($value)) {
 				foreach ($value as $k => $v) {
-					$meta[$key] = str_replace("[".$k."]", $v, $meta[$key]);
+					$meta[$key] = str_replace("[".$k."]", $v . '|', $meta[$key]);
 				}
 			}else{
-				$meta[$key] = str_replace("[".$key."]", $value, $meta[$key]);
+				$meta[$key] = str_replace("[".$key."]", $value . '|', $meta[$key]);
 			}
 		}
 

@@ -64,6 +64,7 @@ class Content extends Fornt{
 			$teamplate = 'content/'.$this->modelInfo['name'].'/index';
 		}
 		$this->assign($data);
+		$this->setSeo($cate['name']);
 		return $this->fetch($teamplate);
 	}
 
@@ -133,6 +134,10 @@ class Content extends Fornt{
 			$teamplate = 'content/'.$this->modelInfo['name'].'/detail';
 		}
 		$this->assign($data);
+		$title = isset($info['title']) ? $info['title'] : '';
+		$tags = isset($info['tags']) ? $info['tags'] : '';
+		$description = isset($info['description']) ? $info['description'] : '';
+		$this->setSeo($title, $tags, $description);
 		return $this->fetch($teamplate);	
 	}
 

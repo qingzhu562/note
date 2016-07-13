@@ -12,31 +12,20 @@ use app\common\controller\Admin;
 
 class Seo extends Admin{
 
-	protected $model;
-	protected $keyList;
+	protected $seo;
+	protected $rewrite;
 
 	public function _initialize(){
 		parent::_initialize();
-		$app=array(''=>'-所有模块-','index'=>'前台模块','user'=>'用户中心');
-		$this->keyList = array(
-			array('name'=>'id','title'=>'标识','type'=>'hidden'),
-			array('name'=>'title','title'=>'规则名称','type'=>'text','option'=>'','help'=>'规则名称，方便记忆'),
-			array('name'=>'app','title'=>'模块名','type'=>'select','option'=>$app,'help'=>'不选表示所有模块'),
-			array('name'=>'controller','title'=>'控制器','type'=>'text','option'=>'','help'=>'不填表示所有控制器'),
-			array('name'=>'act','title'=>'方法','type'=>'text','option'=>'','help'=>'不填表示所有方法'),
-			array('name'=>'seo_title','title'=>'SEO标题','type'=>'text','option'=>'','help'=>'不填表示使用默认'),
-			array('name'=>'seo_keywords','title'=>'SEO关键字','type'=>'text','option'=>'','help'=>'不填表示使用默认'),
-			array('name'=>'seo_description','title'=>'SEO描述','type'=>'text','option'=>'','help'=>'不填表示使用默认'),
-			array('name'=>'status', 'title'=>'状态', 'type'=>'select','option'=>array('0'=>'禁用','1'=>'启用'),'help'=>''),
-			array('name'=>'sort','title'=>'排序','type'=>'text','option'=>'','help'=>'')
-		);
+		$this->seo = model('SeoRule');
+		$this->rewrite = model('Rewrite');
 	}
 
 	public function index($page = 1, $r = 20){
 		//读取规则列表
 		$map = array('status' => array('EGT', 0));
 
-		$list = model('SeoRule')->where($map)->order('sort asc')->paginate(10);
+		$list = $this->seo->where($map)->order('sort asc')->paginate(10);
 
 		$data = array(
 			'list'  => $list,
@@ -50,19 +39,15 @@ class Seo extends Admin{
 	public function add(){
 		if (IS_POST) {
 			$data = $this->request->post();
-			if ($data) {
-				$result = model('SeoRule')->save($data);
-				if ($result) {
-					return $this->success("添加成功！");
-				}else{
-					return $this->error("添加失败！");
-				}
+			$result = $this->seo->save($data);
+			if ($result) {
+				return $this->success("添加成功！");
 			}else{
-				return $this->error($this->model->getError());
+				return $this->error("添加失败！");
 			}
 		}else{
 			$data = array(
-				'keyList' => $this->keyList
+				'keyList' => $this->seo->keyList
 			);
 			$this->assign($data);
 			$this->setMeta("添加规则");
@@ -73,22 +58,18 @@ class Seo extends Admin{
 	public function edit($id = null){
 		if (IS_POST) {
 			$data = $this->request->post();
-			if ($data) {
-				$result = model('SeoRule')->save($data,array('id'=>$data['id']));
-				if (false !== $result) {
-					return $this->success("修改成功！");
-				}else{
-					return $this->error("修改失败！");
-				}
+			$result = $this->seo->save($data,array('id'=>$data['id']));
+			if (false !== $result) {
+				return $this->success("修改成功！");
 			}else{
-				return $this->error($this->model->getError());
+				return $this->error("修改失败！");
 			}
 		}else{
 			$id = input('id','','trim,intval');
-			$info = db('SeoRule')->where(array('id'=>$id))->find();
+			$info = $this->seo->where(array('id'=>$id))->find();
 			$data = array(
 				'info'  => $info,
-				'keyList' => $this->keyList
+				'keyList' => $this->seo->keyList
 			);
 			$this->assign($data);
 			$this->setMeta("编辑规则");
@@ -101,7 +82,61 @@ class Seo extends Admin{
 		if (empty($id)) {
 			return $this->error("非法操作！");
 		}
-		$result = db('SeoRule')->where(array('id'=>array('IN',$id)))->delete();
+		$result = $this->seo->where(array('id'=>array('IN',$id)))->delete();
+		if ($result) {
+			return $this->success("删除成功！");
+		}else{
+			return $this->error("删除失败！");
+		}
+	}
+
+	public function rewrite(){
+		$list = db('Rewrite')->paginate(10);
+
+		$data = array(
+			'list'   => $list,
+			'page'   => $list->render()
+		);
+		$this->assign($data);
+		$this->setMeta("路由规则");
+		return $this->fetch();
+	}
+
+	public function addrewrite(){
+		if (IS_POST) {
+			# code...
+		}else{
+			$data = array(
+				'keyList' => $this->rewrite->keyList
+			);
+			$this->assign($data);
+			$this->setMeta("添加路由规则");
+			return $this->fetch('public/edit');
+		}
+	}
+
+	public function editrewrite(){
+		if (IS_POST) {
+			# code...
+		}else{
+			$id = input('id','','trim,intval');
+			$info = db('Rewrite')->where(array('id'=>$id))->find();
+			$data = array(
+				'info'  => $info,
+				'keyList' => $this->rewrite->keyList
+			);
+			$this->assign($data);
+			$this->setMeta("编辑路由规则");
+			return $this->fetch('public/edit');
+		}
+	}
+
+	public function delrewrite(){
+		$id = $this->getArrayParam('id');
+		if (empty($id)) {
+			return $this->error("非法操作！");
+		}
+		$result = db('Rewrite')->where(array('id'=>array('IN',$id)))->delete();
 		if ($result) {
 			return $this->success("删除成功！");
 		}else{

@@ -57,6 +57,20 @@ class Upload {
 		echo $data->output();
 	}
 
+	public function editor(){
+		$file = request()->file('upload_file');
+		$info = $file->move(config('editor_upload.rootPath'), true, false);
+		if ($info) {
+			$data = $this->parse_file($info);
+			$data['success']   = true;
+			$data['file_path'] = $data['url'];
+		}else{
+			$data['success']   = false;
+			$data['msg']       = "error message";
+		}
+		return $data;
+	}
+
 	public function delete(){
 		$data = array(
 			'status' => 1,

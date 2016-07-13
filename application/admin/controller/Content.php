@@ -56,7 +56,7 @@ class Content extends Admin{
 		}
 		
 		$list = $this->model->where($map)->order($order)->paginate(15, false, array(
-				'query'  => $this->request->param()
+				'query'  => $this->param
 			));
 
 		$data = array(

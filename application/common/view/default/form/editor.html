@@ -1,19 +1,12 @@
-	<textarea name="{$field}" id="{$field}">{$value}</textarea>
-	<script type="text/javascript">
-	serverUrl = "{:url('upload/ueditor')}";
-	{if $option == 'all' || $option == ''}
-	var ue = UE.getEditor("{$field}",{
-		serverUrl         : serverUrl,
-		initialFrameWidth : "100%",
-		initialFrameHeight : "300"
-	});
-	{elseif $option == 'mini'/}
-	var ue = UE.getEditor("{$field}",{
-		toolbars: [
-	        ['source', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', '|','link', 'unlink', '|','simpleupload',]
-	    ],
-		initialFrameWidth : "100%",
-		initialFrameHeight : "120"
-	});
-	{/if}
-	</script>
+<textarea name="{$field}" id="{$field}">{$value}</textarea>
+<script type="text/javascript">
+var editor = new Simditor({
+  textarea: $('#{$field}'),
+  defaultImage : '__PUBLIC__/images/wechat.jpg',
+  upload       : {
+  	placeholder : '欢迎使用SentCMS网站管理系统',
+  	url: "{:url('upload/editor')}",
+  	fileKey: "upload_file"
+  }
+});
+</script>

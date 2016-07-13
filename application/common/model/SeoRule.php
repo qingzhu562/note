@@ -14,6 +14,31 @@ namespace app\common\model;
 */
 class SeoRule extends Base{
 
+	public $keyList = array(
+		array('name'=>'id','title'=>'标识','type'=>'hidden'),
+		array('name'=>'title','title'=>'规则名称','type'=>'text','option'=>'','help'=>'规则名称，方便记忆'),
+		array('name'=>'app','title'=>'模块名','type'=>'select','option'=>array('*'=>'-所有模块-','index'=>'前台模块','user'=>'用户中心'),'help'=>'不选表示所有模块'),
+		array('name'=>'controller','title'=>'控制器','type'=>'text','option'=>'','help'=>'不填表示所有控制器'),
+		array('name'=>'action','title'=>'方法','type'=>'text','option'=>'','help'=>'不填表示所有方法'),
+		array('name'=>'seo_title','title'=>'SEO标题','type'=>'text','option'=>'','help'=>'不填表示使用默认'),
+		array('name'=>'seo_keywords','title'=>'SEO关键字','type'=>'text','option'=>'','help'=>'不填表示使用默认'),
+		array('name'=>'seo_description','title'=>'SEO描述','type'=>'text','option'=>'','help'=>'不填表示使用默认'),
+		array('name'=>'status', 'title'=>'状态', 'type'=>'select','option'=>array('0'=>'禁用','1'=>'启用'),'help'=>''),
+		array('name'=>'sort','title'=>'排序','type'=>'text','option'=>'','help'=>'')
+	);
+
+	protected function setAppAttr($value){
+		return $value ? $value : '*';
+	}
+
+	protected function setControllerAttr($value){
+		return $value ? $value : '*';
+	}
+
+	protected function setActionAttr($value){
+		return (isset($value) && $value) ? $value : '*';
+	}
+
 	protected function getAppAttr($value){
 		return $value ? $value : '*';
 	}
@@ -37,13 +62,6 @@ class SeoRule extends Base{
 	}
 
 	private function getMeta($module, $controller, $action, $seo){
-		//查询缓存，如果已有，则直接返回
-		$cacheKey = "sent_seo_meta_{$module}_{$controller}_{$action}";
-		$cache = cache($cacheKey);
-		if($cache !== false) {
-			return $cache;
-		}
-
 		//获取相关的规则
 		$rules = $this->getRelatedRules($module, $controller, $action);
 
@@ -82,19 +100,15 @@ class SeoRule extends Base{
 		//生成结果
 		$result = array('title' => $title, 'keywords' => $keywords, 'description' => $description);
 
-		//写入缓存
-		cache($cacheKey, $result);
-
 		//返回结果
 		return $result;
     }
 
 	private function getRelatedRules($module, $controller, $action){
 		//查询与当前页面相关的SEO规则
-		$map = array();
-		$map = "(app='' or app='$module') and (controller='' or controller='$controller') and (action='' or action='$action') and status=1";
+		$map = "(app='*' or app='$module') and (controller='*' or controller='$controller') and (action='*' or action='$action') and status=1";
 
-		$rules = $this->db()->where($map)->order('sort asc')->select();
+		$rules = $this->where($map)->order('sort asc')->select();
 
 		//返回规则列表
 		return $rules;

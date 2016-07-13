@@ -4,8 +4,12 @@
 <script src="__PUBLIC__/plugs/tagsinput/bootstrap-tagsinput.js"></script>
 
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/plugs/webuploader/webuploader.css">
-<script type="text/javascript" charset="utf-8" src="__PUBLIC__/plugs/ueditor/ueditor.config.js"></script>
-<script type="text/javascript" charset="utf-8" src="__PUBLIC__/plugs/ueditor/ueditor.all.min.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/plugs/editor/css/simditor.css" />
+
+<script type="text/javascript" src="__PUBLIC__/plugs/editor/js/module.js"></script>
+<script type="text/javascript" src="__PUBLIC__/plugs/editor/js/hotkeys.js"></script>
+<script type="text/javascript" src="__PUBLIC__/plugs/editor/js/uploader.js"></script>
+<script type="text/javascript" src="__PUBLIC__/plugs/editor/js/simditor.js"></script>
 <!-- datepicker statr -->
 <link href="__PUBLIC__/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
 <script src="__PUBLIC__/plugs/datepicker/js/foundation-datepicker.js"></script>
@@ -41,7 +45,7 @@
 						{else/}
 						<div class="form-group">
 							<label class="col-lg-2 control-label">{$field['title']|htmlspecialchars}</label>
-							<div class="col-lg-8 col-sm-10">
+							<div class="col-lg-10 col-sm-10">
 								{:widget('common/Form/show',array($field,$info))}
 								<div class="help-block">{$field['help']|default=''}</div>
 							</div>
@@ -59,7 +63,7 @@
 			{else/}
 			<div class="form-group">
 				<label class="col-lg-2 control-label">{$field['title']|htmlspecialchars}</label>
-				<div class="col-lg-8 col-sm-10">
+				<div class="col-lg-10 col-sm-10">
 					{:widget('common/Form/show',array($field,$info))}
 					<div class="help-block">{$field['help']|default=''}</div>
 				</div>
