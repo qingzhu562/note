@@ -57,7 +57,14 @@ class SeoRule extends Base{
 
 	public function getMetaOfCurrentPage($seo){
 		$request = \think\Request::instance();
-		$result = $this->getMeta($request->module(), $request->controller(), $request->action(), $seo);
+		foreach ($seo as $key => $value) {
+			if (is_array($value)) {
+				$seo_to_str[$key] = implode(',', $value);
+			}else{
+				$seo_to_str[$key] = $value;
+			}
+		}
+		$result = $this->getMeta($request->module(), $request->controller(), $request->action(), $seo_to_str);
 		return $result;
 	}
 
