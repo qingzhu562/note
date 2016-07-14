@@ -36,15 +36,6 @@ class Content extends Base{
 		return $value ? strtotime($value) : time();
 	}
 
-
-	protected function getCreateTimeAttr($value){
-		return date('Y-m-d H:i:s',$value);
-	}
-
-	protected function getUpdateTimeAttr($value){
-		return date('Y-m-d H:i:s',$value);
-	}
-
 	public function extend($name){
 		$this->name = $name;
 		return $this;

@@ -45,6 +45,10 @@ class InitHook {
     }
 
     protected function setRoute(){
+        $list = db('Rewrite')->select();
+        foreach ($list as $key => $value) {
+            $route[$value['rule']] = $value['url'];
+        }
         $model = db('Model');
         $map = array(
             'status' => array('gt',0),
@@ -65,11 +69,6 @@ class InitHook {
             $route["user/".$value['name']."/edit"] = "user/content/edit?model_id=".$value['id'];
             $route["user/".$value['name']."/del"] = "user/content/del?model_id=".$value['id'];
             $route["user/".$value['name']."/status"] = "user/content/status?model_id=".$value['id'];
-        }
-
-        $list = db('Rewrite')->select();
-        foreach ($list as $key => $value) {
-            $route[$value['rule']] = $value['url'];
         }
         \think\Route::rule($route);
     }
