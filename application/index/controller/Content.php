@@ -12,30 +12,9 @@ use app\common\controller\Fornt;
 
 class Content extends Fornt{
 
-	public function _initialize(){
-		parent::_initialize();
-		$model_name = $this->request->param('model');
-		$model_id = $this->request->param('model_id');
-		$row = db('Model')->select();
-		foreach ($row as $key => $value) {
-			$name_list[$value['name']] = $value;
-			$id_list[$value['id']] = $value;
-		}
-
-		if (empty($name_list[$model_name]) && empty($id_list[$model_id])) {
-			return $this->error("无此模型！");
-		}else {
-			$this->modelInfo = $model_name ? $name_list[$model_name] : $id_list[$model_id];
-			if ($this->modelInfo['extend'] > 1) {
-				$this->model = model($this->modelInfo['name']);
-			}else{
-				$this->model = model('Document')->extend($this->modelInfo['name']);
-			}
-
-			$this->assign('model_id',$this->modelInfo['id']);
-			$this->assign('model_list',$name_list);
-		}
-	}
+	protected $beforeActionList = array(
+		'setModel'  => array('except' => 'category')
+	);
 
 	//模块频道首页
 	public function index(){
@@ -110,6 +89,33 @@ class Content extends Fornt{
 		return $this->fetch($teamplate);
 	}
 
+	public function category(){
+		$id = $this->request->param('id');
+		if (!$id) {
+			return $this->error("非法操作");
+		}
+		$cate = $this->getCategory($id);
+
+		$map = array();
+
+		$order = "id desc";
+		$list = model('Document')->where($map)->order($order)->paginate(15);
+
+		$data = array(
+			'list'    => $list,
+			'cate'   => $cate,
+			'page'    => $list->render()
+		);
+		if ($cate['template_lists']) {
+			$teamplate = 'content/'.$cate['template_lists'];
+		}else{
+			$teamplate = 'content/list';
+		}
+		$this->setSeo($cate['title']);
+		$this->assign($data);
+		return $this->fetch($teamplate);
+	}
+
 	//模块内容详情页
 	public function detail($id = '', $name = ''){
 		//当为文章模型时
@@ -144,5 +150,29 @@ class Content extends Fornt{
 	protected function getCategory($id){
 		$data = db('Category')->find($id);
 		return $data;
+	}
+
+	protected function setModel(){
+		$model_name = $this->request->param('model');
+		$model_id = $this->request->param('model_id');
+		$row = db('Model')->select();
+		foreach ($row as $key => $value) {
+			$name_list[$value['name']] = $value;
+			$id_list[$value['id']] = $value;
+		}
+
+		if (empty($name_list[$model_name]) && empty($id_list[$model_id])) {
+			return $this->error("无此模型！");
+		}else {
+			$this->modelInfo = $model_name ? $name_list[$model_name] : $id_list[$model_id];
+			if ($this->modelInfo['extend'] > 1) {
+				$this->model = model($this->modelInfo['name']);
+			}else{
+				$this->model = model('Document')->extend($this->modelInfo['name']);
+			}
+
+			$this->assign('model_id',$this->modelInfo['id']);
+			$this->assign('model_list',$name_list);
+		}
 	}
 }
