@@ -16,7 +16,7 @@ class Profile extends User{
 	public function index(){
 		$user = model('User');
 		if (IS_POST) {
-			$result = $user->change();
+			$result = $user->editUser($this->request->post());
 			if ($result !== false) {
 				return $this->success("更新成功！", "");
 			}else{
@@ -44,7 +44,7 @@ class Profile extends User{
 	public function editpw(){
 		$user = model('User');
 		if (IS_POST) {
-			$result = $user->editpw();
+			$result = $user->editpw($this->request->post());
 			if ($result !== false) {
 				return $this->success("更新成功！", "");
 			}else{

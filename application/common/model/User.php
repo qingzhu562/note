@@ -68,8 +68,8 @@ class User extends Base{
 		return 1;
 	}
 
-	protected function setPasswordAttr($value){
-		return md5($value.$this->data['salt']);
+	protected function setPasswordAttr($value, $data){
+		return md5($value.$data['salt']);
 	}
 
 	/**
@@ -182,12 +182,20 @@ class User extends Base{
 		}
 	}
 
-	public function change(){
-		$data = input('post.');
+	/**
+	 * 修改用户资料
+	 */
+	public function editUser($data, $ischangepwd = false){
 		if ($data['uid']) {
+			if (!$ischangepwd || ($ischangepwd && $data['password'] == '')) {
+				unset($data['salt']);
+				unset($data['password']);
+			}else{
+				$data['salt'] = rand_string(6);
+			}
 			$result = $this->validate('member.edit')->save($data, array('uid'=>$data['uid']));
 			if ($result) {
-				$result = $this->extend->save($data, array('uid'=>$data['uid']));
+				return $this->extend->save($data, array('uid'=>$data['uid']));
 			}else{
 				return false;
 			}
@@ -197,46 +205,39 @@ class User extends Base{
 		}
 	}
 
-	public function editpw(){
-		$data = input('post.');
-		$username = session('user_auth.username');
-		$uid = session('user_auth.uid');
-		$result = $this->checkPassword($username,$data['oldpassword']);
-		if (!$result) {
+	public function editpw($data, $is_reset = false){
+		$uid = $is_reset ? $data['uid'] : session('user_auth.uid');
+		if (!$is_reset) {
+			//后台修改用户时可修改用户密码时设置为true
+			$this->checkPassword($uid,$data['oldpassword']);
+
+			$validate = $this->validate('member.password');
+			if (false === $validate) {
+				return false;
+			}
+		}
+
+		$data['salt'] = rand_string(6);
+
+		return $this->save($data, array('uid'=>$uid));
+	}
+
+	protected function checkPassword($uid,$password){
+		if (!$uid || !$password) {
+			$this->error = '原始用户UID和密码不能为空';
+			return false;
+		}
+
+		$user = $this->where(array('uid'=>$uid))->find();
+		if (md5($password.$user['salt']) === $user['password']) {
+			return true;
+		}else{
 			$this->error = '原始密码错误！';
 			return false;
 		}
-		if (!$data['password']) {
-			$this->error = '密码不能为空！';
-			return false;
-		}
-		if ($data['password'] !== $data['repassword']) {
-			$this->error = '密码和确认密码不相同！';
-			return false;
-		}
-		if (!$uid) {
-			return false;
-		}
-		$data['salt'] = rand_string(6);
-		$data['password'] = md5($data['password'].$data['salt']);
-		$data['uid'] = $uid;
-		return $this->db()->where(array('uid'=>$uid))->update($data);
 	}
 
 	public function extend(){
 		return $this->hasOne('MemberExtend', 'uid');
-	}
-
-	protected function checkPassword($username,$password){
-		if (!$username || !$password) {
-			return false;
-		}
-
-		$user = $this->db()->where(array('username'=>$username))->find()->toArray();
-		if (md5($password.$user['salt']) === $user['password']) {
-			return true;
-		}else{
-			return false;
-		}
 	}
 }

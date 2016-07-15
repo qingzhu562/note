@@ -1,18 +1,18 @@
 {switch name="type"}
 	{case value="readonly"}
-		<input type="text" class="form-control" name="{$field}" id="{$field}" value="{$value}" readonly>
+		<input type="text" class="form-control" name="{$field}" id="{$field}" value="{$value}" autocomplete="false" readonly>
 	{/case}
 	{case value="num"}
-		<input type="text" style="width: auto;" class="form-control" name="{$field}" id="{$field}" value="{$value}">
+		<input type="text" style="width: auto;" class="form-control" name="{$field}" id="{$field}" autocomplete="false" value="{$value}">
 	{/case}
 	{case value="decimal"}
-		<input type="text" style="width: auto;" class="form-control" name="{$field}" id="{$field}" value="{$value}">
+		<input type="text" style="width: auto;" class="form-control" name="{$field}" id="{$field}" autocomplete="false" value="{$value}">
 	{/case}
 	{case value="text"}
-		<input type="text" class="form-control" name="{$field}" id="{$field}" value="{$value}">
+		<input type="text" class="form-control" name="{$field}" id="{$field}" autocomplete="false" value="{$value}">
 	{/case}
 	{case value="password"}
-		<input type="password" class="form-control" name="{$field}" id="{$field}" value="{$value}">
+		<input type="password" class="form-control" name="{$field}" id="{$field}" autocomplete="false" value="{$value}">
 	{/case}
 	{case value="textarea"}
 	<textarea class="form-control" name="{$field}" id="{$field}">{$value}</textarea>
