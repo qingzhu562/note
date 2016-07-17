@@ -253,7 +253,7 @@ function get_cover($cover_id, $field = null){
     $picture = db('Picture')->where(array('status'=>1,'id'=>$cover_id))->find();
     if($field == 'path'){
         if(!empty($picture['url'])){
-            $picture['path'] = $picture['url'] ? $picture['url'] : BASE_PATH . '/public/images/default.png';
+            $picture['path'] = $picture['url'] ? BASE_PATH . $picture['url'] : BASE_PATH . '/public/images/default.png';
         }else{
             $picture['path'] = $picture['path'] ? BASE_PATH . $picture['path'] : BASE_PATH . '/public/images/default.png';
         }
