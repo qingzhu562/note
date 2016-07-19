@@ -130,6 +130,7 @@ CREATE TABLE `sent_addons` (
   `config` text COMMENT '配置',
   `author` varchar(40) DEFAULT '' COMMENT '作者',
   `version` varchar(20) DEFAULT '' COMMENT '版本号',
+  `isinstall` int(10) DEFAULT 0 COMMENT '是否安装',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '安装时间',
   `has_adminlist` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否有后台列表',
   PRIMARY KEY (`id`)
