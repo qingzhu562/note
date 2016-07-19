@@ -139,26 +139,24 @@ class Sent extends Taglib{
 		$cate     = !empty($tag['cate']) ? $tag['cate'] : '';
 		$model_id     = !empty($tag['model']) ? $tag['model'] : '';
 
-		$map = "category_id = ".$cate." and model_id=".$model_id." and id < ".$id;
-
 		$parse  = '<?php ';
-		$parse .= '$__DATA__ = db(\'Document\')->where("' . $map . '")->order(\'id asc\')->find();';
+		$parse .= '$map = "category_id=" . ' . $cate . ' . " and model_id=" . ' . $model_id . ' . " and id>".' . $id . ';';
+		$parse .= '$prev = db(\'Document\')->where($map)->order(\'id asc\')->find();if(!empty($prev)){ ?>';
 		$parse .= $content;
-		$parse .= '}?>';
+		$parse .= '<?php } ?>';
 		return $parse;
 	}
 
 	public function tagnext($tag, $content){
-		$id     = !empty($tag['id']) ? $tag['id'] : '';
+		$id       = !empty($tag['id']) ? ($tag['id']) : '';
 		$cate     = !empty($tag['cate']) ? $tag['cate'] : '';
-		$model_id     = !empty($tag['model']) ? $tag['model'] : '';
-
-		$map = "category_id = ".$cate." and model_id=".$model_id." and id < ".$id;
+		$model_id = !empty($tag['model']) ? $tag['model'] : '';
 
 		$parse  = '<?php ';
-		$parse .= '$__DATA__ = db(\'Document\')->where("' . $map . '")->order(\'id asc\')->find();';
+		$parse .= '$map = "category_id=" . ' . $cate . ' . " and model_id=" . ' . $model_id . ' . " and id<".' . $id . ';';
+		$parse .= '$next = db(\'Document\')->where($map)->order(\'id desc\')->find();if(!empty($next)){ ?>';
 		$parse .= $content;
-		$parse .= '}?>';
+		$parse .= '<?php } ?>';
 		return $parse;
 	}
 }

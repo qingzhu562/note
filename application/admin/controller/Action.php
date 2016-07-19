@@ -42,8 +42,8 @@ class Action extends Admin {
 		$model = model('Action');
 		if(IS_POST){
 			$data = input('post.');
-			$result = $model->save();
-			if ($result) {
+			$result = $model->save($data);
+			if (false != $result) {
 				action_log('add_action', 'Action', $result, session('user_auth.uid'));
 				return $this->success('添加成功！',url('index'));
 			}else{

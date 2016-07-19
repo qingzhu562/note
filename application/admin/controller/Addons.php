@@ -24,28 +24,17 @@ class Addons extends Admin {
 	/**
 	* 插件列表
 	*/
-	public function index(){
-		$row       =   $this->addons->getList();
-		foreach($row as $key => $value){
-			$value['status_text'] = '';
-			if($value['uninstall'] == 1){
-				$value['uninstall_text'] = '未安装';
-			}else{
-				$value['uninstall_text'] = '已安装';
-				if($value['status'] == 0){
-					$value['status_text'] = '禁用';
-				}else{
-					$value['status_text'] = '启用';
-				}
-			}
-			$list[] = $value;
+	public function index($refresh = 0){
+		if ($refresh) {
+			$this->addons->refresh();
 		}
+		$list       =   $this->addons->order('id desc')->paginate(25);
 		// 记录当前列表页的cookie
 		Cookie('__forward__',$_SERVER['REQUEST_URI']);
 
 		$data = array(
 			'list'   => $list,
-			//'page'   => $page->show()
+			'page'   => $list->render()
 		);
 		$this->setMeta("插件管理");
 		$this->assign($data);

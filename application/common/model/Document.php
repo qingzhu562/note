@@ -85,17 +85,15 @@ class Document extends \think\model\Merge{
 			/* 添加或新增基础内容 */
 			if(empty($data['id'])){ //新增数据
 				unset($data['id']);
-				$id = $this->save($data); //添加基础内容
+				$id = $this->validate('document.edit')->save($data); //添加基础内容
 
 				if(!$id){
-					$this->error = '添加基础内容出错！';
 					return false;
 				}
 				$data['id'] = $id;
 			} else { //更新数据
-				$status = $this->save($data, array('id'=>$data['id'])); //更新基础内容
+				$status = $this->validate('document.edit')->save($data, array('id'=>$data['id'])); //更新基础内容
 				if(false === $status){
-					$this->error = '更新基础内容出错！';
 					return false;
 				}
 			}

@@ -75,7 +75,7 @@ class Attribute extends Admin {
 			if ($result) {
 				return $this->success("创建成功！",url('Attribute/index',array('model_id'=>$model_id)));
 			}else{
-				return $this->error($this->model->getError(),'');
+				return $this->error($this->model->getError());
 			}
 		}else{
 			if (!$model_id) {

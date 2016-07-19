@@ -12,7 +12,7 @@ namespace app\common\validate;
 /**
 * 设置模型
 */
-class Model extends \think\Validate{
+class Model extends Base{
 
 	protected $rule = array(
 		'name'   => 'require|unique:model|/^[a-zA-Z]\w{0,39}$/',

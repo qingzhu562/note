@@ -12,22 +12,27 @@ namespace app\common\validate;
 /**
 * 设置模型
 */
-class Config extends Base{
+class Attribute extends Base{
 
 	protected $rule = array(
-		'name'  =>  'require|unique',
-		'title' =>  'require',
+		'name'   => 'require|/^[a-zA-Z]\w{0,39}$/',
+		'title'   => 'require',
+		'type'   => 'require',
+		'length'   => 'requireIn:type,textarea,editor|integer',
+		'remark'   => 'require',
 	);
-
+	
 	protected $message = array(
-		'name.require'  =>  '配置标识必须',
-		'name.unique'   =>  '配置标识已经存在',
-		'title'         =>  '配置名称必须',
+		'length.requireIn'   => '字段长度必须！',
+		'length.integer'   => '字段必须为整形',
+		'name.require'   => '字段名不能为空！',
+		'title.require'   => '字段标题不能为空！',
+		'type.require'   => '类型不能为空！',
+		'remark.require'   => '描述不能为空！',
 	);
-
+	
 	protected $scene = array(
-		'add'   => array('name', 'title'),
-		'edit'  => array('title')
+		'add'   => 'name,title,type,remark,length',
+		'edit'   => 'name,title,type,remark,length'
 	);
-
 }

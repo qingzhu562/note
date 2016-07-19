@@ -12,22 +12,21 @@ namespace app\common\validate;
 /**
 * 设置模型
 */
-class Config extends Base{
+class Base extends \think\Validate{
 
-	protected $rule = array(
-		'name'  =>  'require|unique',
-		'title' =>  'require',
-	);
 
-	protected $message = array(
-		'name.require'  =>  '配置标识必须',
-		'name.unique'   =>  '配置标识已经存在',
-		'title'         =>  '配置名称必须',
-	);
-
-	protected $scene = array(
-		'add'   => array('name', 'title'),
-		'edit'  => array('title')
-	);
-
+	protected function requireIn($value, $rule, $data){
+		if (is_string($rule)) {
+			$rule = explode(',', $rule);
+		}else{
+			return true;
+		}
+		$field = array_shift($rule);
+		$val = $this->getDataValue($data, $field);
+		if (!in_array($val, $rule) && $value == '') {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }

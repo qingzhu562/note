@@ -79,7 +79,7 @@ class Base extends \think\Controller{
 		return $ret;
 	}
 
-	protected function setSeo($title = null,$keywords = null,$description = null){
+	protected function setSeo($title = '', $keywords = '', $description = ''){
 		$seo = array(
 			'title'       => $title,
 			'keywords'    => $keywords,
@@ -87,14 +87,11 @@ class Base extends \think\Controller{
 		);
 		//获取还没有经过变量替换的META信息
 		$meta = model('SeoRule')->getMetaOfCurrentPage($seo);
-		foreach ($seo as $key => $value) {
-			if (is_array($value)) {
-				foreach ($value as $k => $v) {
-					$meta[$key] = str_replace("[".$k."]", $v . '|', $meta[$key]);
-				}
-			}else{
-				$meta[$key] = str_replace("[".$key."]", $value . '|', $meta[$key]);
+		foreach ($seo as $key => $item) {
+			if (is_array($item)) {
+				$item = implode(',', $item);
 			}
+			$meta[$key] = str_replace("[".$key."]", $item . '|', $meta[$key]);
 		}
 
 		$data = array(

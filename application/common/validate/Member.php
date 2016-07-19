@@ -12,7 +12,7 @@ namespace app\common\validate;
 /**
 * 设置模型
 */
-class Member extends \think\Validate{
+class Member extends Base{
 
 	protected $rule = array(
 		'username'   => 'require|unique:member|/^[a-zA-Z]\w{0,39}$/',

@@ -96,7 +96,10 @@ class Content extends Fornt{
 		}
 		$cate = $this->getCategory($id);
 
-		$map = array();
+		$category = get_category_child($id);
+		$map = array(
+			'category_id' => array('IN', $category)
+		);
 
 		$order = "id desc";
 		$list = model('Document')->where($map)->order($order)->paginate(15);

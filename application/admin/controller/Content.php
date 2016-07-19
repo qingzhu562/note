@@ -82,9 +82,9 @@ class Content extends Admin{
 		if (IS_POST) {
 			$result = $this->model->change();
 			if ($result) {
-				return $this->success("添加成功！",url('admin/content/index',array('model_id'=>$this->modelInfo['id'])));
+				return $this->success("添加成功！", url('admin/content/index',array('model_id'=>$this->modelInfo['id'])));
 			}else{
-				return $this->error($this->model->getError(),'');
+				return $this->error($this->model->getError(), url('admin/content/add',array('model_id'=>$this->modelInfo['id'])));
 			}
 		}else{
 			$info = array(
@@ -109,16 +109,15 @@ class Content extends Admin{
 	 * 内容修改
 	 * @author molong <ycgpp@126.com>
 	 */
-	public function edit(){
+	public function edit($id){
 		if (IS_POST) {
 			$result = $this->model->change();
 			if ($result !== false) {
 				return $this->success("更新成功！",url('admin/content/index',array('model_id'=>$this->modelInfo['id'])));
 			}else{
-				return $this->error($this->model->getError(),'');
+				return $this->error($this->model->getError(), url('admin/content/edit',array('model_id'=>$this->modelInfo['id'],'id'=>$id)));
 			}
 		}else{
-			$id = input('id','','trim,intval');
 			if (!$id) {
 				return $this->error("非法操作！");
 			}

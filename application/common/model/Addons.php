@@ -19,15 +19,27 @@ class Addons extends \app\common\model\Base {
     protected $auto = array('status');
     protected $insert = array('create_time');
 
-    protected function setStatusAttr(){
+    protected function setStatusAttr($value){
         return 1;
     }
 
+    protected function setIsinstallAttr($value){
+        return 0;
+    }
+
+    protected function getStatusTextAttr($value, $data){
+        return $data['status'] ? "启用" : "禁用";
+    }
+
+    protected function getUninstallAttr($value, $data){
+        return 0;
+    }
+
     /**
-     * 获取插件列表
+     * 更新插件列表
      * @param string $addon_dir
      */
-    public function getList($addon_dir = ''){
+    public function refresh($addon_dir = ''){
         if(!$addon_dir){
             $addon_dir = SENT_ADDON_PATH;
         }
@@ -36,13 +48,9 @@ class Addons extends \app\common\model\Base {
             $this->error = '插件目录不可读或者不存在';
             return FALSE;
         }
-		$addons			=	array();
 		$where['name']	=	array('in',$dirs);
-		$list			=	db('Addons')->where($where)->field(true)->select();
-		foreach($list as $addon){
-			$addon['uninstall']		=	0;
-			$addons[$addon['name']]	=	$addon;
-		}
+		$addons			=	$this->where($where)->select();
+
         foreach ($dirs as $value) {
             $value = ucfirst($value);
             if(!isset($addons[$value])){
@@ -61,9 +69,6 @@ class Addons extends \app\common\model\Base {
 				}
 			}
         }
-        int_to_string($addons, array('status'=>array(-1=>'损坏', 0=>'禁用', 1=>'启用', null=>'未安装')));
-        $addons = list_sort_by($addons,'uninstall','desc');
-        return $addons;
     }
 
     /**

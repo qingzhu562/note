@@ -43,27 +43,24 @@ class Attribute extends Base{
 	}
 
 	public function change(){
-		$data = input('post.');
+		$data = \think\Request::instance()->post();
 
-		if (!empty($data)) {
+		if ($data['id']) {
+			$status = $this->validate('attribute.edit')->save($data, array('id'=>$data['id']));
+		}else{
+			$status = $this->validate('attribute.add')->save($data);
+		}
+		
+		if (false !== $status) {
 			//在数据库内添加字段
 			$result = $this->checkTableField($data);
 			if (!$result) {
 				$this->error = "字段创建失败！";
 				return false;
 			}
-			if ($data['id']) {
-				$status = $this->save($data, array('id'=>$data['id']));
-			}else{
-				$status = $this->save($data);
-			}
-			
-			if (false !== $status) {
-				return $status;
-			}else{
-				$this->error = "添加失败！";
-				return false;
-			}
+			return $status;
+		}else{
+			return false;
 		}
 	}
 

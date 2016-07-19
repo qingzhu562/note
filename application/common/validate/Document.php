@@ -12,22 +12,18 @@ namespace app\common\validate;
 /**
 * 设置模型
 */
-class Config extends Base{
+class Document extends Base{
 
 	protected $rule = array(
-		'name'  =>  'require|unique',
-		'title' =>  'require',
+		'title'   => 'require',
 	);
-
+	
 	protected $message = array(
-		'name.require'  =>  '配置标识必须',
-		'name.unique'   =>  '配置标识已经存在',
-		'title'         =>  '配置名称必须',
+		'title.require'   => '字段标题不能为空！',
 	);
-
+	
 	protected $scene = array(
-		'add'   => array('name', 'title'),
-		'edit'  => array('title')
+		'add'   => 'title',
+		'edit'   => 'title'
 	);
-
 }

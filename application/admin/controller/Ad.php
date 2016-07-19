@@ -43,8 +43,7 @@ class Ad extends Admin {
 	public function add(){
 		$place = model('AdPlace');
 		if (IS_POST) {
-			$data = input('post.');
-			$result = $place->save($data);
+			$result = $place->change();
 			if (false !== false) {
 				return $this->success("添加成功！");
 			}else{
@@ -63,14 +62,9 @@ class Ad extends Admin {
 	public function edit($id = null){
 		$place = model('AdPlace');
 		if (IS_POST) {
-			$data = $this->request->post();
-			if ($data) {
-				$result = $place->save($data,array('id'=>$data['id']));
-				if ($result) {
-					return $this->success("修改成功！", url('admin/ad/index'));
-				}else{
-					return $this->error($this->adplace->getError());
-				}
+			$result = $place->change();
+			if ($result) {
+				return $this->success("修改成功！", url('admin/ad/index'));
 			}else{
 				return $this->error($this->adplace->getError());
 			}
@@ -122,14 +116,9 @@ class Ad extends Admin {
 	public function addad($id){
 		$ad = model('ad');
 		if (IS_POST) {
-			$data = $this->request->post();
-			if ($data) {
-				$result = $ad->save($data);
-				if ($result) {
-					return $this->success("添加成功！", url('admin/ad/lists',array('id'=>$data['place_id'])));
-				}else{
-					return $this->error($ad->getError());
-				}
+			$result = $ad->change();
+			if ($result) {
+				return $this->success("添加成功！", url('admin/ad/lists',array('id'=>$data['place_id'])));
 			}else{
 				return $this->error($ad->getError());
 			}
@@ -148,14 +137,9 @@ class Ad extends Admin {
 	public function editad($id = null){
 		$ad = model('ad');
 		if (IS_POST) {
-			$data = $this->request->post();
-			if ($data) {
-				$result = $ad->save($data,array('id'=>$data['id']));
-				if ($result) {
-					return $this->success("修改成功！", url('admin/ad/lists',array('id'=>$data['place_id'])));
-				}else{
-					return $this->error($ad->getError());
-				}
+			$result = $ad->change();
+			if ($result) {
+				return $this->success("修改成功！", url('admin/ad/lists',array('id'=>$data['place_id'])));
 			}else{
 				return $this->error($ad->getError());
 			}
