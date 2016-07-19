@@ -139,9 +139,9 @@ CREATE TABLE `sent_addons` (
 -- -----------------------------
 -- Records of `sent_addons`
 -- -----------------------------
-INSERT INTO `sent_addons` VALUES ('1', 'Devteam', '开发团队信息', '开发团队成员信息', '1', '', 'molong', '0.1', '0', '0');
-INSERT INTO `sent_addons` VALUES ('2', 'Sitestat', '站点统计信息', '统计站点的基础信息', '1', '', 'thinkphp', '0.2', '0', '0');
-INSERT INTO `sent_addons` VALUES ('3', 'Systeminfo', '系统环境信息', '用于显示一些服务器的信息', '1', '', 'molong', '0.1', '0', '0');
+INSERT INTO `sent_addons` VALUES ('1', 'Devteam', '开发团队信息', '开发团队成员信息', '1', '', 'molong', '0.1', 1, '0', '0');
+INSERT INTO `sent_addons` VALUES ('2', 'Sitestat', '站点统计信息', '统计站点的基础信息', '1', '', 'thinkphp', '0.2', 1, '0', '0');
+INSERT INTO `sent_addons` VALUES ('3', 'Systeminfo', '系统环境信息', '用于显示一些服务器的信息', '1', '', 'molong', '0.1', 1, '0', '0');
 
 -- -----------------------------
 -- Table structure for `sent_attachment`
