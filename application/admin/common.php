@@ -24,7 +24,7 @@
  *  )
  *
  */
-function intToString(&$data, $map = array('status' => array(1 => '正常', -1 => '删除', 0 => '禁用', 2 => '未审核', 3 => '草稿'))) {
+function int_to_string(&$data, $map = array('status' => array(1 => '正常', -1 => '删除', 0 => '禁用', 2 => '未审核', 3 => '草稿'))) {
 	if ($data === false || $data === null) {
 		return $data;
 	}
@@ -45,7 +45,7 @@ function intToString(&$data, $map = array('status' => array(1 => '正常', -1 =>
  * @return string 状态文字 ，false 未获取到
  * @author huajie <banhuajie@163.com>
  */
-function getStatusTitle($status = null) {
+function get_status_title($status = null) {
 	if (!isset($status)) {
 		return false;
 	}
@@ -64,7 +64,7 @@ function getStatusTitle($status = null) {
 }
 
 // 获取数据的状态操作
-function showStatusOp($status) {
+function show_status_op($status) {
 	switch ($status) {
 	case 0:return '启用';
 		break;
@@ -83,7 +83,7 @@ function showStatusOp($status) {
  * @param bool $all 是否返回全部类型
  * @author huajie <banhuajie@163.com>
  */
-function getActionType($type, $all = false) {
+function get_action_type($type, $all = false) {
 	$list = array(
 		1 => '系统',
 		2 => '用户',
@@ -100,7 +100,7 @@ function getActionType($type, $all = false) {
  * @param string $field 需要获取的字段
  * @author huajie <banhuajie@163.com>
  */
-function getAction($id = null, $field = null) {
+function get_action($id = null, $field = null) {
 	if (empty($id) && !is_numeric($id)) {
 		return false;
 	}
@@ -119,12 +119,12 @@ function getAction($id = null, $field = null) {
  * @param string $field 需要返回的字段，不传则返回整个数据
  * @author huajie <banhuajie@163.com>
  */
-function getDocumentField($value = null, $condition = 'id', $field = null) {
+function get_document_field($value = null, $condition = 'id', $field = null) {
 	if (empty($value)) {
 		return false;
 	}
 
-//拼接参数
+	//拼接参数
 	$map[$condition] = $value;
 	$info            = db('Model')->where($map);
 	if (empty($field)) {

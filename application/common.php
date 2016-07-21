@@ -75,7 +75,7 @@ function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
  * @return string
 +----------------------------------------------------------
  */
-function randString($len = 6, $type = '', $addChars = '') {
+function rand_string($len = 6, $type = '', $addChars = '') {
 	$str = '';
 	switch ($type) {
 	case 0:
@@ -99,7 +99,7 @@ function randString($len = 6, $type = '', $addChars = '') {
 		break;
 	}
 	if ($len > 10) {
-		//位数过长重复字符串一定次数
+//位数过长重复字符串一定次数
 		$chars = $type == 1 ? str_repeat($chars, $len) : str_repeat($chars, 5);
 	}
 	if ($type != 4) {
@@ -172,7 +172,7 @@ function ad($name, $param = array()) {
  * 获取插件类的类名
  * @param strng $name 插件名
  */
-function getAddonClass($name) {
+function get_addon_class($name) {
 	$class = "\\addons\\" . strtolower($name) . "\\{$name}";
 	return $class;
 }
@@ -181,8 +181,8 @@ function getAddonClass($name) {
  * 获取插件类的配置文件数组
  * @param string $name 插件名
  */
-function getAddonConfig($name) {
-	$class = getAddonClass($name);
+function get_addon_config($name) {
+	$class = get_addon_class($name);
 	if (class_exists($class)) {
 		$addon = new $class();
 		return $addon->getConfig();
@@ -197,11 +197,11 @@ function getAddonConfig($name) {
  * @param array $param 参数
  * @author 麦当苗儿 <zuojiazi@vip.qq.com>
  */
-function addonsUrl($url, $param = array()) {
+function addons_url($url, $param = array()) {
 	$url        = parse_url($url);
 	$case       = config('URL_CASE_INSENSITIVE');
-	$addons     = $case ? parseName($url['scheme']) : $url['scheme'];
-	$controller = $case ? parseName($url['host']) : $url['host'];
+	$addons     = $case ? parse_name($url['scheme']) : $url['scheme'];
+	$controller = $case ? parse_name($url['host']) : $url['host'];
 	$action     = trim($case ? strtolower($url['path']) : $url['path'], '/');
 
 	/* 解析URL带的参数 */
@@ -227,7 +227,7 @@ function addonsUrl($url, $param = array()) {
  * @return string      解析或的url
  * @author 麦当苗儿 <zuojiazi@vip.qq.com>
  */
-function getNavUrl($url) {
+function get_nav_url($url) {
 	switch ($url) {
 	case 'http://' === substr($url, 0, 7):
 	case '#' === substr($url, 0, 1):
@@ -246,7 +246,7 @@ function getNavUrl($url) {
  * @return 完整的数据  或者  指定的$field字段值
  * @author huajie <banhuajie@163.com>
  */
-function getCover($cover_id, $field = null) {
+function get_cover($cover_id, $field = null) {
 	if (empty($cover_id)) {
 		return BASE_PATH . '/public/images/default.png';
 	}
@@ -267,13 +267,13 @@ function getCover($cover_id, $field = null) {
  * @return 返回图片列表
  * @author molong <molong@tensent.cn>
  */
-function getCoverList($covers) {
+function get_cover_list($covers) {
 	if ($covers == '') {
 		return false;
 	}
 	$cover_list = explode(',', $covers);
 	foreach ($cover_list as $item) {
-		$list[] = getCover($item, 'path');
+		$list[] = get_cover($item, 'path');
 	}
 	return $list;
 }
@@ -285,7 +285,7 @@ function getCoverList($covers) {
  * @param integer $type 转换类型
  * @return string
  */
-function parseName($name, $type = 0) {
+function parse_name($name, $type = 0) {
 	if ($type) {
 		return ucfirst(preg_replace_callback('/_([a-zA-Z])/', function ($match) {return strtoupper($match[1]);}, $name));
 	} else {
@@ -294,7 +294,7 @@ function parseName($name, $type = 0) {
 }
 
 // 不区分大小写的in_array实现
-function inArrayCase($value, $array) {
+function in_array_case($value, $array) {
 	return in_array(strtolower($value), array_map('strtolower', $array));
 }
 
@@ -304,7 +304,7 @@ function inArrayCase($value, $array) {
  * @return string       签名
  * @author 麦当苗儿 <zuojiazi@vip.qq.com>
  */
-function dataAuthSign($data) {
+function data_auth_sign($data) {
 	//数据类型检测
 	if (!is_array($data)) {
 		$data = (array) $data;
@@ -320,12 +320,12 @@ function dataAuthSign($data) {
  * @return integer 0-未登录，大于0-当前登录用户ID
  * @author 麦当苗儿 <zuojiazi@vip.qq.com>
  */
-function isLogin() {
+function is_login() {
 	$user = session('user_auth');
 	if (empty($user)) {
 		return 0;
 	} else {
-		return session('user_auth_sign') == dataAuthSign($user) ? $user['uid'] : 0;
+		return session('user_auth_sign') == data_auth_sign($user) ? $user['uid'] : 0;
 	}
 }
 
@@ -334,8 +334,8 @@ function isLogin() {
  * @return boolean true-管理员，false-非管理员
  * @author 麦当苗儿 <zuojiazi@vip.qq.com>
  */
-function isAdministrator($uid = null) {
-	$uid = is_null($uid) ? isLogin() : $uid;
+function is_administrator($uid = null) {
+	$uid = is_null($uid) ? is_login() : $uid;
 	return $uid && (intval($uid) === config('user_administrator'));
 }
 
@@ -345,7 +345,7 @@ function isAdministrator($uid = null) {
  * @param boolean $adv 是否进行高级模式获取（有可能被伪装）
  * @return mixed
  */
-function getClientIp($type = 0, $adv = false) {
+function get_client_ip($type = 0, $adv = false) {
 	$type      = $type ? 1 : 0;
 	static $ip = NULL;
 	if ($ip !== NULL) {
@@ -381,7 +381,7 @@ function getClientIp($type = 0, $adv = false) {
  * @return string 完整的时间显示
  * @author huajie <banhuajie@163.com>
  */
-function timeFormat($time = NULL, $format = 'Y-m-d H:i') {
+function time_format($time = NULL, $format = 'Y-m-d H:i') {
 	$time = $time === NULL ? time() : intval($time);
 	return date($format, $time);
 }
@@ -391,7 +391,7 @@ function timeFormat($time = NULL, $format = 'Y-m-d H:i') {
  * @param  integer $uid 用户ID
  * @return string       用户名
  */
-function getUsername($uid = 0) {
+function get_username($uid = 0) {
 	static $list;
 	if (!($uid && is_numeric($uid))) {
 		//获取当前登录用户名
@@ -406,7 +406,7 @@ function getUsername($uid = 0) {
  * @param  integer $uid 用户ID
  * @return string       用户昵称
  */
-function getNickname($uid = 0) {
+function get_nickname($uid = 0) {
 	static $list;
 	if (!($uid && is_numeric($uid))) {
 		//获取当前登录用户名
@@ -421,7 +421,7 @@ function getNickname($uid = 0) {
 	/* 查找用户信息 */
 	$key = "u{$uid}";
 	if (isset($list[$key])) {
-	//已缓存，直接使用
+		//已缓存，直接使用
 		$name = $list[$key];
 	} else {
 		//调用接口获取用户信息
@@ -452,7 +452,7 @@ function getNickname($uid = 0) {
  * asc正向排序 desc逆向排序 nat自然排序
  * @return array
  */
-function listSortBy($list, $field, $sortby = 'asc') {
+function list_sort_by($list, $field, $sortby = 'asc') {
 	if (is_array($list)) {
 		$refer = $resultSet = array();
 		foreach ($list as $i => $data) {
@@ -487,7 +487,7 @@ function listSortBy($list, $field, $sortby = 'asc') {
  * @return array
  * @author 麦当苗儿 <zuojiazi@vip.qq.com>
  */
-function listToTree($list, $pk = 'id', $pid = 'pid', $child = '_child', $root = 0) {
+function list_to_tree($list, $pk = 'id', $pid = 'pid', $child = '_child', $root = 0) {
 	// 创建Tree
 	$tree = array();
 	if (is_array($list) && !is_object($list)) {
@@ -522,17 +522,17 @@ function listToTree($list, $pk = 'id', $pid = 'pid', $child = '_child', $root = 
  * @return array        返回排过序的列表数组
  * @author yangweijie <yangweijiester@gmail.com>
  */
-function treeToList($tree, $child = '_child', $order = 'id', &$list = array()) {
+function tree_to_list($tree, $child = '_child', $order = 'id', &$list = array()) {
 	if (is_array($tree)) {
 		foreach ($tree as $key => $value) {
 			$reffer = $value;
 			if (isset($reffer[$child])) {
 				unset($reffer[$child]);
-				treeToList($value[$child], $child, $order, $list);
+				tree_to_list($value[$child], $child, $order, $list);
 			}
 			$list[] = $reffer;
 		}
-		$list = listSortBy($list, $order, $sortby = 'asc');
+		$list = list_sort_by($list, $order, $sortby = 'asc');
 	}
 	return $list;
 }
@@ -540,7 +540,7 @@ function treeToList($tree, $child = '_child', $order = 'id', &$list = array()) {
 // 分析枚举类型字段值 格式 a:名称1,b:名称2
 // 暂时和 parse_config_attr功能相同
 // 但请不要互相使用，后期会调整
-function parseFieldAttr($string) {
+function parse_field_attr($string) {
 	if (0 === strpos($string, ':')) {
 		// 采用函数定义
 		return eval('return ' . substr($string, 1) . ';');
@@ -562,7 +562,7 @@ function parseFieldAttr($string) {
 	return $value;
 }
 
-function parseFieldBind($table, $selected = '', $model = 0) {
+function parse_field_bind($table, $selected = '', $model = 0) {
 	if ($table) {
 		$select = db($table);
 		$res    = $select->select();
@@ -587,7 +587,7 @@ function parseFieldBind($table, $selected = '', $model = 0) {
 }
 
 // 分析枚举类型配置值 格式 a:名称1,b:名称2
-function parseConfigAttr($string) {
+function parse_config_attr($string) {
 	$array = preg_split('/[,;\r\n]+/', trim($string, ",;\r\n"));
 	if (strpos($string, ':')) {
 		$value = array();
@@ -610,14 +610,14 @@ function parseConfigAttr($string) {
  * @return boolean
  * @author huajie <banhuajie@163.com>
  */
-function actionLog($action = null, $model = null, $record_id = null, $user_id = null) {
+function action_log($action = null, $model = null, $record_id = null, $user_id = null) {
 
 	//参数检查
 	if (empty($action) || empty($model) || empty($record_id)) {
 		return '参数不能为空';
 	}
 	if (empty($user_id)) {
-		$user_id = isLogin();
+		$user_id = is_login();
 	}
 
 	//查询行为,判断是否执行
@@ -629,7 +629,7 @@ function actionLog($action = null, $model = null, $record_id = null, $user_id = 
 	//插入行为日志
 	$data['action_id']   = $action_info['id'];
 	$data['user_id']     = $user_id;
-	$data['action_ip']   = ip2long(getClientIp());
+	$data['action_ip']   = ip2long(get_client_ip());
 	$data['model']       = $model;
 	$data['record_id']   = $record_id;
 	$data['create_time'] = time();
@@ -663,10 +663,10 @@ function actionLog($action = null, $model = null, $record_id = null, $user_id = 
 
 	if (!empty($action_info['rule'])) {
 		//解析行为
-		$rules = parseAction($action, $user_id);
+		$rules = parse_action($action, $user_id);
 
 		//执行行为
-		$res = executeAction($rules, $action_info['id'], $user_id);
+		$res = execute_action($rules, $action_info['id'], $user_id);
 	}
 }
 
@@ -685,7 +685,7 @@ function actionLog($action = null, $model = null, $record_id = null, $user_id = 
  * @return boolean|array: false解析出错 ， 成功返回规则数组
  * @author huajie <banhuajie@163.com>
  */
-function parseAction($action = null, $self) {
+function parse_action($action = null, $self) {
 	if (empty($action)) {
 		return false;
 	}
@@ -733,7 +733,7 @@ function parseAction($action = null, $self) {
  * @return boolean false 失败 ， true 成功
  * @author huajie <banhuajie@163.com>
  */
-function executeAction($rules = false, $action_id = null, $user_id = null) {
+function execute_action($rules = false, $action_id = null, $user_id = null) {
 	if (!$rules || empty($action_id) || empty($user_id)) {
 		return false;
 	}
@@ -750,8 +750,9 @@ function executeAction($rules = false, $action_id = null, $user_id = null) {
 		}
 
 		//执行数据库操作
+		$Model = db(ucfirst($rule['table']));
 		$field = $rule['field'];
-		$res   = db(ucfirst($rule['table']))->where($rule['condition'])->setField($field, array('exp', $rule['rule']));
+		$res   = $Model->where($rule['condition'])->setField($field, array('exp', $rule['rule']));
 
 		if (!$res) {
 			$return = false;
@@ -779,17 +780,17 @@ function setavatardir($uid) {
 	$dir4 = substr($uid, 7, 2);
 	$dir  = $dir1 . '/' . $dir2 . '/' . $dir3 . '/' . $dir4 . '/';
 	if (!is_dir("./uploads/avatar/$dir")) {
-		mkDir("./uploads/avatar/" . $dir);
+		mk_dir("./uploads/avatar/" . $dir);
 	}
 	return $dir;
 }
 
-function mkDir($dir, $mode = 0755) {
+function mk_dir($dir, $mode = 0755) {
 	if (is_dir($dir) || @mkdir($dir, $mode, true)) {
 		return true;
 	}
 
-	if (!mkDir(dirname($dir), $mode, true)) {
+	if (!mk_dir(dirname($dir), $mode, true)) {
 		return false;
 	}
 
@@ -833,7 +834,7 @@ function arr2str($arr = array(), $glue = ',') {
  * @return string            格式化后的带单位的大小
  * @author 麦当苗儿 <zuojiazi@vip.qq.com>
  */
-function formatBytes($size, $delimiter = '') {
+function format_bytes($size, $delimiter = '') {
 	$units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
 	for ($i = 0; $size >= 1024 && $i < 5; $i++) {
 		$size /= 1024;
@@ -842,7 +843,7 @@ function formatBytes($size, $delimiter = '') {
 	return round($size, 2) . $delimiter . $units[$i];
 }
 
-function getGridList($list_grids) {
+function get_grid_list($list_grids) {
 	$grids = preg_split('/[;\r\n]+/s', trim($list_grids));
 	foreach ($grids as &$value) {
 		// 字段:标题:链接
@@ -869,10 +870,8 @@ function getGridList($list_grids) {
 	return $data;
 }
 
-/**
- * 获取字段类型
- */
-function getAttributeType($type = '') {
+// 获取属性类型信息
+function get_attribute_type($type = '') {
 	// TODO 可以加入系统配置
 	$type_array       = config('config_type_list');
 	static $type_list = array();
@@ -888,7 +887,7 @@ function getAttributeType($type = '') {
  * @param  string  $field 模型字段
  * @return array
  */
-function getDocumentModel($id = null, $field = null) {
+function get_document_model($id = null, $field = null) {
 	static $list;
 
 	/* 非法分类ID */
@@ -921,7 +920,7 @@ function getDocumentModel($id = null, $field = null) {
 	}
 }
 
-function getContentStatus($status) {
+function get_content_status($status) {
 	$text = array(
 		'-1' => '<span class="label label-danger">删除</span>',
 		'0'  => '<span class="label label-default">禁用</span>',
@@ -937,7 +936,7 @@ function getContentStatus($status) {
  * @param  string  $field 要获取的字段名
  * @return string         分类信息
  */
-function getCategory($id, $field = null) {
+function get_category($id, $field = null) {
 	/* 非法分类ID */
 	if (empty($id) || !is_numeric($id)) {
 		return '';
@@ -948,17 +947,17 @@ function getCategory($id, $field = null) {
 }
 
 /* 根据ID获取分类标识 */
-function getCategoryName($id) {
-	return getCategory($id, 'title');
+function get_category_name($id) {
+	return get_category($id, 'title');
 }
 
 /* 根据ID获取分类名称 */
-function getCategoryTitle($id) {
-	return getCategory($id, 'title');
+function get_category_title($id) {
+	return get_category($id, 'title');
 }
 
 //分类分组
-function getCategoryListTree($model) {
+function get_category_list_tree($model) {
 	$list = cache('sys_category_list');
 
 	/* 读取缓存数据 */
@@ -977,7 +976,7 @@ function getCategoryListTree($model) {
 		}
 	}
 	$res  = list_unique($res);
-	$tree = listToTree($res);
+	$tree = list_to_tree($res);
 	if ($limit) {
 		$tree = array_slice($tree, 0, $limit);
 	}
@@ -985,7 +984,7 @@ function getCategoryListTree($model) {
 }
 
 //获取栏目子ID
-function getCategoryChild($id) {
+function get_category_child($id) {
 	$list = cache('sys_category_list');
 
 	/* 读取缓存数据 */
@@ -997,13 +996,13 @@ function getCategoryChild($id) {
 	foreach ($list as $key => $value) {
 		if ($value['pid'] == $id) {
 			$ids[] = $value['id'];
-			$ids   = array_merge($ids, getCategoryChild($value['id']));
+			$ids   = array_merge($ids, get_category_child($value['id']));
 		}
 	}
 	return array_unique($ids);
 }
 
-function sendEmail($to, $subject, $message) {
+function send_email($to, $subject, $message) {
 	$config = array(
 		'protocol'  => 'smtp',
 		'smtp_host' => \think\Config::get('mail_host'),
@@ -1027,8 +1026,8 @@ function getFirstCharter($s0) {
 		return strtoupper($s0{0});
 	}
 
-	$s1 = iconv("UTF-8", "gb2312", $s0);
-	$s2 = iconv("gb2312", "UTF-8", $s1);
+	$s1 = \iconv("UTF-8", "gb2312", $s0);
+	$s2 = \iconv("gb2312", "UTF-8", $s1);
 	if ($s2 == $s0) {$s = $s1;} else { $s = $s0;}
 	$asc = ord($s{0}) * 256 + ord($s{1}) - 65536;
 	if ($asc >= -20319 and $asc <= -20284) {
@@ -1128,8 +1127,8 @@ function getFirstCharter($s0) {
 
 function PyFirst($zh) {
 	$ret = "";
-	$s1  = iconv("UTF-8", "gb2312", $zh);
-	$s2  = iconv("gb2312", "UTF-8", $s1);
+	$s1  = \iconv("UTF-8", "gb2312", $zh);
+	$s2  = \iconv("gb2312", "UTF-8", $s1);
 	if ($s2 == $zh) {$zh = $s1;}
 	for ($i = 0; $i < strlen($zh); $i++) {
 		$s1 = substr($zh, $i, 1);
