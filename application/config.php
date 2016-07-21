@@ -10,96 +10,96 @@
 return array(
 
 	// 调试模式
-	'app_debug' => true,
+	'app_debug'         => true,
 
-	'charset'   => 'UTF-8',
-	'lang_switch_on' => true,   // 开启语言包功能
-	'lang_list'     => ['zh-cn'], // 支持的语言列表
+	'charset'           => 'UTF-8',
+	'lang_switch_on'    => true, // 开启语言包功能
+	'lang_list'         => ['zh-cn'], // 支持的语言列表
 
-	'data_auth_key'    => 'sent',
+	'data_auth_key'     => 'sent',
 
-	'base_url'             => BASE_PATH,
-	'url_route_on'         => true,
-	'url_common_param'     => false,
+	'base_url'          => BASE_PATH,
+	'url_route_on'      => true,
+	'url_common_param'  => false,
 
-	'template'             => array(
-		'taglib_build_in'  => 'cx,com\Sent'
+	'template'          => array(
+		'taglib_build_in' => 'cx,com\Sent',
 	),
 
 	// 'dispatch_success_tmpl'  => APP_PATH . 'common/view/default/jump.html',
 	// 'dispatch_error_tmpl'    => APP_PATH . 'common/view/default/jump.html',
 
-	'attachment_upload'    => array(
+	'attachment_upload' => array(
 		// 允许上传的文件MiMe类型
-		'mimes'        => [],
+		'mimes'    => [],
 		// 上传的文件大小限制 (0-不做限制)
-		'maxSize'      => 0,
+		'maxSize'  => 0,
 		// 允许上传的文件后缀
-		'exts'         => [],
+		'exts'     => [],
 		// 子目录创建方式，[0]-函数名，[1]-参数，多个参数使用数组
-		'subName'      => ['date', 'Ymd'],
+		'subName'  => ['date', 'Ymd'],
 		//保存根路径
-		'rootPath'     => './uploads/attachment',
+		'rootPath' => './uploads/attachment',
 		// 保存路径
-		'savePath'     => '',
+		'savePath' => '',
 		// 上传文件命名规则，[0]-函数名，[1]-参数，多个参数使用数组
-		'saveName'     => ['uniqid', ''],
+		'saveName' => ['uniqid', ''],
 		// 文件上传驱动e,
-		'driver'       => 'Local',
+		'driver'   => 'Local',
 	),
 
-	'editor_upload'    => array(
+	'editor_upload'     => array(
 		// 允许上传的文件MiMe类型
-		'mimes'        => [],
+		'mimes'    => [],
 		// 上传的文件大小限制 (0-不做限制)
-		'maxSize'      => 0,
+		'maxSize'  => 0,
 		// 允许上传的文件后缀
-		'exts'         => [],
+		'exts'     => [],
 		// 子目录创建方式，[0]-函数名，[1]-参数，多个参数使用数组
-		'subName'      => ['date', 'Ymd'],
+		'subName'  => ['date', 'Ymd'],
 		//保存根路径
-		'rootPath'     => './uploads/editor',
+		'rootPath' => './uploads/editor',
 		// 保存路径
-		'savePath'     => '',
+		'savePath' => '',
 		// 上传文件命名规则，[0]-函数名，[1]-参数，多个参数使用数组
-		'saveName'     => ['uniqid', ''],
+		'saveName' => ['uniqid', ''],
 		// 文件上传驱动e,
-		'driver'       => 'Local',
+		'driver'   => 'Local',
 	),
 
 	'picture_upload'    => array(
 		// 允许上传的文件MiMe类型
-		'mimes'        => [],
+		'mimes'    => [],
 		// 上传的文件大小限制 (0-不做限制)
-		'maxSize'      => 0,
+		'maxSize'  => 0,
 		// 允许上传的文件后缀
-		'exts'         => [],
+		'exts'     => [],
 		// 子目录创建方式，[0]-函数名，[1]-参数，多个参数使用数组
-		'subName'      => ['date', 'Ymd'],
+		'subName'  => ['date', 'Ymd'],
 		//保存根路径
-		'rootPath'     => './uploads/picture',
+		'rootPath' => './uploads/picture',
 		// 保存路径
-		'savePath'     => '',
+		'savePath' => '',
 		// 上传文件命名规则，[0]-函数名，[1]-参数，多个参数使用数组
-		'saveName'     => ['uniqid', ''],
+		'saveName' => ['uniqid', ''],
 		// 文件上传驱动e,
-		'driver'       => 'Local',
+		'driver'   => 'Local',
 	),
-	'session'  => array(
-		'prefix'         => 'sent',
-		'type'           => '',
-		'auto_start'     => true,
+	'session'           => array(
+		'prefix'     => 'sent',
+		'type'       => '',
+		'auto_start' => true,
 	),
 
-	'log'                => array(
+	'log'               => array(
 		// 日志记录方式，支持 file sae
 		'type' => 'file',
 		// 日志保存目录
 		'path' => LOG_PATH,
 	),
 	// 页面Trace信息
-	'trace' =>array(
+	'trace'             => array(
 		//支持Html,Console 设为false则不显示
-		'type'  =>  'Html',
+		'type' => 'Html',
 	)
 );

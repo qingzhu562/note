@@ -14,27 +14,27 @@ class Addons extends Admin {
 
 	protected $addons;
 
-	public function _initialize(){
+	public function _initialize() {
 		parent::_initialize();
 		//加入菜单
 		$this->getAddonsMenu();
 		$this->addons = model('Addons');
-		$this->hooks = db('Hooks');
+		$this->hooks  = db('Hooks');
 	}
 	/**
-	* 插件列表
-	*/
-	public function index($refresh = 0){
+	 * 插件列表
+	 */
+	public function index($refresh = 0) {
 		if ($refresh) {
 			$this->addons->refresh();
 		}
-		$list       =   $this->addons->order('id desc')->paginate(25);
+		$list = $this->addons->order('id desc')->paginate(25);
 		// 记录当前列表页的cookie
-		Cookie('__forward__',$_SERVER['REQUEST_URI']);
+		Cookie('__forward__', $_SERVER['REQUEST_URI']);
 
 		$data = array(
-			'list'   => $list,
-			'page'   => $list->render()
+			'list' => $list,
+			'page' => $list->render(),
 		);
 		$this->setMeta("插件管理");
 		$this->assign($data);
@@ -42,27 +42,27 @@ class Addons extends Admin {
 	}
 
 	//创建向导首页
-	public function add(){
+	public function add() {
 		if (IS_POST) {
 			$data = $this->addons->create();
 			if ($data) {
 				if ($result) {
-					return $this->success("创建成功！",url('admin/addons/index'));
-				}else{
+					return $this->success("创建成功！", url('admin/addons/index'));
+				} else {
 					return $this->error("创建失败！");
 				}
-			}else{
+			} else {
 				return $this->error($this->addons->getError());
 			}
-		}else{
+		} else {
 			$hooks = db('Hooks')->field('name,description')->select();
-			$this->assign('Hooks',$hooks);
+			$this->assign('Hooks', $hooks);
 			$hook = db('Hooks')->field(true)->select();
-			foreach($hook as $key => $value){
+			foreach ($hook as $key => $value) {
 				$addons_opt[$value['name']] = $value['name'];
 			}
-			$addons_opt = array(array('type'=>'select','opt'=>$addons_opt));
-			if(!is_writable(SENT_ADDON_PATH)){
+			$addons_opt = array(array('type' => 'select', 'opt' => $addons_opt));
+			if (!is_writable(SENT_ADDON_PATH)) {
 				return $this->error('您没有创建目录写入权限，无法使用此功能');
 			}
 			$this->setMeta("添加插件");
@@ -71,35 +71,35 @@ class Addons extends Admin {
 	}
 
 	//预览
-	public function preview($output = true){
+	public function preview($output = true) {
 	}
 
 	/**
 	 * 安装插件
 	 */
-	public function install(){
-		$addon_name     =   input('addon_name','','trim,ucfirst');
-		$class          =   get_addon_class($addon_name);
-		if(class_exists($class)){
-			$addons  =   new $class;
-			$info = $addons->info;
-			if(!$info || !$addons->checkInfo()){
+	public function install() {
+		$addon_name = input('addon_name', '', 'trim,ucfirst');
+		$class      = get_addon_class($addon_name);
+		if (class_exists($class)) {
+			$addons = new $class;
+			$info   = $addons->info;
+			if (!$info || !$addons->checkInfo()) {
 				//检测信息的正确性
 				return $this->error('插件信息缺失');
 			}
-			session('addons_install_error',null);
-			$install_flag   =   $addons->install();
-			if(!$install_flag){
-				return $this->error('执行插件预安装操作失败'.session('addons_install_error'));
+			session('addons_install_error', null);
+			$install_flag = $addons->install();
+			if (!$install_flag) {
+				return $this->error('执行插件预安装操作失败' . session('addons_install_error'));
 			}
 			$result = $this->addons->install($info);
-			if($result){
+			if ($result) {
 				cache('hooks', null);
 				return $this->success('安装成功');
-			}else{
+			} else {
 				return $this->error($this->addons->getError());
 			}
-		}else{
+		} else {
 			return $this->error('插件不存在');
 		}
 	}
@@ -107,11 +107,11 @@ class Addons extends Admin {
 	/**
 	 * 卸载插件
 	 */
-	public function uninstall($id){
+	public function uninstall($id) {
 		$result = $this->addons->uninstall($id);
-		if($result === false){
-			return $this->error($this->addons->getError(),'');
-		}else{
+		if ($result === false) {
+			return $this->error($this->addons->getError(), '');
+		} else {
 			return $this->success('卸载成功！');
 		}
 	}
@@ -119,14 +119,14 @@ class Addons extends Admin {
 	/**
 	 * 启用插件
 	 */
-	public function enable(){
-		$id     =   input('id');
+	public function enable() {
+		$id = input('id');
 		cache('hooks', null);
-		$model = model('Addons');
-		$result = $model::where(array('id'=>$id))->update(array('status'=>1));
+		$model  = model('Addons');
+		$result = $model::where(array('id' => $id))->update(array('status' => 1));
 		if ($result) {
 			return $this->success('启用成功');
-		}else{
+		} else {
 			return $this->error("启用失败！");
 		}
 	}
@@ -134,14 +134,14 @@ class Addons extends Admin {
 	/**
 	 * 禁用插件
 	 */
-	public function disable(){
-		$id     =   input('id');
+	public function disable() {
+		$id = input('id');
 		cache('hooks', null);
-		$model = model('Addons');
-		$result = $model::where(array('id'=>$id))->update(array('status'=>0));
+		$model  = model('Addons');
+		$result = $model::where(array('id' => $id))->update(array('status' => 0));
 		if ($result) {
 			return $this->success('禁用成功');
-		}else{
+		} else {
 			return $this->error("禁用失败！");
 		}
 	}
@@ -149,11 +149,11 @@ class Addons extends Admin {
 	/**
 	 * 设置插件页面
 	 */
-	public function config(){
+	public function config() {
 		if (IS_POST) {
 			# code...
-		}else{
-			$id = input('id','','trim,intval');
+		} else {
+			$id = input('id', '', 'trim,intval');
 			if (!$id) {
 				return $this->error("非法操作！");
 			}
@@ -162,13 +162,13 @@ class Addons extends Admin {
 				$class = get_addon_class($info['name']);
 
 				$keyList = array();
-				$data = array(
-					'keyList'  => $keyList
+				$data    = array(
+					'keyList' => $keyList,
 				);
 				$this->assign($data);
 				$this->setMeta($info['title'] . " - 设置");
 				return $this->fetch('public/edit');
-			}else{
+			} else {
 				return $this->error("未安装此插件！");
 			}
 		}
@@ -180,17 +180,17 @@ class Addons extends Admin {
 	 * @param string $addons  插件名称
 	 * @param string $addons  插件简介
 	 */
-	public function existHook($str, $addons, $msg=''){
-		$hook_mod = db('Hooks');
+	public function existHook($str, $addons, $msg = '') {
+		$hook_mod      = db('Hooks');
 		$where['name'] = $str;
-		$gethook = $hook_mod->where($where)->find();
-		if(!$gethook || empty($gethook) || !is_array($gethook)){
-			$data['name'] = $str;
+		$gethook       = $hook_mod->where($where)->find();
+		if (!$gethook || empty($gethook) || !is_array($gethook)) {
+			$data['name']        = $str;
 			$data['description'] = $msg;
-			$data['type'] = 1;
+			$data['type']        = 1;
 			$data['update_time'] = time();
-			$data['addons'] = $addons;
-			if( false !== $hook_mod->create($data) ){
+			$data['addons']      = $addons;
+			if (false !== $hook_mod->create($data)) {
 				$hook_mod->add();
 			}
 		}
@@ -200,8 +200,8 @@ class Addons extends Admin {
 	 * 删除钩子
 	 * @param string $hook  钩子名称
 	 */
-	public function deleteHook($hook){
-		$model = db('hooks');
+	public function deleteHook($hook) {
+		$model     = db('hooks');
 		$condition = array(
 			'name' => $hook,
 		);
@@ -212,36 +212,36 @@ class Addons extends Admin {
 	/**
 	 * 钩子列表
 	 */
-	public function hooks(){
+	public function hooks() {
 
-		$map = array();
+		$map   = array();
 		$order = "id desc";
-		$list = model('Hooks')->where($map)->order($order)->paginate(10);
-		
+		$list  = model('Hooks')->where($map)->order($order)->paginate(10);
+
 		// 记录当前列表页的cookie
-		Cookie('__forward__',$_SERVER['REQUEST_URI']);
+		Cookie('__forward__', $_SERVER['REQUEST_URI']);
 
 		$data = array(
-			'list'   => $list,
-			'page'   => $list->render()
+			'list' => $list,
+			'page' => $list->render(),
 		);
 		$this->setMeta("钩子管理");
 		$this->assign($data);
 		return $this->fetch();
 	}
 
-	public function addhook(){
+	public function addhook() {
 		$hooks = model('Hooks');
 		if (IS_POST) {
 			$result = $hooks->change();
 			if ($result !== false) {
 				return $this->success("修改成功");
-			}else{
+			} else {
 				return $this->error($hooks->getError());
 			}
-		}else{
+		} else {
 			$keylist = $hooks->getaddons();
-			$data = array(
+			$data    = array(
 				'keyList' => $keylist,
 			);
 			$this->assign($data);
@@ -251,20 +251,20 @@ class Addons extends Admin {
 	}
 
 	//钩子出编辑挂载插件页面
-	public function edithook($id){
+	public function edithook($id) {
 		$hooks = model('Hooks');
 		if (IS_POST) {
 			$result = $hooks->change();
 			if ($result !== false) {
 				return $this->success("修改成功");
-			}else{
+			} else {
 				return $this->error($hooks->getError());
 			}
-		}else{
-			$info = db('Hooks')->find($id);
+		} else {
+			$info    = db('Hooks')->find($id);
 			$keylist = $hooks->getaddons($info['addons']);
-			$data = array(
-				'info'  => $info,
+			$data    = array(
+				'info'    => $info,
 				'keyList' => $keylist,
 			);
 			$this->assign($data);
@@ -274,41 +274,41 @@ class Addons extends Admin {
 	}
 
 	//超级管理员删除钩子
-	public function delhook(){
-		$id = input('id','','trim,intval');
-		$ids = input('post.ids/a',array());
+	public function delhook() {
+		$id  = input('id', '', 'trim,intval');
+		$ids = input('post.ids/a', array());
 		array_push($ids, $id);
-		$map['id'] = array('IN',$ids);
-		$result = $this->hooks->where($map)->delete();
-		if($result !== false){
+		$map['id'] = array('IN', $ids);
+		$result    = $this->hooks->where($map)->delete();
+		if ($result !== false) {
 			return $this->success('删除成功');
-		}else{
+		} else {
 			return $this->error('删除失败');
 		}
 	}
 
-	public function updateHook(){
-		$hookModel  =   D('Hooks');
-		$data       =   $hookModel->create();
-		if($data){
-			if($data['id']){
+	public function updateHook() {
+		$hookModel = D('Hooks');
+		$data      = $hookModel->create();
+		if ($data) {
+			if ($data['id']) {
 				$flag = $hookModel->save($data);
-				if($flag !== false){
+				if ($flag !== false) {
 					S('hooks', null);
 					$this->success('更新成功', Cookie('__forward__'));
-				}else{
+				} else {
 					$this->error('更新失败');
 				}
-			}else{
+			} else {
 				$flag = $hookModel->add($data);
-				if($flag){
+				if ($flag) {
 					S('hooks', null);
 					$this->success('新增成功', Cookie('__forward__'));
-				}else{
+				} else {
 					$this->error('新增失败');
 				}
 			}
-		}else{
+		} else {
 			$this->error($hookModel->getError());
 		}
 	}

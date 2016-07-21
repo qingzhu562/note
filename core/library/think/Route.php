@@ -26,6 +26,7 @@ class Route
         'POST'    => [],
         'PUT'     => [],
         'DELETE'  => [],
+        'PATCH'   => [],
         'HEAD'    => [],
         'OPTIONS' => [],
         '*'       => [],
@@ -59,7 +60,7 @@ class Route
     // 域名绑定
     private static $bind = [];
     // 当前分组
-    private static $group;
+    private static $group = '';
     // 当前参数
     private static $option = [];
 
@@ -242,7 +243,7 @@ class Route
             self::$rules[$type][$rule] = ['rule' => $rule, 'route' => $route, 'var' => $vars, 'option' => $option, 'pattern' => $pattern];
             if ('*' == $type) {
                 // 注册路由快捷方式
-                foreach (['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS'] as $method) {
+                foreach (['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'] as $method) {
                     self::$rules[$method][$rule] = true;
                 }
             }
@@ -257,7 +258,11 @@ class Route
      */
     public static function setGroup($name)
     {
-        self::$group = $name;
+        if (self::$group) {
+            self::$group = self::$group . '/' . ltrim($name, '/');
+        } else {
+            self::$group = $name;
+        }
     }
 
     /**
@@ -291,9 +296,11 @@ class Route
         if (!empty($name)) {
             // 分组
             if ($routes instanceof \Closure) {
+                $curentGroup = self::$group;
                 self::setGroup($name);
                 call_user_func_array($routes, []);
-                self::setGroup(null);
+                self::$group = $curentGroup;
+
                 self::$rules[$type][$name]['route']   = '';
                 self::$rules[$type][$name]['var']     = self::parseVar($name);
                 self::$rules[$type][$name]['option']  = $option;
@@ -317,7 +324,7 @@ class Route
                 self::$rules[$type][$name] = ['rule' => $item, 'route' => '', 'var' => [], 'option' => $option, 'pattern' => $pattern];
             }
             if ('*' == $type) {
-                foreach (['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS'] as $method) {
+                foreach (['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'] as $method) {
                     if (!isset(self::$rules[$method][$name])) {
                         self::$rules[$method][$name] = true;
                     } else {
@@ -406,6 +413,20 @@ class Route
     public static function delete($rule, $route = '', $option = [], $pattern = [])
     {
         self::rule($rule, $route, 'DELETE', $option, $pattern);
+    }
+
+    /**
+     * 注册PATCH路由
+     * @access public
+     * @param string    $rule 路由规则
+     * @param string    $route 路由地址
+     * @param array     $option 路由参数
+     * @param array     $pattern 变量规则
+     * @return void
+     */
+    public static function patch($rule, $route = '', $option = [], $pattern = [])
+    {
+        self::rule($rule, $route, 'PATCH', $option, $pattern);
     }
 
     /**
