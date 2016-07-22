@@ -1,6 +1,18 @@
 ## SentCMS介绍
 > SentCMS网站管理系统是南昌腾速科技有限公司倾力打造的一款简单易用的网站管理系统，SentCMS网站管理系统（下文简称SentCMS）继承了thinkphp5.0的优秀品质，秉承“大道至简”的设计理念。SnetCMS为网站建设而生，为网站建设减少90%的代码编写，只需前端设计师就可以设计出完美的网站，而如此完美的系统还是完全开源的。
 
+## 安装
+
+目前暂无安装文件，可按以下方法安装：
+
+* 第一步、修改数据库配置文件 application/database.php
+* 第二步、通过数据库导入工具，比如phpmyadmin导入数据，数据sql文件data/sql.sql
+* 第三步、登录后台，后台地址 http://域名/admin
+
+> 系统必须开启伪静态
+
+初始账号：admin，密码：admin888 
+
 ## SentCMS特性包括：
 * 全新的路由体系，完美的路由解决方案
 * 全新的系统架构，采用thinkphp5.0内核框架
@@ -48,7 +60,6 @@
 │ ├─ueditor.json      编辑配置文件
 ├─core                thinkphp框架目录
 ├─data                缓存以及备份目录
-├─extend         扩展类库目录（后期可能会变更目录）
 ├─public         公共资源库
 ├─uploads        上传文件目录
 ├─.htaccess      Apache下伪静态文件
@@ -56,15 +67,3 @@
 ├─index.php      入口文件
 ├─README.md      系统介绍文件
 ~~~
-
-## 安装
-
-目前暂无安装文件，可按以下方法安装：
-
-* 第一步、修改数据库配置文件 application/database.php
-* 第二步、通过数据库导入工具，比如phpmyadmin导入数据，数据sql文件data/sql.sql
-* 第三步、登录后台，后台地址 http://域名/admin
-
-> 系统必须开启伪静态
-
-初始账号：admin，密码：admin888 

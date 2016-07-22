@@ -1093,7 +1093,7 @@ class Route
                 foreach ($matches[1] as $name) {
                     if (strpos($name, '?')) {
                         $name      = substr($name, 0, -1);
-                        $replace[] = '((' . (isset($pattern[$name]) ? $pattern[$name] : '') . ')?)';
+                        $replace[] = '(' . (isset($pattern[$name]) ? $pattern[$name] : '') . '?)';
                     } else {
                         $replace[] = '(' . (isset($pattern[$name]) ? $pattern[$name] : '') . ')';
                     }
@@ -1112,11 +1112,17 @@ class Route
 
             if (0 === strpos($val, '[:')) {
                 // 可选参数
-                $val = substr($val, 1, -1);
+                $val      = substr($val, 1, -1);
+                $optional = true;
+            } else {
+                $optional = false;
             }
             if (0 === strpos($val, ':')) {
                 // URL变量
                 $name = substr($val, 1);
+                if (!$optional && !isset($m1[$key])) {
+                    return false;
+                }
                 if (isset($m1[$key]) && isset($pattern[$name]) && !preg_match('/^' . $pattern[$name] . '$/', $m1[$key])) {
                     // 检查变量规则
                     return false;
