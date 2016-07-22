@@ -1,6 +1,10 @@
 	<div class="picker-box">
 		<div id="picker_{$field}" class="picker_button">上传图片</div>
-		<input type="hidden" name="{$field}" id="field_{$field}" value="{$value|default=''}">
+		{if isset($value) && $value}
+		<input type="hidden" name="{$field}" id="field_{$field}" value="{$value}">
+		{else/}
+		<input type="hidden" name="{$field}" id="field_{$field}" value="">
+		{/if}
 		<div id="fileList_{$field}" class="upload-file-list-info" style="width:280px;">
 			{if $value}
 			{php}
