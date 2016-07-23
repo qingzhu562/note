@@ -104,7 +104,12 @@ class Seo extends Admin{
 
 	public function addrewrite(){
 		if (IS_POST) {
-			# code...
+			$result = model('Rewrite')->change();
+			if (false != $result) {
+				return $this->success("添加成功！", url('admin/seo/rewrite'));
+			}else{
+				return $this->error(model('Rewrite')->getError());
+			}
 		}else{
 			$data = array(
 				'keyList' => $this->rewrite->keyList
@@ -117,7 +122,12 @@ class Seo extends Admin{
 
 	public function editrewrite(){
 		if (IS_POST) {
-			# code...
+			$result = model('Rewrite')->change();
+			if (false != $result) {
+				return $this->success("更新成功！", url('admin/seo/rewrite'));
+			}else{
+				return $this->error(model('Rewrite')->getError());
+			}
 		}else{
 			$id = input('id','','trim,intval');
 			$info = db('Rewrite')->where(array('id'=>$id))->find();

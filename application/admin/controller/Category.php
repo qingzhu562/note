@@ -10,23 +10,23 @@
 namespace app\admin\controller;
 use app\common\controller\Admin;
 
-class Category extends Admin{
+class Category extends Admin {
 
-	public function _initialize(){
+	public function _initialize() {
 		parent::_initialize();
 		$this->getContentMenu();
 	}
 
-	public function index(){
+	public function index() {
 		$map  = array('status' => array('gt', -1));
-		$list = db('Category')->where($map)->order('sort asc,id asc')->column('*','id');
-		
-        if (!empty($list)) {
-            $tree = new \com\Tree();
-            $list = $tree->toFormatTree($list);
-        }
+		$list = db('Category')->where($map)->order('sort asc,id asc')->column('*', 'id');
 
-        $this->assign('tree',$list);
+		if (!empty($list)) {
+			$tree = new \com\Tree();
+			$list = $tree->toFormatTree($list);
+		}
+
+		$this->assign('tree', $list);
 		$this->setMeta('栏目列表');
 		return $this->fetch();
 	}
@@ -37,7 +37,7 @@ class Category extends Admin{
 			db('Category')->where(array('id' => $pk))->setField($name, $value);
 		}
 	}
-	
+
 	/* 编辑分类 */
 	public function edit($id = null, $pid = 0) {
 		if (IS_POST) {
@@ -48,8 +48,7 @@ class Category extends Admin{
 				//记录行为
 				action_log('update_category', 'category', $id, session('user_auth.uid'));
 				return $this->success('编辑成功！', url('index'));
-			} 
-			else {
+			} else {
 				$error = $category->getError();
 				return $this->error(empty($error) ? '未知错误！' : $error);
 			}
@@ -64,7 +63,7 @@ class Category extends Admin{
 			}
 			/* 获取分类信息 */
 			$info = $id ? db('Category')->find($id) : '';
-			
+
 			$this->assign('info', $info);
 			$this->assign('category', $cate);
 			$this->setMeta('编辑分类');
@@ -74,15 +73,14 @@ class Category extends Admin{
 	/* 新增分类 */
 	public function add($pid = 0) {
 		$Category = model('Category');
-		
+
 		if (IS_POST) {
 			//提交表单
 			$id = $Category->change();
 			if (false !== $id) {
 				action_log('update_category', 'category', $id, session('user_auth.uid'));
 				return $this->success('新增成功！', url('index'));
-			} 
-			else {
+			} else {
 				$error = $Category->getError();
 				return $this->error(empty($error) ? '未知错误！' : $error);
 			}
@@ -121,49 +119,46 @@ class Category extends Admin{
 			return $this->error('请先删除该分类下的文章（包含回收站）');
 		}
 		//删除该分类信息
-		$res = db('Category')->where(array('id'=>$id))->delete();
+		$res = db('Category')->where(array('id' => $id))->delete();
 		if ($res !== false) {
 			//记录行为
 			action_log('update_category', 'category', $id, session('user_auth.uid'));
 			return $this->success('删除分类成功！');
-		} 
-		else {
+		} else {
 			return $this->error('删除分类失败！');
 		}
 	}
-	
+
 	/**
 	 * 操作分类初始化
 	 * @param string $type
 	 * @author huajie <banhuajie@163.com>
 	 */
-	public function operate($type = 'move') {
+	public function operate($type = 'move', $from = '') {
 		//检查操作参数
-		if (strcmp($type, 'move') == 0) {
+		if ($type == 'move') {
 			$operate = '移动';
-		} 
-		elseif (strcmp($type, 'merge') == 0) {
+		} elseif ($type == 'merge') {
 			$operate = '合并';
-		} 
-		else {
+		} else {
 			return $this->error('参数错误！');
 		}
-		$from = intval(input('get.from'));
+
 		if (empty($from)) {
-		 	return $this->error('参数错误！');
-		 }
+			return $this->error('参数错误！');
+		}
 		//获取分类
-		$map = array('status' => 1, 'id' => array('neq', $from));
+		$map  = array('status' => 1, 'id' => array('neq', $from));
 		$list = db('Category')->where($map)->field('id,pid,title')->select();
 		//移动分类时增加移至根分类
-		if (strcmp($type, 'move') == 0) {
+		if ($type == 'move') {
 			//不允许移动至其子孙分类
 			$list = tree_to_list(list_to_tree($list));
-			
+
 			$pid = db('Category')->getFieldById($from, 'pid');
 			$pid && array_unshift($list, array('id' => 0, 'title' => '根分类'));
 		}
-		
+
 		$this->assign('type', $type);
 		$this->assign('operate', $operate);
 		$this->assign('from', $from);
@@ -176,13 +171,12 @@ class Category extends Admin{
 	 * @author huajie <banhuajie@163.com>
 	 */
 	public function move() {
-		$to = input('post.to');
+		$to   = input('post.to');
 		$from = input('post.from');
-		$res = db('Category')->where(array('id' => $from))->setField('pid', $to);
+		$res  = db('Category')->where(array('id' => $from))->setField('pid', $to);
 		if ($res !== false) {
 			return $this->success('分类移动成功！', url('index'));
-		} 
-		else {
+		} else {
 			return $this->error('分类移动失败！');
 		}
 	}
@@ -191,12 +185,12 @@ class Category extends Admin{
 	 * @author huajie <banhuajie@163.com>
 	 */
 	public function merge() {
-		$to = input('post.to');
-		$from = input('post.from');
+		$to    = input('post.to');
+		$from  = input('post.from');
 		$Model = model('Category');
 		//检查分类绑定的模型
 		$from_models = explode(',', $Model->getFieldById($from, 'model'));
-		$to_models = explode(',', $Model->getFieldById($to, 'model'));
+		$to_models   = explode(',', $Model->getFieldById($to, 'model'));
 		foreach ($from_models as $value) {
 			if (!in_array($value, $to_models)) {
 				return $this->error('请给目标分类绑定' . get_document_model($value, 'title') . '模型');
@@ -204,40 +198,38 @@ class Category extends Admin{
 		}
 		//检查分类选择的文档类型
 		$from_types = explode(',', $Model->getFieldById($from, 'type'));
-		$to_types = explode(',', $Model->getFieldById($to, 'type'));
+		$to_types   = explode(',', $Model->getFieldById($to, 'type'));
 		foreach ($from_types as $value) {
 			if (!in_array($value, $to_types)) {
-				$types = config('DOCUMENT_MODEL_TYPE');
+				$types = config('document_model_type');
 				return $this->error('请给目标分类绑定文档类型：' . $types[$value]);
 			}
 		}
 		//合并文档
 		$res = db('Document')->where(array('category_id' => $from))->setField('category_id', $to);
-		
+
 		if ($res !== false) {
 			//删除被合并的分类
 			$Model->delete($from);
 			return $this->success('合并分类成功！', url('index'));
-		} 
-		else {
+		} else {
 			return $this->error('合并分类失败！');
 		}
 	}
 
-	public function status(){
-		$id = input('id','','trim,intval');
-		$ids = input('post.ids/a',array(),'');
-		$status = input('status','0','trim,intval');
-		array_push($ids, $id);
+	public function status() {
+		$id = $this->getArrayParam('id');
+		$status = input('status', '0', 'trim,intval');
+
 		if (!$id) {
 			return $this->error("非法操作！");
 		}
 
-		$map['id'] = array('IN',$ids);
-		$result = db('Category')->where($map)->setField('status', $status);
+		$map['id'] = array('IN', $id);
+		$result    = db('Category')->where($map)->setField('status', $status);
 		if ($result) {
 			return $this->success("设置成功！");
-		}else{
+		} else {
 			return $this->error("设置失败！");
 		}
 	}

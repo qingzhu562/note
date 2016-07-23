@@ -18,7 +18,7 @@ class Document extends \think\model\Merge{
 	protected $fk = 'doc_id';
 
 	// 定义需要自动写入时间戳格式的字段
-	protected $autoTimeField = array('create_time','update_time','deadline');
+	protected $autoWriteTimestamp = array('create_time','update_time','deadline');
 
 	protected $auto = array('doc_id', 'title', 'description', 'update_time','deadline');
 	protected $insert = array('uid', 'attach'=>0, 'view'=>0, 'comment'=>0, 'extend'=>0, 'create_time', 'status');

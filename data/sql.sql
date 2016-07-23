@@ -1309,6 +1309,7 @@ INSERT INTO `sent_menu` VALUES ('22', '广告管理', 'admin', 'cc', '5', '0', '
 INSERT INTO `sent_menu` VALUES ('23', '插件列表', 'admin', 'usb', '6', '0', 'admin/addons/index', '0', '', '插件管理', '0', '0');
 INSERT INTO `sent_menu` VALUES ('24', '钩子列表', 'admin', 'code', '6', '0', 'admin/addons/hooks', '0', '', '插件管理', '0', '0');
 INSERT INTO `sent_menu` VALUES ('25', '自定义表单', 'admin', '', '5', '0', 'admin/form/index', '0', '', '运营管理', '0', '0');
+INSERT INTO `sent_menu` VALUES ('26', '伪静态规则', 'admin', '', '2', '0', 'admin/seo/rewrite', '0', '', '优化设置', '0', '0');
 
 -- -----------------------------
 -- Table structure for `sent_model`

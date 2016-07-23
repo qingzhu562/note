@@ -25,6 +25,10 @@ class Base extends \think\Model{
 	 */
 	public function change(){
 		$data = \think\Request::instance()->post();
-		return $this->save($data, array('id'=>$data['id']));
+		if (isset($data['id']) && $data['id']) {
+			return $this->save($data, array('id'=>$data['id']));
+		}else{
+			return $this->save($data);
+		}
 	}
 }

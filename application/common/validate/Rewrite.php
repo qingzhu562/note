@@ -12,21 +12,16 @@ namespace app\common\validate;
 /**
 * 设置模型
 */
-class Book extends \think\Validate{
+class Rewrite extends Base{
 
 	protected $rule = array(
-		'book_name' =>  'require',
-		'stand_class' =>  'require',
+		'rule'   => 'require|unique:Rewrite',
+		'url'   => 'require'
 	);
-
 	protected $message = array(
-		'book_name'         =>  '书名称必须！',
-		'stand_class' =>  '图书标准类型必须！',
-	);
-
-	protected $scene = array(
-		'add'   => array('book_name', 'stand_class'),
-		'edit'  => array('book_name', 'stand_class')
+		'rule.require'   => '规则必须！',
+		'rule.unique'   => '规则已存在！',
+		'url.require'   => '路由地址标题必须！',
 	);
 
 }
