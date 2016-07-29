@@ -82,7 +82,7 @@ class App
         }
 
         $config = self::initCommon();
-
+        $request->filter($config['default_filter']);
         try {
 
             // 开启多语言机制
@@ -104,6 +104,7 @@ class App
             }
             // 记录当前调度信息
             $request->dispatch($dispatch);
+
             // 记录路由信息
             self::$debug && Log::record('[ ROUTE ] ' . var_export($dispatch, true), 'info');
             // 监听app_begin
@@ -415,6 +416,8 @@ class App
         // 加载初始化文件
         if (is_file(APP_PATH . $module . 'init' . EXT)) {
             include APP_PATH . $module . 'init' . EXT;
+        } elseif (is_file(RUNTIME_PATH . $module . 'init' . EXT)) {
+            include RUNTIME_PATH . $module . 'init' . EXT;
         } else {
             $path = APP_PATH . $module;
             // 加载模块配置
@@ -466,7 +469,7 @@ class App
      */
     public static function routeCheck($request, array $config)
     {
-        $path   = rtrim($request->path(), '/');
+        $path   = $request->path();
         $depr   = $config['pathinfo_depr'];
         $result = false;
         // 路由检测
