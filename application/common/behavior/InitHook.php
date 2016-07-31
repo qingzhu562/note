@@ -5,7 +5,7 @@ class InitHook {
 
 	public function run(&$request){
 		//未安装时不执行
-		if (substr(request()->pathinfo(), 0, 7) != 'install') {
+		if (substr(request()->pathinfo(), 0, 7) != 'install' && is_file(APP_PATH . 'database.php') ) {
 			//初始化某些配置信息
 			if (cache('db_config_data')) {
 				\think\Config::set(cache('db_config_data'));
