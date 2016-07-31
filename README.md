@@ -3,15 +3,13 @@
 
 ## 安装
 
-目前暂无安装文件，可按以下方法安装：
-
-* 第一步、修改数据库配置文件 application/database.php
-* 第二步、通过数据库导入工具，比如phpmyadmin导入数据，数据sql文件data/sql.sql
-* 第三步、登录后台，后台地址 http://域名/admin
+访问网址：http://网址/install
 
 > 系统必须开启伪静态
 
-初始账号：admin，密码：admin888 
+## 交流讨论
+
+> 点击链接加入群【SentCMS交流群】：http://jq.qq.com/?_wv=1027&k=2DXSKpe
 
 ## SentCMS特性包括：
 * 全新的路由体系，完美的路由解决方案
