@@ -18,6 +18,9 @@ class Base extends \think\Controller{
 	protected $action;
 
 	public function _initialize(){
+		if (!is_file(APP_PATH . 'database.php') || !is_file(APP_PATH . 'install.lock')) {
+			return $this->redirect('install/index/index');
+		}
 		/* 读取数据库中的配置 */
 		$config =   cache('db_config_data');
 		if(!$config){

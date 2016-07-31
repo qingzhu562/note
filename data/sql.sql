@@ -1191,12 +1191,11 @@ CREATE TABLE `sent_member` (
   `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '会员状态',
   PRIMARY KEY (`uid`),
   KEY `status` (`status`)
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='会员表';
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
 -- -----------------------------
 -- Records of `sent_member`
 -- -----------------------------
-INSERT INTO `sent_member` VALUES ('1', 'admin', 'e927747ef39033eca386584ef290949c', '系统管理员', 'admin@admin.com', '', '1', '0000-00-00', '707479167', '0', '测试用户签名', '0', '0', '0', '0', 'YsIplN', '132', '0', '1455846185', '2130706433', '1467077781', '1');
 
 -- -----------------------------
 -- Table structure for `sent_member_extend`

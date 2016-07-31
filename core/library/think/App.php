@@ -280,7 +280,10 @@ class App
             if ($bind) {
                 // 绑定模块
                 list($bindModule) = explode('/', $bind);
-                if ($module == $bindModule) {
+                if (empty($result[0])) {
+                    $module    = $bindModule;
+                    $available = true;
+                } elseif ($module == $bindModule) {
                     $available = true;
                 }
             } elseif (!in_array($module, $config['deny_module_list']) && is_dir(APP_PATH . $module)) {
@@ -363,7 +366,7 @@ class App
             self::$debug = Config::get('app_debug');
             if (!self::$debug) {
                 ini_set('display_errors', 'Off');
-            } else {
+            } elseif (!IS_CLI) {
                 //重新申请一块比较大的buffer
                 if (ob_get_level() > 0) {
                     $output = ob_get_clean();
