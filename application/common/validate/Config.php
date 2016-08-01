@@ -15,7 +15,7 @@ namespace app\common\validate;
 class Config extends Base{
 
 	protected $rule = array(
-		'name'  =>  'require|unique',
+		'name'  =>  'require|unique:config',
 		'title' =>  'require',
 	);
 
