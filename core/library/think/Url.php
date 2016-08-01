@@ -19,9 +19,6 @@ use think\Route;
 
 class Url
 {
-    // 生成URL地址的root
-    protected static $root;
-
     /**
      * URL生成 支持路由反射
      * @param string            $url URL表达式，
@@ -39,6 +36,11 @@ class Url
             $domain = true;
         }
         // 解析URL
+        if (0 === strpos($url, '[') && $pos = strpos($url, ']')) {
+            // [name] 表示使用路由命名标识生成URL
+            $name = substr($url, 1, $pos - 1);
+            $url  = 'name' . substr($url, $pos + 1);
+        }
         $info = parse_url($url);
         $url  = !empty($info['path']) ? $info['path'] : '';
         if (isset($info['fragment'])) {
@@ -69,10 +71,12 @@ class Url
             $vars = array_merge($params, $vars);
         }
 
-        $rule = Route::name($url);
+        $rule = Route::name(isset($name) ? $name : $url);
         if ($rule && $match = self::getRuleUrl($rule, $vars)) {
             // 匹配路由命名标识 快速生成
             $url = $match;
+        } elseif ($rule && isset($name)) {
+            throw new \InvalidArgumentException('route name not exists:' . $name);
         } else {
             // 获取路由别名
             $alias = self::getRouteAlias();
@@ -122,7 +126,7 @@ class Url
         // 检测域名
         $domain = self::parseDomain($url, $domain);
         // URL组装
-        $url = $domain . (self::$root ?: Request::instance()->root()) . '/' . ltrim($url, '/');
+        $url = $domain . Request::instance()->root() . '/' . ltrim($url, '/');
         return $url;
     }
 
@@ -337,12 +341,5 @@ class Url
     public static function clearAliasCache()
     {
         Cache::rm('think_route_map');
-    }
-
-    // 指定当前生成URL地址的root
-    public static function root($root)
-    {
-        self::$root = $root;
-        Request::instance()->root($root);
     }
 }

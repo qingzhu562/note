@@ -257,7 +257,8 @@ class Route
     protected static function setRule($rule, $route, $type = '*', $option = [], $pattern = [], $group = '')
     {
         if (is_array($rule)) {
-            list($name, $rule) = $rule;
+            $name = $rule[0];
+            $rule = $rule[1];
         }
         if ('$' == substr($rule, -1, 1)) {
             // 是否完整匹配
@@ -334,11 +335,11 @@ class Route
         }
         if (!empty($name)) {
             // 分组
+            $currentGroup = self::getGroup('name');
+            if ($currentGroup) {
+                $name = $currentGroup . '/' . ltrim($name, '/');
+            }
             if ($routes instanceof \Closure) {
-                $currentGroup = self::getGroup('name');
-                if ($currentGroup) {
-                    $name = $currentGroup . '/' . ltrim($name, '/');
-                }
                 $currentOption  = self::getGroup('option');
                 $currentPattern = self::getGroup('pattern');
                 self::setGroup($name, $option, $pattern);
@@ -348,7 +349,6 @@ class Route
                 self::$rules['*'][$name]['var']     = self::parseVar($name);
                 self::$rules['*'][$name]['option']  = $option;
                 self::$rules['*'][$name]['pattern'] = $pattern;
-
             } else {
                 foreach ($routes as $key => $val) {
                     if (is_numeric($key)) {
@@ -381,6 +381,9 @@ class Route
                 $currentGroup   = self::getGroup('name');
                 $currentOption  = self::getGroup('option');
                 $currentPattern = self::getGroup('pattern');
+                if ($currentGroup) {
+                    $name = $currentGroup . '/' . ltrim($name, '/');
+                }
                 self::setGroup($name, $option, $pattern);
                 call_user_func_array($routes, []);
                 self::setGroup($currentGroup, $currentOption, $currentPattern);
