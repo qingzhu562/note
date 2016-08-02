@@ -137,7 +137,6 @@ class Base extends \think\Controller{
 
 	//request信息
 	protected function requestInfo(){
-		$this->request    = \think\Request::instance();
 		$this->param = $this->request->param();
 		defined('MODULE_NAME') or define('MODULE_NAME', $this->request->module());
 		defined('CONTROLLER_NAME') or define('CONTROLLER_NAME', $this->request->controller());
@@ -145,7 +144,6 @@ class Base extends \think\Controller{
 		defined('IS_POST') or define('IS_POST', $this->request->isPost());
 		defined('IS_GET') or define('IS_GET', $this->request->isGet());
 		$this->url = $this->request->module() . '/' . $this->request->controller() . '/' . $this->request->action();
-		$this->assign('request',$this->request);
 		$this->assign('param',$this->param);
 	}
 
