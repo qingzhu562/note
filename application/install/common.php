@@ -9,7 +9,6 @@
 
 // 检测环境是否支持可写
 define('IS_WRITE', true);
-define('INSTALL_APP_PATH', BASE_PATH . '/');
 
 /**
  * 系统环境检测
@@ -47,7 +46,7 @@ function check_env(){
 
 	//磁盘空间检测
 	if(function_exists('disk_free_space')) {
-		$items['disk'][3] = floor(disk_free_space(INSTALL_APP_PATH) / (1024*1024)).'M';
+		$items['disk'][3] = floor(disk_free_space(ROOT_PATH) / (1024*1024)).'M';
 	}
 
 	return $items;
@@ -68,7 +67,7 @@ function check_dirfile(){
 	);
 
 	foreach ($items as &$val) {
-		$item =	INSTALL_APP_PATH . $val[3];
+		$item =	ROOT_PATH . $val[3];
 		if('dir' == $val[0]){
 			if(!is_writable($item)) {
 				if(is_dir($item)) {
@@ -134,7 +133,7 @@ function check_func(){
 function write_config($config){
 	if(is_array($config)){
 		//读取配置内容
-		$conf = file_get_contents(BASE_PATH . './data/db.tpl');
+		$conf = file_get_contents(ROOT_PATH . 'data/db.tpl');
 		//替换配置项
 		foreach ($config as $name => $value) {
 			$conf = str_replace("[{$name}]", $value, $conf);
@@ -159,7 +158,7 @@ function write_config($config){
  */
 function create_tables($db, $prefix = ''){
 	//读取SQL文件
-	$sql = file_get_contents(BASE_PATH . './data/sql.sql');
+	$sql = file_get_contents(ROOT_PATH . 'data/sql.sql');
 	$sql = str_replace("\r", "\n", $sql);
 	$sql = explode(";\n", $sql);
 
@@ -211,7 +210,7 @@ function register_administrator($db, $prefix, $admin){
  */
 function update_tables($db, $prefix = ''){
 	//读取SQL文件
-	$sql = file_get_contents(MODULE_PATH . 'Data/update.sql');
+	$sql = file_get_contents(ROOT_PATH . 'data/update.sql');
 	$sql = str_replace("\r", "\n", $sql);
 	$sql = explode(";\n", $sql);
 
