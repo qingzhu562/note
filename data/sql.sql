@@ -1102,8 +1102,7 @@ CREATE TABLE `sent_file` (
   `location` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '文件保存位置',
   `url` varchar(255) NOT NULL DEFAULT '' COMMENT '远程地址',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_md5` (`md5`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='文件表';
 
 -- -----------------------------
@@ -1345,10 +1344,11 @@ CREATE TABLE `sent_model` (
 -- -----------------------------
 -- Records of `sent_model`
 -- -----------------------------
-INSERT INTO `sent_model` VALUES ('1', 'document', '通用模型', '0', '', '', '1', '1', '{\"1\":[\"17\",\"16\",\"19\",\"20\",\"14\",\"13\",\"4\",\"3\",\"2\",\"5\",\"12\",\"11\",\"10\"]}', '1:基础,2:扩展', '1,7,8,9,10,2,11,12,13,3,4,14,25,15,5,6,23,22,24', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', '10', '', '', '', '', '', '1450088499', '1454054412', '1', 'MyISAM');
-INSERT INTO `sent_model` VALUES ('2', 'article', '文章', '1', 'file-word-o', '', '0', '1', '{\"1\":[\"3\",\"2\",\"4\",\"25\",\"12\",\"5\",\"24\",\"55\"],\"2\":[\"11\",\"10\",\"13\",\"19\",\"17\",\"16\",\"14\",\"20\"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', '10', '', '', '', '', '', '1453859167', '1467019566', '1', 'MyISAM');
-INSERT INTO `sent_model` VALUES ('3', 'photo', '图片', '1', 'file-image-o', '', '0', '1', '{\"1\":[\"3\",\"2\",\"4\",\"12\",\"26\",\"5\",\"27\",\"55\"],\"2\":[\"11\",\"10\",\"19\",\"13\",\"16\",\"17\",\"14\",\"20\"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', '10', '', '', '', '', '', '1454052310', '1467019679', '1', 'MyISAM');
-INSERT INTO `sent_model` VALUES ('4', 'page', '单页', '2', 'file-text-o', '', '0', '1', '{\"1\":[\"28\",\"30\",\"31\",\"32\",\"33\"]}', '1:基础', '', '', '', 'id:ID\r\ntitle:标题\r\nupdate_time:更新时间', '10', '', '', '', '', '', '1456296668', '1467019686', '1', 'MyISAM');
+INSERT INTO `sent_model` (`id`, `name`, `title`, `extend`, `icon`, `relation`, `is_user_show`, `need_pk`, `field_sort`, `field_group`, `field_list`, `attribute_list`, `attribute_alias`, `list_grid`, `list_row`, `search_key`, `search_list`, `template_list`, `template_add`, `template_edit`, `create_time`, `update_time`, `status`, `engine_type`) VALUES
+(1, 'document', '通用模型', 0, '', '', 1, 1, '{"1":["17","16","19","20","14","13","4","3","2","5","12","11","10"]}', '1:基础,2:扩展', '1,7,8,9,10,2,11,12,13,3,4,14,25,15,5,6,23,22,24', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', '', '', '', 1450088499, 1454054412, 1, 'MyISAM'),
+(2, 'article', '文章', 1, 'file-word-o', '', 0, 1, '{"1":["3","2","4","25","12","5","24","55"],"2":["11","10","13","19","17","16","14","20"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', '', '', '', 1453859167, 1467019566, 1, 'MyISAM'),
+(3, 'photo', '图片', 1, 'file-image-o', '', 0, 1, '{"1":["3","2","4","12","26","5","27","55"],"2":["11","10","19","13","16","17","14","20"]}', '1:基础,2:扩展', '', '', '', 'id:ID\r\ntitle:标题\r\nuid:发布人|get_username\r\ncreate_time:创建时间|time_format\r\nupdate_time:更新时间|time_format\r\nstatus:状态|get_content_status', 10, '', '', '', '', '', 1454052310, 1467019679, 1, 'MyISAM'),
+(4, 'page', '单页', 2, 'file-text-o', '', 0, 1, '{"1":["28","55","30","31","32","33"]}', '1:基础', '', '', '', 'id:ID\r\ntitle:标题\r\nupdate_time:更新时间|time_format', 10, '', '', '', '', '', 1456296668, 1470240568, 1, 'MyISAM');
 
 -- -----------------------------
 -- Table structure for `sent_page`

@@ -222,11 +222,12 @@ $(function() {
 				} else {
 					updateAlert(data.msg);
 					setTimeout(function() {
-						if (data.url) {
-							location.href = data.url;
-						} else {
-							$('#top-alert').find('button').click();
-						}
+						location.reload();
+						// if (data.url) {
+						// 	location.href = data.url;
+						// } else {
+						// 	$('#top-alert').find('button').click();
+						// }
 					}, 1500);
 				}
 			});
@@ -304,11 +305,12 @@ $(function() {
 					updateAlert(data.msg, 'danger');
 					setTimeout(function() {
 						$(that).removeClass('disabled').prop('disabled', false);
-						if (data.url) {
-							location.href = data.url;
-						} else {
-							$('#top-alert').find('button').click();
-						}
+						location.reload();
+						// if (data.url) {
+						// 	location.href = data.url;
+						// } else {
+						// 	$('#top-alert').find('button').click();
+						// }
 					}, 1500);
 				}
 			});
