@@ -19,6 +19,9 @@ use think\Route;
 
 class Url
 {
+    // 生成URL地址的root
+    protected static $root;
+
     /**
      * URL生成 支持路由反射
      * @param string            $url URL表达式，
@@ -75,6 +78,9 @@ class Url
         if ($rule && $match = self::getRuleUrl($rule, $vars)) {
             // 匹配路由命名标识 快速生成
             $url = $match;
+            if (!empty($rule[2])) {
+                $domain = $rule[2];
+            }
         } elseif ($rule && isset($name)) {
             throw new \InvalidArgumentException('route name not exists:' . $name);
         } else {
@@ -86,7 +92,7 @@ class Url
                 $url = $match;
             } else {
                 // 路由不存在 直接解析
-                $url = self::parseUrl($url);
+                $url = self::parseUrl($url, $domain);
             }
         }
 
@@ -126,12 +132,12 @@ class Url
         // 检测域名
         $domain = self::parseDomain($url, $domain);
         // URL组装
-        $url = $domain . Request::instance()->root() . '/' . ltrim($url, '/');
+        $url = $domain . (self::$root ?: Request::instance()->root()) . '/' . ltrim($url, '/');
         return $url;
     }
 
     // 直接解析URL地址
-    protected static function parseUrl($url)
+    protected static function parseUrl($url, $domain)
     {
         $request = Request::instance();
         if (0 === strpos($url, '/')) {
@@ -145,8 +151,17 @@ class Url
             $url = substr($url, 1);
         } else {
             // 解析到 模块/控制器/操作
-            $module     = $request->module();
-            $module     = $module ? $module . '/' : '';
+            $module  = $request->module();
+            $domains = Route::rules('domain');
+            if (isset($domains[$domain]['[bind]'][0])) {
+                $bindModule = $domains[$domain]['[bind]'][0];
+                if ($bindModule && !in_array($bindModule[0], ['\\', '@'])) {
+                    $module = '';
+                }
+            } else {
+                $module = $module ? $module . '/' : '';
+            }
+
             $controller = $request->controller();
             if ('' == $url) {
                 // 空字符串输出当前的 模块/控制器/操作
@@ -181,7 +196,7 @@ class Url
                     if (0 === strpos($domain_prefix, '*.') && strpos($domain, ltrim($domain_prefix, '*.')) !== false) {
                         foreach ($domains as $key => $rule) {
                             $rule = is_array($rule) ? $rule[0] : $rule;
-                            if (false === strpos($key, '*') && 0 === strpos($url, $rule)) {
+                            if (is_string($rule) && false === strpos($key, '*') && 0 === strpos($url, $rule)) {
                                 $url    = ltrim($url, $rule);
                                 $domain = $key;
                                 // 生成对应子域名
@@ -341,5 +356,12 @@ class Url
     public static function clearAliasCache()
     {
         Cache::rm('think_route_map');
+    }
+
+    // 指定当前生成URL地址的root
+    public static function root($root)
+    {
+        self::$root = $root;
+        Request::instance()->root($root);
     }
 }
