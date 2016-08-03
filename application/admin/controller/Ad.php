@@ -118,7 +118,7 @@ class Ad extends Admin {
 		if (IS_POST) {
 			$result = $ad->change();
 			if ($result) {
-				return $this->success("添加成功！", url('admin/ad/lists',array('id'=>$data['place_id'])));
+				return $this->success("添加成功！", url('admin/ad/lists',array('id'=>$this->param['place_id'])));
 			}else{
 				return $this->error($ad->getError());
 			}
@@ -139,7 +139,7 @@ class Ad extends Admin {
 		if (IS_POST) {
 			$result = $ad->change();
 			if ($result) {
-				return $this->success("修改成功！", url('admin/ad/lists',array('id'=>$data['place_id'])));
+				return $this->success("修改成功！", url('admin/ad/lists',array('id'=>$this->param['place_id'])));
 			}else{
 				return $this->error($ad->getError());
 			}
