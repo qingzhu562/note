@@ -1,17 +1,17 @@
 	<div class="picker-box">
 		<div id="picker_{$field}" class="picker_button">上传文件</div>
-		<input type="hidden" name="{$field}" id="field_{$field}" value="{$value['id']|default=''}">
+		<input type="hidden" name="{$field}" id="field_{$field}" value="{$value|default=''}">
 		<div id="fileList_{$field}" class="upload-file-list-info" style="width:280px;">
-		{if isset($value['id'])}
+		{if isset($value)}
 			<li class="affix-list-item" id="WU_FILE_0">
 				<div class="upload-file-info">
-					<span class="webuploader-pick-file-close" data-queued-id="WU_FILE_0" data-id="{$value['id']}" data-fileurl="{$value['savename']}"><i class="close"></i></span>
+					<span class="webuploader-pick-file-close" data-queued-id="WU_FILE_0" data-id="{$value}" data-fileurl="{$value|get_file=###,"savename"}"><i class="close"></i></span>
 					<span class="fname"></span>
-					<span class="fsize">上传时间:{$value['create_time']|date='Y-m-d H:i:s',###}</span>
+					<span class="fsize">上传时间:{$value|get_file=###,"time"}</span>
 					<div class="clearfix"></div>
 				</div>
 				<div class="filebox image">
-					文件名{$value['savename']}
+					文件名{$value|get_file=###,"savename"}
 				</div>
 			</li>
 		{/if}

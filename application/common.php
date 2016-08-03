@@ -262,6 +262,26 @@ function get_cover($cover_id, $field = null) {
 }
 
 /**
+ * 获取文件
+ * @param int $file_id
+ * @param string $field
+ * @return 完整的数据  或者  指定的$field字段值
+ * @author huajie <banhuajie@163.com>
+ */
+function get_file($file_id, $field = null) {
+	if (empty($file_id)) {
+		return '';
+	}
+	$file = db('File')->where(array('id' => $file_id))->find();
+	if ($field == 'path') {
+		return $file['savepath'];
+	}elseif ($field == 'time') {
+		return date('Y-m-d H:i:s', $file['create_time']);
+	}
+	return empty($field) ? $file : $file[$field];
+}
+
+/**
  * 获取多图地址
  * @param array $covers
  * @return 返回图片列表
