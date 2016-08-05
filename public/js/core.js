@@ -222,7 +222,7 @@ $(function() {
 				} else {
 					updateAlert(data.msg);
 					setTimeout(function() {
-						location.reload();
+						//location.reload();
 						// if (data.url) {
 						// 	location.href = data.url;
 						// } else {
@@ -305,7 +305,7 @@ $(function() {
 					updateAlert(data.msg, 'danger');
 					setTimeout(function() {
 						$(that).removeClass('disabled').prop('disabled', false);
-						location.reload();
+						//location.reload();
 						// if (data.url) {
 						// 	location.href = data.url;
 						// } else {

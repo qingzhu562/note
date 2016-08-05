@@ -104,7 +104,7 @@ class Document extends \think\model\Merge{
 	}
 
 	public function del($map){
-		return $this->db()->where($map)->delete();
+		return $this->where($map)->delete();
 	}
 
 	public function detail($id){

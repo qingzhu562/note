@@ -46,37 +46,34 @@ class Model extends Base{
 	 */
 	public function change() {
 		if(IS_POST){
-			$data = input('post.',array());
+			$data = \think\Request::instance()->post();
 			if($data){
 				if (empty($data['id'])) {
 					/*创建表*/
 					$db = new \com\Datatable();
-					//文档模型
-					if($data['extend'] == 1){
-						//默认文档前缀
-						$tablename = 'document_'.$data['name'];
-						$is_auto_increment = false;
+
+					if ($data['extend'] == 1) {
+						//文档模型
+						$sql = $db->start_table('document_'.$data['name'])->create_id('doc_id', 11 , '主键' , false)->create_key('doc_id');
 					}else{
-						$tablename = $data['name'];
-						$is_auto_increment = true;
+						$sql = $db->start_table($data['name'])->create_id('id', 11 , '主键' , true)->create_uid()->create_key('id');
 					}
-					$sql = $db->start_table($tablename)
-						->create_id('id', 11 , '主键' , $is_auto_increment);
-					if ($data['extend'] != 1) {
-						$sql = $sql->create_uid();
-					}
-					$sql->create_key('id')->end_table($data['title'], $data['engine_type'])
-						->create();
-					$id = $this->validate('model.add')->save($data);
-					if (false === $id) {
-						return array('info'=>$this->getError(), 'status'=>0);
+					//执行操作数据库，建立数据表
+					$result = $sql->end_table($data['title'], $data['engine_type'])->create();
+					if ($result) {
+						$id = $this->validate('model.add')->save($data);
+						if (false === $id) {
+							return array('info'=>$this->getError(), 'status'=>0);
+						}else{
+							// 清除模型缓存数据
+							cache('document_model_list', null);
+							
+							//记录行为
+							action_log('update_model', 'model', $id, session('auth_user.uid'));
+							return $id ? array('info'=>'创建模型成功！','status'=>1) : array('info'=>'创建模型失败！','status'=>1);
+						}
 					}else{
-						// 清除模型缓存数据
-						cache('document_model_list', null);
-						
-						//记录行为
-						action_log('update_model', 'model', $id, session('auth_user.uid'));
-						return $id ? array('info'=>'创建模型成功！','status'=>1) : array('info'=>'创建模型失败！','status'=>1);
+						return false;
 					}
 				} else {
 					//修改

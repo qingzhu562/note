@@ -58,6 +58,6 @@ class Content extends Base{
 	}
 
 	public function del($map){
-		return $this->db()->where($map)->delete();
+		return $this->where($map)->delete();
 	}
 }
