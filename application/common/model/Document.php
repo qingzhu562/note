@@ -14,7 +14,6 @@ namespace app\common\model;
 */
 class Document extends \think\model\Merge{
 
-	protected $table = "sent_document";
 	protected $fk = 'doc_id';
 
 	// 定义需要自动写入时间戳格式的字段
