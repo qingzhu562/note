@@ -144,6 +144,7 @@ class Base extends \think\Controller{
 		defined('IS_POST') or define('IS_POST', $this->request->isPost());
 		defined('IS_GET') or define('IS_GET', $this->request->isGet());
 		$this->url = $this->request->module() . '/' . $this->request->controller() . '/' . $this->request->action();
+		$this->assign('request',$this->request);
 		$this->assign('param',$this->param);
 	}
 
