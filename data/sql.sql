@@ -408,6 +408,7 @@ CREATE TABLE `sent_channel` (
 -- Records of `sent_channel`
 -- -----------------------------
 INSERT INTO `sent_channel` VALUES ('1', '0', '网站首页', 'index/index/index', '1', 'home', '', '', '', 'home', '1379475111', '1464490544', '1', '0');
+INSERT INTO `sent_channel` VALUES ('2', '0', '新闻资讯', 'article/list/1', '1', 'article', '', '', '', 'article', '1379475111', '1464490544', '1', '0');
 
 -- -----------------------------
 -- Table structure for `sent_config`

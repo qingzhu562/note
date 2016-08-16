@@ -1,0 +1,35 @@
+{extend name="public/base"/}
+{block name="body"}
+<div class="jumbotron">
+	<div class="container">
+		<hgroup>
+			<h1>{$info['title']}</h1>
+			<h4>和各大明星企业有着紧密合作...</h4>
+		</hgroup>
+	</div>
+</div>
+<div class="warp art-page">
+	<div class="art-detail">
+		<div class="art-heading">
+			<div class="title">{$info['title']}</div>
+			<div class="info">
+				<span>发布时间：{$info['create_time']|date='Y-m-d H:i:s',###}</span>
+				<span>访问量：{$info['view']}</span>
+			</div>
+		</div>
+		<div class="art-body">
+			{$info['content']}
+		</div>
+	</div>
+	{prev id="$info['id']" cate="$info['category_id']" model="$info['model_id']"}
+	<a href="{:url('index/content/detail',array('id'=>$prev['id'],'model_id'=>$prev['model_id']))}" class="prev">
+		<i class="fa fa-angle-left"></i>
+	</a>
+	{/prev}
+	{next id="$info['id']" cate="$info['category_id']" model="$info['model_id']"}
+	<a href="{:url('index/content/detail',array('id'=>$next['id'],'model_id'=>$next['model_id']))}" class="next">
+		<i class="fa fa-angle-right"></i>
+	</a>
+	{/next}
+</div>
+{/block}

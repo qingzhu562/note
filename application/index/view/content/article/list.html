@@ -1,0 +1,42 @@
+{extend name="public/base"/}
+{block name="body"}
+<div class="jumbotron">
+	<div class="container">
+		<hgroup>
+			<h1>{$cate['title']}</h1>
+			<h4>和各大明星企业有着紧密合作...</h4>
+		</hgroup>
+	</div>
+</div>
+
+<div class="warp art-page">
+	<div class="left-nav">
+		<ul>
+			<li><a href="{:url('index/content/lists',array('model'=>'article','id'=>8))}">公司新闻 <span class="pull-right"><i class="fa fa-chevron-right text-primary"></i></span></a></li>
+			<li><a href="{:url('index/content/lists',array('model'=>'article','id'=>9))}">行业动态 <span class="pull-right"><i class="fa fa-chevron-right text-primary"></i></span></a></li>
+		</ul>
+	</div>
+	<div class="art-list">
+
+		<ul class="list">
+			{volist name="list" id="item"}
+			<li>
+				<a href="{:url('index/content/detail',array('model_id'=>$item['model_id'],'id'=>$item['id']))}">
+					<div class="time">
+						<span class="day">{$item['create_time']|date='d',###}</span>
+						<span class="moth">{$item['create_time']|date='m',###}</span>
+					</div>
+					<div class="info">
+						<div class="tit">{$item['title']|msubstr=###,0,80}</div>
+						<div class="des">{$item['description']|msubstr=###,0,120}</div>
+					</div>
+				</a>
+			</li>
+			{/volist}
+			<div class="clearfix"></div>
+		</ul>
+		{$page}
+	</div>
+	<div class="clearfix"></div>
+</div>
+{/block}
