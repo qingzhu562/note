@@ -607,7 +607,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      * @param array     $data 数据
      * @param array     $where 更新条件
      * @param string    $sequence     自增序列名
-     * @return integer
+     * @return integer|false
      */
     public function save($data = [], $where = [], $sequence = null)
     {
@@ -729,16 +729,35 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      * 保存多个数据到当前数据对象
      * @access public
      * @param array     $dataSet 数据
+     * @param boolean   $replace 是否自动识别更新和写入
      * @return array|false
      */
-    public function saveAll($dataSet)
+    public function saveAll($dataSet, $replace = true)
     {
+        if ($this->validate) {
+            // 数据批量验证
+            $validate = $this->validate;
+            foreach ($dataSet as $data) {
+                if (!$this->validate($validate)->validateData($data)) {
+                    return false;
+                }
+            }
+        }
+
         $result = [];
         $db     = $this->db();
         $db->startTrans();
         try {
+            $pk = $this->getPk();
+            if (is_string($pk) && $replace) {
+                $auto = true;
+            }
             foreach ($dataSet as $key => $data) {
-                $result[$key] = self::create($data);
+                if (!empty($auto) && isset($data[$pk])) {
+                    $result[$key] = self::update($data);
+                } else {
+                    $result[$key] = self::create($data);
+                }
             }
             $db->commit();
             return $result;
@@ -969,8 +988,8 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      */
     public static function update($data = [], $where = [])
     {
-        $model = new static();
-        $model->isUpdate(true)->save($data, $where);
+        $model  = new static();
+        $result = $model->isUpdate(true)->save($data, $where);
         return $model;
     }
 
