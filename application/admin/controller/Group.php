@@ -211,7 +211,7 @@ class Group extends Admin {
 		if (IS_POST) {
 			$result = $this->rule->change();
 			if ($result) {
-				return $this->success("创建成功！");
+				return $this->success("创建成功！", url('admin/group/access'));
 			}else{
 				return $this->error($this->rule->getError());
 			}
@@ -229,8 +229,8 @@ class Group extends Admin {
 	public function editnode($id){
 		if (IS_POST) {
 			$result = $this->rule->change();
-			if ($result) {
-				return $this->success("更新成功！");
+			if (false !== $result) {
+				return $this->success("更新成功！", url('admin/group/access'));
 			}else{
 				return $this->error("更新失败！");
 			}
