@@ -1,4 +1,12 @@
 <?php
+// +----------------------------------------------------------------------
+// | SentCMS [ WE CAN DO IT JUST THINK IT ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2013 http://www.tensent.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Author: molong <molong@tensent.cn> <http://www.tensent.cn>
+// +----------------------------------------------------------------------
+
 namespace app\common\widget;
 
 /**
@@ -7,7 +15,7 @@ namespace app\common\widget;
  */
 class Form {
 
-	public function show($field, $info){
+	public function show($field, $info) {
 		$type = isset($field['type']) ? $field['type'] : 'text';
 		//类型合并
 		if (in_array($type, array('string'))) {
@@ -17,16 +25,16 @@ class Form {
 			$type = 'image';
 		}
 		$data = array(
-			'type'      => $type,
-			'field'    => isset($field['name']) ? $field['name'] : '',
-			'value'     => isset($info[$field['name']]) ? $info[$field['name']] : '',
-			'size'      => isset($field['size']) ? $field['size'] : 12,
-			'option'    =>isset($field['option']) ? $field['option'] : ''
+			'type'   => $type,
+			'field'  => isset($field['name']) ? $field['name'] : '',
+			'value'  => isset($info[$field['name']]) ? $info[$field['name']] : '',
+			'size'   => isset($field['size']) ? $field['size'] : 12,
+			'option' => isset($field['option']) ? $field['option'] : '',
 		);
-		$no_tem = array('readonly', 'text', 'password', 'textarea', 'select', 'bind', 'checkbox', 'radio', 'num','bool','decimal');
-		$type = !in_array($type, $no_tem) ? $type : 'show';
-		$view = new \think\View();
+		$no_tem = array('readonly', 'text', 'password', 'textarea', 'select', 'bind', 'checkbox', 'radio', 'num', 'bool', 'decimal');
+		$type   = !in_array($type, $no_tem) ? $type : 'show';
+		$view   = new \think\View();
 		$view->assign($data);
-		return $view->fetch('common@default/form/'.$type);
+		return $view->fetch('common@default/form/' . $type);
 	}
 }

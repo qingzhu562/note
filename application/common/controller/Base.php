@@ -9,7 +9,7 @@
 
 namespace app\common\controller;
 
-class Base extends \think\Controller{
+class Base extends \think\Controller {
 
 	protected $url;
 	protected $request;
@@ -17,31 +17,31 @@ class Base extends \think\Controller{
 	protected $controller;
 	protected $action;
 
-	public function _initialize(){
+	public function _initialize() {
 		if (!is_file(APP_PATH . 'database.php') || !is_file(APP_PATH . 'install.lock')) {
 			return $this->redirect('install/index/index');
 		}
 		/* 读取数据库中的配置 */
-		$config =   cache('db_config_data');
-		if(!$config){
-			$config =   model('Config')->lists();
-			cache('db_config_data',$config);
+		$config = cache('db_config_data');
+		if (!$config) {
+			$config = model('Config')->lists();
+			cache('db_config_data', $config);
 		}
 		config($config);
 		//获取request信息
 		$this->requestInfo();
 	}
 
-	public function execute($mc = null, $op = '', $ac = null){
+	public function execute($mc = null, $op = '', $ac = null) {
 		$op = $op ? $op : $this->request->module();
-		if(\think\Config::get('url_case_insensitive')){
+		if (\think\Config::get('url_case_insensitive')) {
 			$mc = ucfirst(parse_name($mc, 1));
-			$op = parse_name($op,1);
+			$op = parse_name($op, 1);
 		}
-		
-		if(!empty($mc) && !empty($op) && !empty($ac)){
-			$ops = ucwords($op);
-			$class = "\\addons\\{$mc}\\controller\\{$ops}";
+
+		if (!empty($mc) && !empty($op) && !empty($ac)) {
+			$ops    = ucwords($op);
+			$class  = "\\addons\\{$mc}\\controller\\{$ops}";
 			$addons = new $class;
 			$addons->$ac();
 		} else {
@@ -55,34 +55,38 @@ class Base extends \think\Controller{
 	 * @param string $tablepre  自己的前缀
 	 * @return multitype:string 返回最终需要的sql语句
 	 */
-	public function sql_split($sql, $tablepre) {
-		if ($tablepre != "sent_")
+	public function sqlSplit($sql, $tablepre) {
+		if ($tablepre != "sent_") {
 			$sql = str_replace("sent_", $tablepre, $sql);
-			$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=utf8", $sql);
+		}
 
-			if ($r_tablepre != $s_tablepre){
-				$sql = str_replace($s_tablepre, $r_tablepre, $sql);
-				$sql = str_replace("\r", "\n", $sql);
-				$ret = array();
-				$num = 0;
-				$queriesarray = explode(";\n", trim($sql));
-				unset($sql);
-				foreach ($queriesarray as $query) {
-					$ret[$num] = '';
-					$queries = explode("\n", trim($query));
-					$queries = array_filter($queries);
-					foreach ($queries as $query) {
-						$str1 = substr($query, 0, 1);
-						if ($str1 != '#' && $str1 != '-')
-							$ret[$num] .= $query;
+		$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=utf8", $sql);
+
+		if ($r_tablepre != $s_tablepre) {
+			$sql          = str_replace($s_tablepre, $r_tablepre, $sql);
+			$sql          = str_replace("\r", "\n", $sql);
+			$ret          = array();
+			$num          = 0;
+			$queriesarray = explode(";\n", trim($sql));
+			unset($sql);
+			foreach ($queriesarray as $query) {
+				$ret[$num] = '';
+				$queries   = explode("\n", trim($query));
+				$queries   = array_filter($queries);
+				foreach ($queries as $query) {
+					$str1 = substr($query, 0, 1);
+					if ($str1 != '#' && $str1 != '-') {
+						$ret[$num] .= $query;
 					}
-					$num++;
+
 				}
+				$num++;
 			}
+		}
 		return $ret;
 	}
 
-	protected function setSeo($title = '', $keywords = '', $description = ''){
+	protected function setSeo($title = '', $keywords = '', $description = '') {
 		$seo = array(
 			'title'       => $title,
 			'keywords'    => $keywords,
@@ -94,7 +98,7 @@ class Base extends \think\Controller{
 			if (is_array($item)) {
 				$item = implode(',', $item);
 			}
-			$meta[$key] = str_replace("[".$key."]", $item . '|', $meta[$key]);
+			$meta[$key] = str_replace("[" . $key . "]", $item . '|', $meta[$key]);
 		}
 
 		$data = array(
@@ -105,15 +109,13 @@ class Base extends \think\Controller{
 		$this->assign($data);
 	}
 
-
-
 	/**
 	 * 验证码
 	 * @param  integer $id 验证码ID
 	 * @author 郭平平 <molong@tensent.cn>
 	 */
-	public function verify($id = 1){
-		$verify = new \org\Verify(array('length'=>4));
+	public function verify($id = 1) {
+		$verify = new \org\Verify(array('length' => 4));
 		$verify->entry($id);
 	}
 
@@ -123,20 +125,20 @@ class Base extends \think\Controller{
 	 * @return boolean     检测结果
 	 * @author 麦当苗儿 <zuojiazi@vip.qq.com>
 	 */
-	public function checkVerify($code, $id = 1){
+	public function checkVerify($code, $id = 1) {
 		if ($code) {
 			$verify = new \org\Verify();
 			$result = $verify->check($code, $id);
 			if (!$result) {
 				return $this->error("验证码错误！", "");
 			}
-		}else{
+		} else {
 			return $this->error("验证码为空！", "");
 		}
 	}
 
 	//request信息
-	protected function requestInfo(){
+	protected function requestInfo() {
 		$this->param = $this->request->param();
 		defined('MODULE_NAME') or define('MODULE_NAME', $this->request->module());
 		defined('CONTROLLER_NAME') or define('CONTROLLER_NAME', $this->request->controller());
@@ -144,17 +146,17 @@ class Base extends \think\Controller{
 		defined('IS_POST') or define('IS_POST', $this->request->isPost());
 		defined('IS_GET') or define('IS_GET', $this->request->isGet());
 		$this->url = $this->request->module() . '/' . $this->request->controller() . '/' . $this->request->action();
-		$this->assign('request',$this->request);
-		$this->assign('param',$this->param);
+		$this->assign('request', $this->request);
+		$this->assign('param', $this->param);
 	}
 
 	/**
 	 * 获取单个参数的数组形式
 	 */
-	protected function getArrayParam($param){
+	protected function getArrayParam($param) {
 		if (isset($this->param['id'])) {
-			return array_unique((array)$this->param[$param]);
-		}else{
+			return array_unique((array) $this->param[$param]);
+		} else {
 			return array();
 		}
 	}

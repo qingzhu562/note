@@ -9,9 +9,9 @@
 
 namespace app\common\controller;
 
-class Fornt extends Base{
+class Fornt extends Base {
 
-	public function _initialize(){
+	public function _initialize() {
 		parent::_initialize();
 
 		//判读是否为关闭网站
@@ -27,7 +27,7 @@ class Fornt extends Base{
 	}
 
 	//当前栏目导航
-	protected function setHoverNav(){
+	protected function setHoverNav() {
 		//dump($_SERVER['PHP_SELF']);
 	}
 }

@@ -2,7 +2,7 @@
 		<div id="picker_{$field}" class="picker_button">上传文件</div>
 		<input type="hidden" name="{$field}" id="field_{$field}" value="{$value|default=''}">
 		<div id="fileList_{$field}" class="upload-file-list-info" style="width:280px;">
-		{if isset($value)}
+		{if isset($value) && $value}
 			<li class="affix-list-item" id="WU_FILE_0">
 				<div class="upload-file-info">
 					<span class="webuploader-pick-file-close" data-queued-id="WU_FILE_0" data-id="{$value}" data-fileurl="{$value|get_file=###,"savename"}"><i class="close"></i></span>

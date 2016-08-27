@@ -99,7 +99,7 @@ function rand_string($len = 6, $type = '', $addChars = '') {
 		break;
 	}
 	if ($len > 10) {
-//位数过长重复字符串一定次数
+		//位数过长重复字符串一定次数
 		$chars = $type == 1 ? str_repeat($chars, $len) : str_repeat($chars, 5);
 	}
 	if ($type != 4) {
@@ -275,7 +275,7 @@ function get_file($file_id, $field = null) {
 	$file = db('File')->where(array('id' => $file_id))->find();
 	if ($field == 'path') {
 		return $file['savepath'];
-	}elseif ($field == 'time') {
+	} elseif ($field == 'time') {
 		return date('Y-m-d H:i:s', $file['create_time']);
 	}
 	return empty($field) ? $file : $file[$field];
