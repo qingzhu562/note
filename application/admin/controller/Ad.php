@@ -15,22 +15,22 @@ class Ad extends Admin {
 	protected $ad;
 	protected $adplace;
 
-	public function _initialize(){
+	public function _initialize() {
 		parent::_initialize();
-		$this->ad = db('Ad');
+		$this->ad      = db('Ad');
 		$this->adplace = db('AdPlace');
 	}
 	/**
-	* 插件列表
-	*/
-	public function index(){
-		$map = array();
+	 * 插件列表
+	 */
+	public function index() {
+		$map   = array();
 		$order = "id desc";
 
 		$list = db('AdPlace')->where($map)->order($order)->paginate(10);
 		$data = array(
-			'list'  => $list,
-			'page'  => $list->render()
+			'list' => $list,
+			'page' => $list->render(),
 		);
 		$this->assign($data);
 		$this->setMeta("广告管理");
@@ -40,18 +40,18 @@ class Ad extends Admin {
 	/**
 	 * 广告位添加
 	 */
-	public function add(){
+	public function add() {
 		$place = model('AdPlace');
 		if (IS_POST) {
 			$result = $place->change();
 			if (false !== false) {
 				return $this->success("添加成功！");
-			}else{
+			} else {
 				return $this->error($place->getError());
 			}
-		}else{
+		} else {
 			$data = array(
-				'keyList' => $place->keyList
+				'keyList' => $place->keyList,
 			);
 			$this->assign($data);
 			$this->setMeta("添加广告位");
@@ -59,23 +59,23 @@ class Ad extends Admin {
 		}
 	}
 
-	public function edit($id = null){
+	public function edit($id = null) {
 		$place = model('AdPlace');
 		if (IS_POST) {
 			$result = $place->change();
 			if ($result) {
 				return $this->success("修改成功！", url('admin/ad/index'));
-			}else{
+			} else {
 				return $this->error($this->adplace->getError());
 			}
-		}else{
-			$info = db('AdPlace')->where(array('id'=>$id))->find();
+		} else {
+			$info = db('AdPlace')->where(array('id' => $id))->find();
 			if (!$info) {
 				return $this->error("非法操作！");
 			}
 			$data = array(
-				'info'   => $info,
-				'keyList' => $place->keyList
+				'info'    => $info,
+				'keyList' => $place->keyList,
 			);
 			$this->assign($data);
 			$this->setMeta("编辑广告位");
@@ -83,50 +83,50 @@ class Ad extends Admin {
 		}
 	}
 
-	public function del(){
+	public function del() {
 		$id = $this->getArrayParam('id');
 
 		if (empty($id)) {
 			return $this->error("非法操作！");
 		}
-		$map['id'] = array('IN',$id);
-		$result = $this->adplace->where($map)->delete();
+		$map['id'] = array('IN', $id);
+		$result    = $this->adplace->where($map)->delete();
 		if ($result) {
 			return $this->success("删除成功！");
-		}else{
+		} else {
 			return $this->error("删除失败！");
 		}
 	}
 
-	public function lists($id = null){
+	public function lists($id = null) {
 		$map['place_id'] = $id;
-		$order = "id desc";
+		$order           = "id desc";
 
 		$list = db('Ad')->where($map)->order($order)->paginate(10);
 		$data = array(
-			'id'  => $id,
-			'list'  => $list,
-			'page'  => $list->render()
+			'id'   => $id,
+			'list' => $list,
+			'page' => $list->render(),
 		);
 		$this->assign($data);
 		$this->setMeta("广告管理");
 		return $this->fetch();
 	}
 
-	public function addad($id){
+	public function addad($id) {
 		$ad = model('ad');
 		if (IS_POST) {
 			$result = $ad->change();
 			if ($result) {
-				return $this->success("添加成功！", url('admin/ad/lists',array('id'=>$this->param['place_id'])));
-			}else{
+				return $this->success("添加成功！", url('admin/ad/lists', array('id' => $this->param['place_id'])));
+			} else {
 				return $this->error($ad->getError());
 			}
-		}else{
+		} else {
 			$info['place_id'] = $id;
-			$data = array(
-				'info'   => $info,
-				'keyList' => $ad->keyList
+			$data             = array(
+				'info'    => $info,
+				'keyList' => $ad->keyList,
 			);
 			$this->assign($data);
 			$this->setMeta("添加广告位");
@@ -134,23 +134,23 @@ class Ad extends Admin {
 		}
 	}
 
-	public function editad($id = null){
+	public function editad($id = null) {
 		$ad = model('ad');
 		if (IS_POST) {
 			$result = $ad->change();
 			if ($result) {
-				return $this->success("修改成功！", url('admin/ad/lists',array('id'=>$this->param['place_id'])));
-			}else{
+				return $this->success("修改成功！", url('admin/ad/lists', array('id' => $this->param['place_id'])));
+			} else {
 				return $this->error($ad->getError());
 			}
-		}else{
-			$info = db('ad')->where(array('id'=>$id))->find();
+		} else {
+			$info = db('ad')->where(array('id' => $id))->find();
 			if (!$info) {
 				return $this->error("非法操作！");
 			}
 			$data = array(
-				'info'   => $info,
-				'keyList' => $ad->keyList
+				'info'    => $info,
+				'keyList' => $ad->keyList,
 			);
 			$this->assign($data);
 			$this->setMeta("编辑广告位");
@@ -158,17 +158,17 @@ class Ad extends Admin {
 		}
 	}
 
-	public function delad(){
+	public function delad() {
 		$id = $this->getArrayParam('id');
 
 		if (empty($id)) {
 			return $this->error("非法操作！");
 		}
-		$map['id'] = array('IN',$id);
-		$result = db('ad')->where($map)->delete();
+		$map['id'] = array('IN', $id);
+		$result    = db('ad')->where($map)->delete();
 		if ($result) {
 			return $this->success("删除成功！");
-		}else{
+		} else {
 			return $this->error("删除失败！");
 		}
 	}

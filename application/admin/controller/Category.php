@@ -218,7 +218,7 @@ class Category extends Admin {
 	}
 
 	public function status() {
-		$id = $this->getArrayParam('id');
+		$id     = $this->getArrayParam('id');
 		$status = input('status', '0', 'trim,intval');
 
 		if (!$id) {

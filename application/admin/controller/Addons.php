@@ -275,10 +275,8 @@ class Addons extends Admin {
 
 	//超级管理员删除钩子
 	public function delhook() {
-		$id  = input('id', '', 'trim,intval');
-		$ids = input('post.ids/a', array());
-		array_push($ids, $id);
-		$map['id'] = array('IN', $ids);
+		$id = $this->getArrayParam('id');
+		$map['id'] = array('IN', $id);
 		$result    = $this->hooks->where($map)->delete();
 		if ($result !== false) {
 			return $this->success('删除成功');
