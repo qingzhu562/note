@@ -269,6 +269,7 @@ class Content extends Admin {
 		if ($this->modelInfo['extend'] == 1) {
 			$category  = isset($data['category']) ? $data['category'] : '';
 			$cate_list = parse_field_bind('category', $category, 0);
+			$map['model_id'] = $this->model_id;
 			$this->assign('cate_list', $cate_list);
 		}
 		$this->assign($data);
