@@ -908,9 +908,11 @@ class Query
                 $where = $field;
             } elseif ($field) {
                 // 字符串查询
-                $where[] = ['exp', $field];
-            } else {
-                $where = '';
+                if (is_numeric($field)) {
+                    $where[] = ['exp', $field];
+                } else {
+                    $where[$field] = ['null', ''];
+                }
             }
         } elseif (is_array($op)) {
             $where[$field] = $param;
@@ -1227,7 +1229,7 @@ class Query
     /**
      * 设置查询数据不存在是否抛出异常
      * @access public
-     * @param bool $fail 是否严格检查字段
+     * @param bool $fail 数据不存在是否抛出异常
      * @return $this
      */
     public function failException($fail = true)
@@ -1855,7 +1857,8 @@ class Query
         $resultSet = false;
         if (empty($options['fetch_sql']) && !empty($options['cache'])) {
             // 判断查询缓存
-            $cache     = $options['cache'];
+            $cache = $options['cache'];
+            unset($options['cache']);
             $key       = is_string($cache['key']) ? $cache['key'] : md5(serialize($options));
             $resultSet = Cache::get($key);
         }
@@ -1883,7 +1886,7 @@ class Query
         }
 
         // 返回结果处理
-        if ($this->connection->getNumRows()) {
+        if (count($resultSet) > 0) {
             // 数据列表读取后的处理
             if (!empty($this->model)) {
                 // 生成模型对象
