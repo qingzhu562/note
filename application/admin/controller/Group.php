@@ -127,26 +127,13 @@ class Group extends Admin {
 	//根据菜单更新节点
 	public function upnode($type) {
 		$rule = model('Menu')->getAuthNodes($type);
-		foreach ($rule as $value) {
-			$data = array(
-				'module' => $type,
-				'type'   => 2,
-				'name'   => $value['url'],
-				'title'  => $value['title'],
-				'group'  => $value['group'],
-				'status' => 1,
-			);
-			$id = $this->rule->where(array('name' => $data['name']))->value('id');
-			if ($id) {
-				$data['id'] = $id;
-				$this->rule->save($data, array('id' => $id));
-			} else {
-				$this->rule->save($data);
-			}
-		}
+		$reuslt = $this->rule->uprule($rule, $type);
 		return $this->success("更新成功！");
 	}
 
+	/**
+	 * 授权
+	 */
 	public function auth($id) {
 		if (!$id) {
 			return $this->error("非法操作！");
