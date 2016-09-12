@@ -89,24 +89,22 @@ abstract class Builder
 
         $result = [];
         foreach ($data as $key => $val) {
+            $item = $this->parseKey($key);
             if (!in_array($key, $fields, true)) {
                 if ($options['strict']) {
                     throw new Exception('fields not exists:[' . $key . ']');
                 }
-            } else {
-                $item = $this->parseKey($key);
-                if (isset($val[0]) && 'exp' == $val[0]) {
-                    $result[$item] = $val[1];
-                } elseif (is_null($val)) {
-                    $result[$item] = 'NULL';
-                } elseif (is_scalar($val)) {
-                    // 过滤非标量数据
-                    if ($this->query->isBind(substr($val, 1))) {
-                        $result[$item] = $val;
-                    } else {
-                        $this->query->bind($key, $val, isset($bind[$key]) ? $bind[$key] : PDO::PARAM_STR);
-                        $result[$item] = ':' . $key;
-                    }
+            } elseif (isset($val[0]) && 'exp' == $val[0]) {
+                $result[$item] = $val[1];
+            } elseif (is_null($val)) {
+                $result[$item] = 'NULL';
+            } elseif (is_scalar($val)) {
+                // 过滤非标量数据
+                if ($this->query->isBind(substr($val, 1))) {
+                    $result[$item] = $val;
+                } else {
+                    $this->query->bind($key, $val, isset($bind[$key]) ? $bind[$key] : PDO::PARAM_STR);
+                    $result[$item] = ':' . $key;
                 }
             }
         }
@@ -224,43 +222,34 @@ abstract class Builder
         }
 
         $whereStr = '';
-        // 获取字段信息
-        $fields = $this->query->getTableFields($options);
-        $binds  = $this->query->getFieldsBind($options);
         foreach ($where as $key => $val) {
             $str = [];
             foreach ($val as $field => $value) {
-                if ($fields && in_array($field, $fields, true) && is_scalar($value) && !$this->query->isBind($field)) {
-                    $this->query->bind($field, $value, isset($binds[$field]) ? $binds[$field] : PDO::PARAM_STR);
-                    $value = ':' . $field;
-                }
                 if ($value instanceof \Closure) {
                     // 使用闭包查询
                     $query = new Query($this->connection);
                     call_user_func_array($value, [ & $query]);
                     $str[] = ' ' . $key . ' ( ' . $this->buildWhere($query->getOptions('where'), $options) . ' )';
-                } else {
-                    if (strpos($field, '|')) {
-                        // 不同字段使用相同查询条件（OR）
-                        $array = explode('|', $field);
-                        $item  = [];
-                        foreach ($array as $k) {
-                            $item[] = $this->parseWhereItem($k, $value, '', $options);
-                        }
-                        $str[] = ' ' . $key . ' ( ' . implode(' OR ', $item) . ' )';
-                    } elseif (strpos($field, '&')) {
-                        // 不同字段使用相同查询条件（AND）
-                        $array = explode('&', $field);
-                        $item  = [];
-                        foreach ($array as $k) {
-                            $item[] = $this->parseWhereItem($k, $value, '', $options);
-                        }
-                        $str[] = ' ' . $key . ' ( ' . implode(' AND ', $item) . ' )';
-                    } else {
-                        // 对字段使用表达式查询
-                        $field = is_string($field) ? $field : '';
-                        $str[] = ' ' . $key . ' ' . $this->parseWhereItem($field, $value, $key, $options);
+                } elseif (strpos($field, '|')) {
+                    // 不同字段使用相同查询条件（OR）
+                    $array = explode('|', $field);
+                    $item  = [];
+                    foreach ($array as $k) {
+                        $item[] = $this->parseWhereItem($k, $value, '', $options);
                     }
+                    $str[] = ' ' . $key . ' ( ' . implode(' OR ', $item) . ' )';
+                } elseif (strpos($field, '&')) {
+                    // 不同字段使用相同查询条件（AND）
+                    $array = explode('&', $field);
+                    $item  = [];
+                    foreach ($array as $k) {
+                        $item[] = $this->parseWhereItem($k, $value, '', $options);
+                    }
+                    $str[] = ' ' . $key . ' ( ' . implode(' AND ', $item) . ' )';
+                } else {
+                    // 对字段使用表达式查询
+                    $field = is_string($field) ? $field : '';
+                    $str[] = ' ' . $key . ' ' . $this->parseWhereItem($field, $value, $key, $options);
                 }
             }
 

@@ -15,6 +15,7 @@ use think\App;
 use think\Config;
 use think\exception\HttpException;
 use think\Hook;
+use think\Loader;
 use think\Log;
 use think\Request;
 use think\Response;
@@ -853,9 +854,10 @@ class Route
      * @param string    $url URL地址
      * @param string    $depr URL分割符
      * @param string    $group 路由分组名
+     * @param array     $options 路由参数（分组）
      * @return mixed
      */
-    private static function checkRoute($request, $rules, $url, $depr = '/', $group = '')
+    private static function checkRoute($request, $rules, $url, $depr = '/', $group = '', $options = [])
     {
         foreach ($rules as $key => $item) {
             if (true === $item) {
@@ -892,7 +894,7 @@ class Route
                     continue;
                 }
 
-                $result = self::checkRoute($request, $rule, $url, $depr, $key);
+                $result = self::checkRoute($request, $rule, $url, $depr, $key, $option);
                 if (false !== $result) {
                     return $result;
                 }
@@ -905,6 +907,9 @@ class Route
                 }
                 if ($group) {
                     $rule = $group . ($rule ? '/' . ltrim($rule, '/') : '');
+                }
+                if (isset($options['bind_model']) && isset($option['bind_model'])) {
+                    $option['bind_model'] = array_merge($options['bind_model'], $option['bind_model']);
                 }
                 $result = self::checkRule($rule, $route, $url, $pattern, $option);
                 if (false !== $result) {
@@ -1003,7 +1008,7 @@ class Route
         if (!empty($array[1])) {
             self::parseUrlParams($array[1]);
         }
-        return ['type' => 'method', 'method' => [$class, $action], 'params' => []];
+        return ['type' => 'method', 'method' => [$class, $action]];
     }
 
     /**
@@ -1022,7 +1027,7 @@ class Route
         if (!empty($array[2])) {
             self::parseUrlParams($array[2]);
         }
-        return ['type' => 'method', 'method' => [$namespace . '\\' . $class, $method], 'params' => []];
+        return ['type' => 'method', 'method' => [$namespace . '\\' . $class, $method]];
     }
 
     /**
@@ -1040,7 +1045,7 @@ class Route
         if (!empty($array[1])) {
             self::parseUrlParams($array[1]);
         }
-        return ['type' => 'controller', 'controller' => $controller . '/' . $action, 'params' => []];
+        return ['type' => 'controller', 'controller' => $controller . '/' . $action];
     }
 
     /**
@@ -1327,6 +1332,44 @@ class Route
             }
         }
 
+        // 绑定模型数据
+        if (isset($option['bind_model'])) {
+            $bind = [];
+            foreach ($option['bind_model'] as $key => $val) {
+                if ($val instanceof \Closure) {
+                    $result = call_user_func_array($val, [$matches]);
+                } else {
+                    if (is_array($val)) {
+                        $fields    = explode('&', $val[1]);
+                        $model     = $val[0];
+                        $exception = isset($val[2]) ? $val[2] : true;
+                    } else {
+                        $fields    = ['id'];
+                        $model     = $val;
+                        $exception = true;
+                    }
+                    $where = [];
+                    $match = true;
+                    foreach ($fields as $field) {
+                        if (!isset($matches[$field])) {
+                            $match = false;
+                            break;
+                        } else {
+                            $where[$field] = $matches[$field];
+                        }
+                    }
+                    if ($match) {
+                        $query  = strpos($model, '\\') ? $model::where($where) : Loader::model($model)->where($where);
+                        $result = $query->failException($exception)->find();
+                    }
+                }
+                if (!empty($result)) {
+                    $bind[$key] = $result;
+                }
+            }
+            $matches = array_merge($matches, $bind);
+        }
+
         // 解析额外参数
         self::parseUrlParams(empty($paths) ? '' : implode('/', $paths), $matches);
         // 记录匹配的路由信息
@@ -1346,7 +1389,7 @@ class Route
             }
             // 路由规则重定向
             if ($result instanceof Response) {
-                return ['type' => 'response', 'response' => $result, 'params' => $matches];
+                return ['type' => 'response', 'response' => $result];
             } elseif (is_array($result)) {
                 return $result;
             }
@@ -1354,17 +1397,17 @@ class Route
 
         if ($route instanceof \Closure) {
             // 执行闭包
-            $result = ['type' => 'function', 'function' => $route, 'params' => $matches];
+            $result = ['type' => 'function', 'function' => $route];
         } elseif (0 === strpos($route, '/') || 0 === strpos($route, 'http')) {
             // 路由到重定向地址
             $result = ['type' => 'redirect', 'url' => $route, 'status' => isset($option['status']) ? $option['status'] : 301];
         } elseif (0 === strpos($route, '\\')) {
             // 路由到方法
             $method = strpos($route, '@') ? explode('@', $route) : $route;
-            $result = ['type' => 'method', 'method' => $method, 'params' => $matches];
+            $result = ['type' => 'method', 'method' => $method];
         } elseif (0 === strpos($route, '@')) {
             // 路由到控制器
-            $result = ['type' => 'controller', 'controller' => substr($route, 1), 'params' => $matches];
+            $result = ['type' => 'controller', 'controller' => substr($route, 1)];
         } else {
             // 路由到模块/控制器/操作
             $result = self::parseModule($route);
