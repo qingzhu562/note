@@ -31,7 +31,7 @@ class Form {
 			'size'   => isset($field['size']) ? $field['size'] : 12,
 			'option' => isset($field['option']) ? $field['option'] : '',
 		);
-		$no_tem = array('readonly', 'text', 'password', 'textarea', 'select', 'bind', 'checkbox', 'radio', 'num', 'bool', 'decimal');
+		$no_tem = array('readonly', 'text', 'password','checkbox', 'textarea', 'select', 'bind', 'checkbox', 'radio', 'num', 'bool', 'decimal');
 		$type   = !in_array($type, $no_tem) ? $type : 'show';
 		$view   = new \think\View();
 		$view->assign($data);
