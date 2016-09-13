@@ -39,10 +39,10 @@
 	</select>
 	{/case}
 	{case value="checkbox"}
-		{php}$value = isset($value) ? $value : 1;{/php}
+		{php}$value = isset($value) && is_array($value) ? $value : array();{/php}
 		{volist name="option" id="item"}
 		<div class="checkbox-nice checkbox-inline">
-			<input type="checkbox" name="{$field}[]" id="{$field}-{$key}" value="{$key}" {if $key == $value}checked{/if}/>
+			<input type="checkbox" name="{$field}[]" id="{$field}-{$key}" value="{$key}" {if in_array($key, $value)}checked{/if}/>
 			<label for="{$field}-{$key}">{$item}</label>
 		</div>
 		{/volist}
