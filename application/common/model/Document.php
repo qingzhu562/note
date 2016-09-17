@@ -83,7 +83,7 @@ class Document extends \think\model\Merge{
 
 		if ($data !== false) {
             //增加增加复选框 shu'zu数组保存 
-            foreach($data ad $key=>$val){
+            foreach($data as $key=>$val){
                 if(is_array($val)){
                     $data[$key] = implode(',', $val);
                 }
@@ -115,7 +115,8 @@ class Document extends \think\model\Merge{
 
 	public function detail($id){
 		$data = $this->get($id);
-        $model_type = db('attribute')->where('model_id'=>$data['model_id'], 'type'=>array('in', 'checkbox'))->column('name');
+		$map = array('model_id'=>$data['model_id'], 'type'=>array('in', 'checkbox'));
+        $model_type = db('attribute')->where($map)->column('name');
         foreach($model_type as $val){
             $data->setAttr($val, explode(',', $data[$val]));
         }
