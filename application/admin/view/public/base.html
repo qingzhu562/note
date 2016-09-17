@@ -207,7 +207,7 @@
 												{if $meta_title}
 												<span>{$meta_title}</span>
 												{else/}
-												<span>{:lang($Request->controller().'_'.$Request->action())}</span>
+												<span>{:lang(request()->controller().'_'.request()->action())}</span>
 												{/if}
 											</li>
 										</ol>

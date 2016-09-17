@@ -85,12 +85,13 @@ class Hooks extends Base {
 						'update_time'  => time(),
 						'status'       => 1
 					);
-					$this->save($save);
+					self::create($save);
 				}else{
 					if ($info['addons']) {
-						# code...
+						$addons = explode(',', $info['addons']);
+						array_push($addons, substr($item, 0, -5));
 					}else{
-						$addons = substr($item, 0, -5);
+						$addons = array(substr($item, 0, -5));
 					}
 					$this->where('name', $addons_name)->setField('addons', $addons);
 				}
@@ -105,6 +106,14 @@ class Hooks extends Base {
 			$this->error = "未实现{$addons_name}插件的入口文件";
 			return false;
 		}
-		$methods = get_class_methods($addons_class);
+		$row = $this->where(array('addons'=>array('like',$addons_name)))->select();
+		foreach ($row as $key => $value) {
+			$value['addons'] = explode(',', $info['addons']);
+			$key = array_search($addons_name, $value['addons']);
+			unset($value['addons'][$key]);
+			$addons = $value['addons'];
+			$this->where('id', $value['id'])->setField('addons', $addons);
+		}
+		return true;
 	}
 }

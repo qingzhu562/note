@@ -9,6 +9,7 @@
 			<h2>{$meta_title}</h2>
 		</div>
 		<div class="pull-right">
+			<a class="btn btn-info" href="{:url('index?refresh=1')}">更 新</a>
 			<a class="btn btn-primary" href="{:url('add')}">新 增</a>
 			<button class="btn btn-danger ajax-post confirm" url="{:url('del')}" target-form="ids">删 除</button>
 		</div>
@@ -41,7 +42,7 @@
 						<td>{$item['author']}</td>
 						<td>{$item['version']}</td>
 						<td>
-							{if $item['uninstall']}
+							{if !$item['isinstall']}
 							<a href="{:url('install?addon_name='.$item['name'])}" class="ajax-get">安装</a>
 							{else/}
 							<a href="{:url('uninstall?id='.$item['id'])}" class="confirm ajax-get">卸载</a>

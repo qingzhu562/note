@@ -34,7 +34,7 @@ class Addons extends Base {
 
 	public function template($template) {
 		$mc                         = $this->getAddonsName();
-		$ac                         = input('get.ac', '', 'trim,strtolower');
+		$ac                         = input('ac', '', 'trim,strtolower');
 		$parse_str                  = \think\Config::get('parse_str');
 		$parse_str['__ADDONROOT__'] = ROOT_PATH . "/addons/{$mc}";
 		\think\Config::set('parse_str', $parse_str);
@@ -52,7 +52,7 @@ class Addons extends Base {
 	}
 
 	final public function getAddonsName() {
-		$mc = input('get.mc', '', 'trim,strtolower');
+		$mc = input('mc', '', 'trim,strtolower');
 		if ($mc) {
 			return $mc;
 		} else {

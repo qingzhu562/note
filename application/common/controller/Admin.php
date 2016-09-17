@@ -201,6 +201,7 @@ class Admin extends Base {
 		$model = db('Addons');
 		$list  = array();
 		$map   = array(
+			'isinstall' => array('gt', 0),
 			'status' => array('gt', 0),
 		);
 		$list = $model->field("name,id,title,'' as 'style'")->where($map)->select();
