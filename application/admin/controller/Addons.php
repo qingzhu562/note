@@ -275,7 +275,7 @@ class Addons extends Admin {
 
 	//超级管理员删除钩子
 	public function delhook() {
-		$id = $this->getArrayParam('id');
+		$id        = $this->getArrayParam('id');
 		$map['id'] = array('IN', $id);
 		$result    = $this->hooks->where($map)->delete();
 		if ($result !== false) {

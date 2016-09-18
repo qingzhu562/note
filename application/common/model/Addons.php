@@ -87,9 +87,7 @@ class Addons extends \app\common\model\Base {
 			if ($info) {
 				$result = $this->save(array('isinstall'=>1, 'status'=>1), array('id'=>$info));
 			}else{
-				$data['isinstall'] = 1;
-				$data['status'] = 1;
-				$result = $this->save($data);
+				$result = false;
 			}
 			if (false !== $result) {
 				return model('Hooks')->addHooks($data['name']);
