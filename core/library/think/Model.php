@@ -156,24 +156,6 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                 $query->name($this->name);
             }
 
-            if (!empty($this->field)) {
-                if (true === $this->field) {
-                    $type = $this->db()->getTableInfo('', 'type');
-                } else {
-                    $type = [];
-                    foreach ((array) $this->field as $key => $val) {
-                        if (is_int($key)) {
-                            $key = $val;
-                            $val = 'varchar';
-                        }
-                        $type[$key] = $val;
-                    }
-                }
-                $query->setFieldType($type);
-                $this->field = array_keys($type);
-                $query->allowField($this->field);
-            }
-
             if (!empty($this->pk)) {
                 $query->pk($this->pk);
             }
@@ -631,7 +613,6 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
 
         // 检测字段
         if (!empty($this->field)) {
-            $this->db();
             foreach ($this->data as $key => $val) {
                 if (!in_array($key, $this->field)) {
                     unset($this->data[$key]);
@@ -781,9 +762,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
     public function allowField($field)
     {
         if (true === $field) {
-            $field = $this->db()->getTableInfo('', 'type');
-            $this->db()->setFieldType($field);
-            $field = array_keys($field);
+            $field = $this->db()->getTableInfo('', 'fields');
         }
         $this->field = $field;
         return $this;
