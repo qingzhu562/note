@@ -19,7 +19,7 @@
     <div class="main-box-body clearfix">
         <div class="tabs-wrapper">
             <ul class="nav nav-tabs">
-                <li {if condition="!isset($_GET['group'])"}class="active"{/if}><a href="{:url('index')}">全部</a></li>
+                <li {if condition="!$group_id"}class="active"{/if}><a href="{:url('index')}">全部</a></li>
                 {volist name="group" id="item"}
                 <li {if condition="$group_id eq $key"}class="active"{/if}>
                     <a href="{:url('index?group='.$key)}">{$item}</a>

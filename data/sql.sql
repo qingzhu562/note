@@ -134,7 +134,7 @@ CREATE TABLE `sent_addons` (
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '安装时间',
   `has_adminlist` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否有后台列表',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='插件表';
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='插件表';
 
 -- -----------------------------
 -- Records of `sent_addons`
@@ -447,27 +447,26 @@ INSERT INTO `sent_config` VALUES ('9', 'develop_mode', 'bool', '开启开发者�
 INSERT INTO `sent_config` VALUES ('10', 'allow_visit', 'textarea', '不受限控制器方法', '99', '', '', '', '1386644047', '1438075615', '1', '0:article/draftbox\r\n1:article/mydocument\r\n2:Category/tree\r\n3:Index/verify\r\n4:file/upload\r\n5:file/download\r\n6:user/updatePassword\r\n7:user/updateNickname\r\n8:user/submitPassword\r\n9:user/submitNickname\r\n10:file/uploadpicture', '0');
 INSERT INTO `sent_config` VALUES ('11', 'deny_visit', 'textarea', '超管专限控制器方法', '99', '', '仅超级管理员可访问的控制器方法', '', '1386644141', '1438075628', '1', '0:Addons/addhook\r\n1:Addons/edithook\r\n2:Addons/delhook\r\n3:Addons/updateHook\r\n4:Admin/getMenus\r\n5:Admin/recordList\r\n6:AuthManager/updateRules\r\n7:AuthManager/tree', '0');
 INSERT INTO `sent_config` VALUES ('12', 'admin_allow_ip', 'text', '后台允许访问IP', '99', '', '多个用逗号分隔，如果不配置表示不限制IP访问', '', '1387165454', '1452307198', '1', '', '12');
-INSERT INTO `sent_config` VALUES ('13', 'show_page_trace', 'bool', '是否显示页面Trace', '99', '0:关闭\r\n1:开启', '是否显示页面Trace信息', '', '1387165685', '1447306056', '1', '0', '1');
-INSERT INTO `sent_config` VALUES ('14', 'web_site_title', 'text', '网站标题', '1', '', '网站标题前台显示标题', '', '1378898976', '1379235274', '1', 'SentCMS网站管理系统', '0');
-INSERT INTO `sent_config` VALUES ('15', 'web_site_url', 'text', '网站URL', '1', '', '网站网址', '', '1378898976', '1379235274', '1', 'http://www.tensent.cn', '1');
-INSERT INTO `sent_config` VALUES ('16', 'web_site_description', 'textarea', '网站描述', '1', '', '网站搜索引擎描述', '', '1378898976', '1379235841', '1', 'SentCMS网站管理系统', '3');
-INSERT INTO `sent_config` VALUES ('17', 'web_site_keyword', 'textarea', '网站关键字', '1', '', '网站搜索引擎关键字', '', '1378898976', '1381390100', '1', 'SentCMS网站管理系统,SentCMS', '6');
-INSERT INTO `sent_config` VALUES ('18', 'web_site_close', 'bool', '关闭站点', '1', '0:否,1:是', '站点关闭后其他用户不能访问，管理员可以正常访问', '', '1378898976', '1447321395', '1', '0', '4');
-INSERT INTO `sent_config` VALUES ('19', 'web_site_icp', 'text', '网站备案号', '1', '', '设置在网站底部显示的备案号，如“赣ICP备13006622号', '', '1378900335', '1379235859', '1', '赣ICP备13006622号', '7');
-INSERT INTO `sent_config` VALUES ('20', 'open_mobile_site', 'bool', '开启手机站', '1', '0:关闭\r\n1:开启', '', '', '1440901307', '1440901543', '1', '0', '4');
-INSERT INTO `sent_config` VALUES ('21', 'list_rows', 'num', '列表条数', '99', '', '', '', '1448937662', '1448937662', '1', '20', '10');
-INSERT INTO `sent_config` VALUES ('22', 'user_allow_register', 'bool', '是否可注册', '2', '1:是\r\n0:否', '', '', '1449043544', '1449043586', '1', '1', '0');
-INSERT INTO `sent_config` VALUES ('23', 'user_group_type', 'textarea', '会员分组类别', '2', '', '', '', '1449196835', '1449196835', '1', 'admin:系统管理员\r\nfront:会员等级', '1');
-INSERT INTO `sent_config` VALUES ('24', 'config_type_list', 'textarea', '字段类型', '99', '', '', '', '1459136529', '1459136529', '1', 'text:单行文本:varchar\r\nstring:字符串:int\r\npassword:密码:varchar\r\ntextarea:文本框:text\r\nbool:布尔型:int\r\nselect:选择:varchar\r\nnum:数字:int\r\ndecimal:金额:decimal\r\ntags:标签:varchar\r\ndatetime:时间控件:int\r\ndate:日期控件:varchar\r\neditor:编辑器:text\r\nbind:模型绑定:int\r\nimage:图片上传:int\r\nimages:多图上传:varchar\r\nattach:文件上传:varchar', '0');
-INSERT INTO `sent_config` VALUES ('25', 'document_position', 'textarea', '文档推荐位', '99', '', '', '', '1453449698', '1453449698', '1', '1:首页推荐\r\n2:列表推荐', '0');
-INSERT INTO `sent_config` VALUES ('26', 'mail_host', 'text', 'smtp服务器的名称', '3', '', 'smtp服务器的名称', '', '1455690530', '1455690556', '1', 'smtp.163.com', '0');
-INSERT INTO `sent_config` VALUES ('27', 'mail_smtpauth', 'select', '启用smtp认证', '3', '0:否,1:是', '启用smtp认证', '', '1455690641', '1455690689', '1', '1', '0');
-INSERT INTO `sent_config` VALUES ('28', 'mail_username', 'text', '邮件发送用户名', '3', '', '邮件发送用户名', '', '1455690771', '1455690771', '1', '你的邮箱账号', '0');
-INSERT INTO `sent_config` VALUES ('29', 'mail_password', 'text', '邮箱密码', '3', '', '邮箱密码，如果是qq邮箱，则填安全密码', '', '1455690802', '1455690802', '1', '你的邮箱密码', '0');
-INSERT INTO `sent_config` VALUES ('30', 'mail_fromname', 'text', '发件人姓名', '3', '', '发件人姓名', '', '1455690838', '1455690838', '1', '发件人姓名', '0');
-INSERT INTO `sent_config` VALUES ('31', 'mail_ishtml', 'select', '是否HTML格式邮件', '3', '0:否,1:是', '是否HTML格式邮件', '', '1455690888', '1455690888', '1', '1', '0');
-INSERT INTO `sent_config` VALUES ('32', 'mail_charset', 'text', '邮件编码', '3', '', '设置发送邮件的编码', '', '1455690920', '1455690920', '1', 'UTF8', '0');
-INSERT INTO `sent_config` VALUES ('33', 'wechat_name', 'text', '微信名称', '4', '', '填写微信名称', '', '1459136529', '1461898406', '1', '', '0');
+INSERT INTO `sent_config` VALUES ('13', 'web_site_title', 'text', '网站标题', '1', '', '网站标题前台显示标题', '', '1378898976', '1379235274', '1', 'SentCMS网站管理系统', '0');
+INSERT INTO `sent_config` VALUES ('14', 'web_site_url', 'text', '网站URL', '1', '', '网站网址', '', '1378898976', '1379235274', '1', 'http://www.tensent.cn', '1');
+INSERT INTO `sent_config` VALUES ('15', 'web_site_description', 'textarea', '网站描述', '1', '', '网站搜索引擎描述', '', '1378898976', '1379235841', '1', 'SentCMS网站管理系统', '3');
+INSERT INTO `sent_config` VALUES ('16', 'web_site_keyword', 'textarea', '网站关键字', '1', '', '网站搜索引擎关键字', '', '1378898976', '1381390100', '1', 'SentCMS网站管理系统,SentCMS', '6');
+INSERT INTO `sent_config` VALUES ('17', 'web_site_close', 'bool', '关闭站点', '1', '0:否,1:是', '站点关闭后其他用户不能访问，管理员可以正常访问', '', '1378898976', '1447321395', '1', '0', '4');
+INSERT INTO `sent_config` VALUES ('18', 'web_site_icp', 'text', '网站备案号', '1', '', '设置在网站底部显示的备案号，如“赣ICP备13006622号', '', '1378900335', '1379235859', '1', '赣ICP备13006622号', '7');
+INSERT INTO `sent_config` VALUES ('19', 'open_mobile_site', 'bool', '开启手机站', '1', '0:关闭\r\n1:开启', '', '', '1440901307', '1440901543', '1', '0', '4');
+INSERT INTO `sent_config` VALUES ('20', 'list_rows', 'num', '列表条数', '99', '', '', '', '1448937662', '1448937662', '1', '20', '10');
+INSERT INTO `sent_config` VALUES ('21', 'user_allow_register', 'bool', '是否可注册', '2', '1:是\r\n0:否', '', '', '1449043544', '1449043586', '1', '1', '0');
+INSERT INTO `sent_config` VALUES ('22', 'user_group_type', 'textarea', '会员分组类别', '2', '', '', '', '1449196835', '1449196835', '1', 'admin:系统管理员\r\nfront:会员等级', '1');
+INSERT INTO `sent_config` VALUES ('23', 'config_type_list', 'textarea', '字段类型', '99', '', '', '', '1459136529', '1459136529', '1', 'text:单行文本:varchar\r\nstring:字符串:int\r\npassword:密码:varchar\r\ntextarea:文本框:text\r\nbool:布尔型:int\r\nselect:选择:varchar\r\nnum:数字:int\r\ndecimal:金额:decimal\r\ntags:标签:varchar\r\ndatetime:时间控件:int\r\ndate:日期控件:varchar\r\neditor:编辑器:text\r\nbind:模型绑定:int\r\nimage:图片上传:int\r\nimages:多图上传:varchar\r\nattach:文件上传:varchar', '0');
+INSERT INTO `sent_config` VALUES ('24', 'document_position', 'textarea', '文档推荐位', '99', '', '', '', '1453449698', '1453449698', '1', '1:首页推荐\r\n2:列表推荐', '0');
+INSERT INTO `sent_config` VALUES ('25', 'mail_host', 'text', 'smtp服务器的名称', '3', '', 'smtp服务器的名称', '', '1455690530', '1455690556', '1', 'smtp.163.com', '0');
+INSERT INTO `sent_config` VALUES ('26', 'mail_smtpauth', 'select', '启用smtp认证', '3', '0:否,1:是', '启用smtp认证', '', '1455690641', '1455690689', '1', '1', '0');
+INSERT INTO `sent_config` VALUES ('27', 'mail_username', 'text', '邮件发送用户名', '3', '', '邮件发送用户名', '', '1455690771', '1455690771', '1', '你的邮箱账号', '0');
+INSERT INTO `sent_config` VALUES ('28', 'mail_password', 'text', '邮箱密码', '3', '', '邮箱密码，如果是qq邮箱，则填安全密码', '', '1455690802', '1455690802', '1', '你的邮箱密码', '0');
+INSERT INTO `sent_config` VALUES ('29', 'mail_fromname', 'text', '发件人姓名', '3', '', '发件人姓名', '', '1455690838', '1455690838', '1', '发件人姓名', '0');
+INSERT INTO `sent_config` VALUES ('30', 'mail_ishtml', 'select', '是否HTML格式邮件', '3', '0:否,1:是', '是否HTML格式邮件', '', '1455690888', '1455690888', '1', '1', '0');
+INSERT INTO `sent_config` VALUES ('31', 'mail_charset', 'text', '邮件编码', '3', '', '设置发送邮件的编码', '', '1455690920', '1455690920', '1', 'UTF8', '0');
+INSERT INTO `sent_config` VALUES ('32', 'wechat_name', 'text', '微信名称', '4', '', '填写微信名称', '', '1459136529', '1461898406', '1', '', '0');
 
 -- -----------------------------
 -- Table structure for `sent_district`

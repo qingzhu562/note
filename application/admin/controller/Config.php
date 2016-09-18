@@ -22,14 +22,16 @@ class Config extends Admin {
 	 * @author 麦当苗儿 <zuojiazi@vip.qq.com>
 	 */
 	public function index() {
+		$group = input('group', 0, 'trim');
+		$name  = input('name', '', 'trim');
 		/* 查询条件初始化 */
-		$map = array();
-		$map = array('status' => 1);
-		if (isset($_GET['group'])) {
-			$map['group'] = input('group', 0);
+		$map          = array('status' => 1);
+		if ($group) {
+			$map['group'] = $group;
 		}
-		if (isset($_GET['name'])) {
-			$map['name'] = array('like', '%' . (string) input('name') . '%');
+
+		if ($name) {
+			$map['name'] = array('like', '%' . $name . '%');
 		}
 
 		$list = $this->model->where($map)->order('id desc')->paginate(25);
@@ -40,7 +42,7 @@ class Config extends Admin {
 			'group'       => config('config_group_list'),
 			'config_type' => config('config_config_list'),
 			'page'        => $list->render(),
-			'group_id'    => input('get.group', 0),
+			'group_id'    => $group,
 			'list'        => $list,
 		);
 
