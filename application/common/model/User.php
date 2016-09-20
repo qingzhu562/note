@@ -128,7 +128,7 @@ class User extends Base{
 		$data['email'] = $email;
 		$result = $this->validate(true)->save($data);
 		if ($result) {
-			$this->data['uid'] = $result;
+			$data['uid'] = $this->data['uid'];
 			$this->extend()->save($data);
 			if ($isautologin) {
 				$this->autoLogin($this->data);
