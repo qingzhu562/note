@@ -214,16 +214,37 @@ class App
     public static function invokeMethod($method, $vars = [])
     {
         if (is_array($method)) {
-            $class   = is_object($method[0]) ? $method[0] : new $method[0];
+            $class   = is_object($method[0]) ? $method[0] : new $method[0](Request::instance());
             $reflect = new \ReflectionMethod($class, $method[1]);
         } else {
             // 静态方法
             $reflect = new \ReflectionMethod($method);
         }
         $args = self::bindParams($reflect, $vars);
-        // 记录执行信息
+
         self::$debug && Log::record('[ RUN ] ' . $reflect->__toString(), 'info');
         return $reflect->invokeArgs(isset($class) ? $class : null, $args);
+    }
+
+    /**
+     * 调用反射执行类的实例化 支持依赖注入
+     * @access public
+     * @param string    $class 类名
+     * @param array     $vars  变量
+     * @return mixed
+     */
+    public static function invokeClass($class, $vars = [])
+    {
+        $reflect     = new \ReflectionClass($class);
+        $constructor = $reflect->getConstructor();
+        if ($constructor) {
+            $args = self::bindParams($constructor, $vars);
+        } else {
+            $args = [];
+        }
+
+        self::$debug && Log::record('[ RUN ] ' . $reflect->__toString(), 'info');
+        return $reflect->newInstanceArgs($args);
     }
 
     /**
@@ -254,9 +275,9 @@ class App
                 $class = $param->getClass();
                 if ($class) {
                     $className = $class->getName();
-                    if (isset($vars[$name]) && $vars[$name] instanceof $className) {
-                        $args[] = $vars[$name];
-                        unset($vars[$name]);
+                    $bind      = Request::instance()->$name;
+                    if ($bind instanceof $className) {
+                        $args[] = $bind;
                     } else {
                         $args[] = method_exists($className, 'instance') ? $className::instance() : new $className();
                     }
@@ -444,12 +465,18 @@ class App
             $path = APP_PATH . $module;
             // 加载模块配置
             $config = Config::load(CONF_PATH . $module . 'config' . CONF_EXT);
-
+            // 读取数据库配置文件
+            $filename = CONF_PATH . $module . 'database' . CONF_EXT;
+            Config::load($filename, 'database');
             // 读取扩展配置文件
-            if ($config['extra_config_list']) {
-                foreach ($config['extra_config_list'] as $name => $file) {
-                    $filename = CONF_PATH . $module . $file . CONF_EXT;
-                    Config::load($filename, is_string($name) ? $name : pathinfo($filename, PATHINFO_FILENAME));
+            if (is_dir(CONF_PATH . $module . 'extra')) {
+                $dir   = CONF_PATH . $module . 'extra';
+                $files = scandir($dir);
+                foreach ($files as $file) {
+                    if (strpos($file, CONF_EXT)) {
+                        $filename = $dir . DS . $file;
+                        Config::load($filename, pathinfo($file, PATHINFO_FILENAME));
+                    }
                 }
             }
 

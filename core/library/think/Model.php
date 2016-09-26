@@ -442,12 +442,16 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                 $value = (bool) $value;
                 break;
             case 'timestamp':
-                $format = !empty($param) ? $param : $this->dateFormat;
-                $value  = date($format, $value);
+                if (!is_null($value)) {
+                    $format = !empty($param) ? $param : $this->dateFormat;
+                    $value  = date($format, $value);
+                }
                 break;
             case 'datetime':
-                $format = !empty($param) ? $param : $this->dateFormat;
-                $value  = date($format, strtotime($value));
+                if (!is_null($value)) {
+                    $format = !empty($param) ? $param : $this->dateFormat;
+                    $value  = date($format, strtotime($value));
+                }
                 break;
             case 'json':
                 $value = json_decode($value, true);
@@ -1346,16 +1350,22 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
 
     public static function __callStatic($method, $params)
     {
+        $query = self::getDb();
         $model = get_called_class();
-        if (!isset(self::$links[$model])) {
-            self::$links[$model] = (new static())->db();
-        }
-        $query = self::$links[$model];
         // 全局作用域
         if (static::$useGlobalScope && method_exists($model, 'base')) {
             call_user_func_array('static::base', [ & $query]);
         }
         return call_user_func_array([$query, $method], $params);
+    }
+
+    protected static function getDb()
+    {
+        $model = get_called_class();
+        if (!isset(self::$links[$model])) {
+            self::$links[$model] = (new static())->db();
+        }
+        return self::$links[$model];
     }
 
     /**
