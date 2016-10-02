@@ -489,51 +489,51 @@ class Query
      */
     public function count($field = '*')
     {
-        return $this->value('COUNT(' . $field . ') AS tp_count', 0);
+        return (int) $this->value('COUNT(' . $field . ') AS tp_count', 0);
     }
 
     /**
      * SUM查询
      * @access public
      * @param string $field 字段名
-     * @return integer
+     * @return float|int
      */
     public function sum($field = '*')
     {
-        return $this->value('SUM(' . $field . ') AS tp_sum', 0);
+        return $this->value('SUM(' . $field . ') AS tp_sum', 0) + 0;
     }
 
     /**
      * MIN查询
      * @access public
      * @param string $field 字段名
-     * @return integer
+     * @return float|int
      */
     public function min($field = '*')
     {
-        return $this->value('MIN(' . $field . ') AS tp_min', 0);
+        return $this->value('MIN(' . $field . ') AS tp_min', 0) + 0;
     }
 
     /**
      * MAX查询
      * @access public
      * @param string $field 字段名
-     * @return integer
+     * @return float|int
      */
     public function max($field = '*')
     {
-        return $this->value('MAX(' . $field . ') AS tp_max', 0);
+        return $this->value('MAX(' . $field . ') AS tp_max', 0) + 0;
     }
 
     /**
      * AVG查询
      * @access public
      * @param string $field 字段名
-     * @return integer
+     * @return float|int
      */
     public function avg($field = '*')
     {
-        return $this->value('AVG(' . $field . ') AS tp_avg', 0);
+        return $this->value('AVG(' . $field . ') AS tp_avg', 0) + 0;
     }
 
     /**
@@ -972,7 +972,7 @@ class Query
     /**
      * 分页查询
      * @param int|null $listRows 每页数量
-     * @param bool     $simple   简洁模式
+     * @param int|bool $simple   简洁模式或者总记录数
      * @param array    $config   配置参数
      *                           page:当前页,
      *                           path:url路径,
@@ -986,6 +986,10 @@ class Query
      */
     public function paginate($listRows = null, $simple = false, $config = [])
     {
+        if (is_int($simple)) {
+            $total  = $simple;
+            $simple = false;
+        }
         $config   = array_merge(Config::get('paginate'), $config);
         $listRows = $listRows ?: $config['list_rows'];
 
@@ -1000,16 +1004,17 @@ class Query
 
         $config['path'] = isset($config['path']) ? $config['path'] : call_user_func([$class, 'getCurrentPath']);
 
-        if (!$simple) {
+        if (!isset($total) && !$simple) {
             $options = $this->getOptions();
             $total   = $this->count();
             $bind    = $this->bind;
             $results = $this->options($options)->bind($bind)->page($page, $listRows)->select();
-        } else {
+        } elseif ($simple) {
             $results = $this->limit(($page - 1) * $listRows, $listRows + 1)->select();
             $total   = null;
+        } else {
+            $results = $this->page($page, $listRows)->select();
         }
-
         return $class::make($results, $listRows, $page, $total, $simple, $config);
     }
 
@@ -1482,7 +1487,11 @@ class Query
      */
     public function getOptions($name = '')
     {
-        return isset($this->options[$name]) ? $this->options[$name] : $this->options;
+        if ('' === $name) {
+            return $this->options;
+        } else {
+            return isset($this->options[$name]) ? $this->options[$name] : null;
+        }
     }
 
     /**

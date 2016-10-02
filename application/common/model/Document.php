@@ -73,7 +73,7 @@ class Document extends \think\model\Merge{
 		if (is_numeric($name)) {
 			$name = db('model')->where(array('id'=>$name))->value('name');
 		}
-		self::$relationModel = array('document_' . $name);
+		$this->relationModel = array('document_' . $name);
 		return $this;
 	}
 
