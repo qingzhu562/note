@@ -15,7 +15,7 @@ namespace app\common\model;
 class Document extends \think\model\Merge{
 
 	protected $fk = 'doc_id';
-	//protected static $relationModel = array('document_article');
+	protected $relationModel = array('document_article');
 
 	// 定义需要自动写入时间戳格式的字段
 	protected $autoWriteTimestamp = array('create_time','update_time','deadline');

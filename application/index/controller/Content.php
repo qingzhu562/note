@@ -125,7 +125,6 @@ class Content extends Fornt {
 		//当为文章模型时
 		$info = $this->model->detail($id);
 
-		//文档模型数据统计,同一台电脑半小时更新一次
 		if ($this->modelInfo['extend'] = 1 && (time() - session('set_content_view')) > 1800) {
 			db('Document')->where(array('id' => $id))->setInc('view');
 			session('set_content_view', time());
