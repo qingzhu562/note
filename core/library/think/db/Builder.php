@@ -180,12 +180,17 @@ abstract class Builder
     protected function parseTable($tables, $options = [])
     {
         $item = [];
-        foreach ((array) $tables as $table) {
-            $table = $this->parseSqlTable($table);
-            if (isset($options['alias'][$table])) {
-                $item[] = $this->parseKey($table) . ' ' . $this->parseKey($options['alias'][$table]);
+        foreach ((array) $tables as $key => $table) {
+            if (!is_numeric($key)) {
+                $key    = $this->parseSqlTable($key);
+                $item[] = $this->parseKey($key) . ' ' . $this->parseKey($table);
             } else {
-                $item[] = $this->parseKey($table);
+                $table = $this->parseSqlTable($table);
+                if (isset($options['alias'][$table])) {
+                    $item[] = $this->parseKey($table) . ' ' . $this->parseKey($options['alias'][$table]);
+                } else {
+                    $item[] = $this->parseKey($table);
+                }
             }
         }
         return implode(',', $item);
@@ -437,8 +442,12 @@ abstract class Builder
                 list($table, $type, $on) = $item;
                 $condition               = [];
                 foreach ((array) $on as $val) {
-                    list($val1, $val2) = explode('=', $val, 2);
-                    $condition[]       = $this->parseKey($val1, $options) . '=' . $this->parseKey($val2, $options);
+                    if (strpos($val, '=')) {
+                        list($val1, $val2) = explode('=', $val, 2);
+                        $condition[]       = $this->parseKey($val1, $options) . '=' . $this->parseKey($val2, $options);
+                    } else {
+                        $condition[] = $val;
+                    }
                 }
 
                 $table = $this->parseTable($table, $options);

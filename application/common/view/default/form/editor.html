@@ -1,13 +1,15 @@
-<textarea name="{$field}" id="{$field}">{$value}</textarea>
+<textarea name="{$field}" id="{$field}" style="width: 100%;">{$value}</textarea>
+<!-- 样式文件 -->
+<link rel="stylesheet" href="__PUBLIC__/plugs/umeditor/themes/default/css/umeditor.css">
+<!-- 配置文件 -->
+<script type="text/javascript" src="__PUBLIC__/plugs/umeditor/umeditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="__PUBLIC__/plugs/umeditor/umeditor.js"></script>
+<!-- 实例化编辑器代码 -->
 <script type="text/javascript">
-var editor = new Simditor({
-  textarea: $('#{$field}'),
-  defaultImage : '__PUBLIC__/images/wechat.jpg',
-  upload       : {
-  	placeholder : '欢迎使用SentCMS网站管理系统',
-  	url: "{:url('upload/editor')}",
-  	pasteImage:true,
-  	fileKey: "upload_file"
-  }
-});
+    $(function(){
+        window.um = UM.getEditor('{$field}', {
+        	imageUrl: "{:url('upload/editor')}"
+        });
+    });
 </script>

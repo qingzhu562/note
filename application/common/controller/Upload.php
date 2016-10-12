@@ -61,7 +61,7 @@ class Upload {
 	}
 
 	public function editor() {
-		$file = request()->file('upload_file');
+		$file = request()->file('upfile');
 		$info = $file->move(config('editor_upload.rootPath'), true, false);
 		if ($info) {
 			$data              = $this->parseFile($info);
