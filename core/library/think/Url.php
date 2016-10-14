@@ -85,13 +85,28 @@ class Url
         } elseif (!empty($rule) && isset($name)) {
             throw new \InvalidArgumentException('route name not exists:' . $name);
         } else {
+            // 检查别名路由
+            $alias = Route::rules('alias');
+            if ($alias) {
+                // 别名路由解析
+                foreach ($alias as $key => $val) {
+                    if (is_array($val)) {
+                        $val = $val[0];
+                    }
+                    if (0 === strpos($url, $val)) {
+                        $url = $key . substr($url, strlen($val));
+                        break;
+                    }
+                }
+            } else {
+                // 路由标识不存在 直接解析
+                $url = self::parseUrl($url, $domain);
+            }
             if (isset($info['query'])) {
                 // 解析地址里面参数 合并到vars
                 parse_str($info['query'], $params);
                 $vars = array_merge($params, $vars);
             }
-            // 路由标识不存在 直接解析
-            $url = self::parseUrl($url, $domain);
         }
 
         // 检测URL绑定
@@ -119,7 +134,11 @@ class Url
             } else {
                 foreach ($vars as $var => $val) {
                     if ('' !== trim($val)) {
-                        $url .= $depr . $var . $depr . urlencode($val);
+                        if (Config::get('url_param_type')) {
+                            $url .= $depr . urlencode($val);
+                        } else {
+                            $url .= $depr . $var . $depr . urlencode($val);
+                        }
                     }
                 }
                 $url .= $suffix . $anchor;

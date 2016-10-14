@@ -943,8 +943,16 @@ class Route
 
         if (is_array($item)) {
             list($rule, $option) = $item;
-            if (isset($option['method'][$array[0]])) {
-                $option['method'] = $option['method'][$array[0]];
+            $action              = $array[0];
+            if (isset($option['allow']) && !in_array($action, explode(',', $option['allow']))) {
+                // 允许操作
+                return false;
+            } elseif (isset($option['except']) && in_array($action, explode(',', $option['except']))) {
+                // 排除操作
+                return false;
+            }
+            if (isset($option['method'][$action])) {
+                $option['method'] = $option['method'][$action];
             }
         } else {
             $rule = $item;
@@ -957,7 +965,7 @@ class Route
         } elseif (0 === strpos($rule, '\\')) {
             // 路由到类
             return self::bindToClass($bind, substr($rule, 1), $depr);
-        } elseif (0 === strpos($url, '@')) {
+        } elseif (0 === strpos($rule, '@')) {
             // 路由到控制器类
             return self::bindToController($bind, substr($rule, 1), $depr);
         } else {
@@ -1406,7 +1414,7 @@ class Route
         if ($route instanceof \Closure) {
             // 执行闭包
             $result = ['type' => 'function', 'function' => $route];
-        } elseif (0 === strpos($route, '/') || 0 === strpos($route, 'http')) {
+        } elseif (0 === strpos($route, '/') || strpos($route, '://')) {
             // 路由到重定向地址
             $result = ['type' => 'redirect', 'url' => $route, 'status' => isset($option['status']) ? $option['status'] : 301];
         } elseif (false !== strpos($route, '\\')) {

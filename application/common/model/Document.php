@@ -12,10 +12,10 @@ namespace app\common\model;
 /**
 * 设置模型
 */
-class Document extends \think\model\Merge{
+class Document extends \think\Model{
 
 	protected $fk = 'doc_id';
-	protected $relationModel = array('document_article');
+	protected $pk = 'id';
 
 	// 定义需要自动写入时间戳格式的字段
 	protected $autoWriteTimestamp = array('create_time','update_time','deadline');
@@ -70,10 +70,8 @@ class Document extends \think\model\Merge{
 	}
 
 	public function extend($name){
-		if (is_numeric($name)) {
-			$name = db('model')->where(array('id'=>$name))->value('name');
-		}
-		$this->relationModel = array('document_' . $name);
+		$name = strtoupper($name);
+		$this->join('__DOCUMENT_' . $name . '__', $this->fk . '=' . $this->pk, 'LEFT');
 		return $this;
 	}
 
@@ -82,23 +80,24 @@ class Document extends \think\model\Merge{
 		$data = \think\Request::instance()->post();
 
 		if ($data !== false) {
-            //增加增加复选框 shu'zu数组保存 
-            foreach($data as $key=>$val){
-                if(is_array($val)){
-                    $data[$key] = implode(',', $val);
-                }
-            }
+			//增加增加复选框 shu'zu数组保存 
+			foreach($data as $key=>$val){
+				if(is_array($val)){
+					$data[$key] = implode(',', $val);
+				}
+			}
 			/* 添加或新增基础内容 */
 			if(empty($data['id'])){ //新增数据
 				unset($data['id']);
-				$id = $this->validate('document.edit')->save($data); //添加基础内容
+				$id = $this->validate('document.edit')->insert($data); //添加基础内容
 
 				if(!$id){
 					return false;
 				}
 				$data['id'] = $id;
 			} else { //更新数据
-				$status = $this->validate('document.edit')->save($data, array('id'=>$data['id'])); //更新基础内容
+				$status = $this->validate('document.edit')->fetchSql(true)->update($data, array('id'=>$data['id'])); //更新基础内容
+				dump($status);exit();
 				if(false === $status){
 					return false;
 				}
@@ -116,10 +115,10 @@ class Document extends \think\model\Merge{
 	public function detail($id){
 		$data = $this->get($id);
 		$map = array('model_id'=>$data['model_id'], 'type'=>array('in', 'checkbox'));
-        $model_type = db('attribute')->where($map)->column('name');
-        foreach($model_type as $val){
-            $data->setAttr($val, explode(',', $data[$val]));
-        }
+		$model_type = db('attribute')->where($map)->column('name');
+		foreach($model_type as $val){
+			$data->setAttr($val, explode(',', $data[$val]));
+		}
 
 		return $data;
 	}
