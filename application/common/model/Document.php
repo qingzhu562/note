@@ -12,7 +12,7 @@ namespace app\common\model;
 /**
 * 设置模型
 */
-class Document extends \think\Model{
+class Document extends Base{
 
 	protected $fk = 'doc_id';
 	protected $pk = 'id';
@@ -72,7 +72,16 @@ class Document extends \think\Model{
 	public function extend($name){
 		$name = strtoupper($name);
 		$this->join('__DOCUMENT_' . $name . '__', $this->fk . '=' . $this->pk, 'LEFT');
+		$this->dao = $this->db()->alias('d')
+			->join('__DOCUMENT_' . $name . '__ dc', 'dc.' . $this->fk . '= d.' . $this->pk, 'RIGHT');
 		return $this;
+	}
+
+	public function lists($map, $order){
+		$list = $this->dao->where($map)->order($order)->paginate(15, false, array(
+			'query' => $this->param,
+		));
+		return $list;
 	}
 
 	public function change(){

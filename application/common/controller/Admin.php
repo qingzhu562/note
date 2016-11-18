@@ -148,7 +148,7 @@ class Admin extends Base {
 		$pid = db('menu')->where("pid !=0 AND url like '%{$hover_url}%'")->value('pid');
 		$id  = db('menu')->where("pid = 0 AND url like '%{$hover_url}%'")->value('id');
 		$pid = $pid ? $pid : $id;
-		if ($hover_url == 'admin/content' || $hover_url == 'admin/attribute') {
+		if (strtolower($hover_url) == 'admin/content' || strtolower($hover_url) == 'admin/attribute') {
 			//内容管理菜单
 			$pid = db('menu')->where("pid =0 AND url like '%admin/category%'")->value('id');
 		}

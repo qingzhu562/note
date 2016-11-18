@@ -14,10 +14,16 @@ namespace app\common\model;
 */
 class Base extends \think\Model{
 
+	protected $param;
 	protected $type = array(
 		'id'  => 'integer',
 		'cover_id'  => 'integer',
 	);
+
+	public function initialize(){
+		parent::initialize();
+		$this->param = \think\Request::instance()->param();
+	}
 
 	/**
 	 * 数据修改

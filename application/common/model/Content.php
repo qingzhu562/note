@@ -14,11 +14,11 @@ namespace app\common\model;
 */
 class Content extends Base{
 
-	//protected $name = "page";
+	protected $dao;
 
 	protected $auto = array("update_time");
 	protected $insert = array("create_time");
-
+	
 	protected $type = array(
 		'id'  => 'integer',
 		'cover_id'  => 'integer',
@@ -37,27 +37,59 @@ class Content extends Base{
 	}
 
 	public function extend($name){
-		$this->name = $name;
+		$this->dao = db($name);
 		return $this;
 	}
 
-	public function detail($id){
+	public function lists($map, $order){
+		$list = $this->dao->where($map)->order($order)->paginate(15, false, array(
+			'query' => $this->param,
+		));
+		return $list;
+	}
+
+	public function detail($id, $map = array()){
 		$map['id'] = $id;
-		$this->data = $this->db()->where($map)->find();
+		$this->data = $this->dao->where($map)->find();
 		return $this->data;
 	}
 
-	public function change(){
-		$data = input('post.');
-		if ($data['id']) {
-			$result = $this->save($data,array('id'=>$data['id']));
-		}else{
-			$result = $this->save($data);
-		}
-		return $result;
+	public function del($map){
+		return $this->dao->where($map)->delete();
 	}
 
-	public function del($map){
-		return $this->where($map)->delete();
+	public function change(){
+		$data = $this->param;
+		if (isset($data['id']) && $data['id']) {
+			$where['id'] = $data['id'];
+		}
+		if (!empty($data)) {
+			// 数据自动验证
+			if (!$this->validateData($data)) {
+				return false;
+			}
+			// 数据对象赋值
+			foreach ($data as $key => $value) {
+				$this->setAttr($key, $value, $data);
+			}
+			if (!empty($where)) {
+				$this->isUpdate = true;
+			}
+		}
+
+		// 数据自动完成
+		$this->autoCompleteData($this->auto);
+
+		// 自动写入更新时间
+		if ($this->autoWriteTimestamp && $this->updateTime) {
+			$this->setAttr($this->updateTime, null);
+		}
+
+		if ($this->isUpdate) {
+			$result = $this->dao->update($this->data, $where);
+		}else{
+			$result = $this->dao->insert($this->data);
+		}
+		return $result;
 	}
 }

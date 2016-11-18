@@ -66,20 +66,20 @@
 							<td>
 								{if isset($item['is_top'])}
 								{if $item['is_top']}
-								<a href="{:url('admin/content/settop',array('id'=>$item['id'],'model_id'=>$model_id,'is_top'=>'0'))}" class="ajax-get">取消置顶</a>
+								<a href="{:url('admin/content/settop',array('model_id'=>$model_id,'id'=>$item['id'],'is_top'=>'0'))}" class="ajax-get">取消置顶</a>
 								{else/}
-								<a href="{:url('admin/content/settop',array('id'=>$item['id'],'model_id'=>$model_id,'is_top'=>'1'))}" class="ajax-get">置顶</a>
+								<a href="{:url('admin/content/settop',array('model_id'=>$model_id,'id'=>$item['id'],'is_top'=>'1'))}" class="ajax-get">置顶</a>
 								{/if}
 								{/if}
 								{if isset($item['status'])}
 								{if $item['status']}
-								<a href="{:url('admin/content/status',array('id'=>$item['id'],'model_id'=>$model_id,'status'=>'0'))}" class="ajax-get">取消审核</a>
+								<a href="{:url('admin/content/status',array('model_id'=>$model_id,'id'=>$item['id'],'status'=>'0'))}" class="ajax-get">取消审核</a>
 								{else/}
-								<a href="{:url('admin/content/status',array('id'=>$item['id'],'model_id'=>$model_id,'status'=>'1'))}" class="ajax-get">审核</a>
+								<a href="{:url('admin/content/status',array('model_id'=>$model_id,'id'=>$item['id'],'status'=>'1'))}" class="ajax-get">审核</a>
 								{/if}
 								{/if}
-								<a href="{:url('admin/content/edit',array('id'=>$item['id'],'model_id'=>$model_id))}" >编辑</a>
-								<a href="{:url('admin/content/del',array('id'=>$item['id'],'model_id'=>$model_id))}" class="ajax-get confirm">删除</a>
+								<a href="{:url('admin/content/edit',array('model_id'=>$model_id, 'id'=>$item['id']))}" >编辑</a>
+								<a href="{:url('admin/content/del',array('model_id'=>$model_id, 'id'=>$item['id']))}" class="ajax-get confirm">删除</a>
 							</td>
 						</tr>
 						{/volist}

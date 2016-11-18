@@ -66,13 +66,13 @@ class InitHook {
 			$route[$value['name'] . "/index"]             = "index/content/index?model=" . $value['name'];
 			$route[$value['name'] . "/list/:id"]          = "index/content/lists?model=" . $value['name'];
 			$route[$value['name'] . "/detail/:id"]        = "index/content/detail?model_id=" . $value['id'];
-			$route["/list/:id"]                           = "index/content/category";
 			$route["user/" . $value['name'] . "/index"]   = "user/content/index?model_id=" . $value['id'];
 			$route["user/" . $value['name'] . "/add"]     = "user/content/add?model_id=" . $value['id'];
 			$route["user/" . $value['name'] . "/edit"]    = "user/content/edit?model_id=" . $value['id'];
 			$route["user/" . $value['name'] . "/del"]     = "user/content/del?model_id=" . $value['id'];
 			$route["user/" . $value['name'] . "/status"]  = "user/content/status?model_id=" . $value['id'];
 		}
+		$route["list/:id"]                            = "index/content/category";
 		\think\Route::rule($route);
 	}
 }

@@ -26,7 +26,7 @@ class Content extends Admin {
 		} else {
 			$this->modelInfo = $list[$model_id];
 			if ($this->modelInfo['extend'] > 1) {
-				$this->model = model($this->modelInfo['name']);
+				$this->model = model('Content')->extend($this->modelInfo['name']);
 			} else {
 				$this->model = model('Document')->extend($this->modelInfo['name']);
 			}
@@ -55,9 +55,7 @@ class Content extends Admin {
 			unset($map['model_id']);
 		}
 
-		$list = $this->model->where($map)->order($order)->paginate(15, false, array(
-			'query' => $this->param,
-		));
+		$list = $this->model->lists($map, $order);
 
 		$data = array(
 			'grid' => $grid_list,
