@@ -152,7 +152,7 @@ class Content extends Admin {
 		$map['id'] = array('IN', $id);
 		$result    = $this->model->del($map);
 
-		if ($result) {
+		if (false !== $result) {
 			return $this->success("删除成功！");
 		} else {
 			return $this->error("删除失败！");

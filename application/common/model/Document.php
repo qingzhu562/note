@@ -16,6 +16,7 @@ class Document extends Base{
 
 	protected $fk = 'doc_id';
 	protected $pk = 'id';
+	protected $extend_db;
 
 	// 定义需要自动写入时间戳格式的字段
 	protected $autoWriteTimestamp = array('create_time','update_time','deadline');
@@ -70,9 +71,10 @@ class Document extends Base{
 	}
 
 	public function extend($name){
+		$this->extend_db = db('Document' . ucfirst($name));
 		$name = strtoupper($name);
-		$this->join('__DOCUMENT_' . $name . '__', $this->fk . '=' . $this->pk, 'LEFT');
-		$this->dao = $this->db()->alias('d')
+		//$this->join('__DOCUMENT_' . $name . '__', $this->fk . '=' . $this->pk, 'LEFT');
+		$this->dao = db('Document')->alias('d')
 			->join('__DOCUMENT_' . $name . '__ dc', 'dc.' . $this->fk . '= d.' . $this->pk, 'RIGHT');
 		return $this;
 	}
@@ -98,17 +100,20 @@ class Document extends Base{
 			/* 添加或新增基础内容 */
 			if(empty($data['id'])){ //新增数据
 				unset($data['id']);
-				$id = $this->validate('document.edit')->insert($data); //添加基础内容
-
+				$id = $this->validate('document.edit')->save($data); //添加基础内容
 				if(!$id){
 					return false;
+				}else{
+					$data['doc_id'] = $this->id;
+					$this->extend_db->insert($data);
 				}
 				$data['id'] = $id;
 			} else { //更新数据
-				$status = $this->validate('document.edit')->fetchSql(true)->update($data, array('id'=>$data['id'])); //更新基础内容
-				dump($status);exit();
+				$status = $this->validate('document.edit')->save($data, array('id'=>$data['id'])); //更新基础内容
 				if(false === $status){
 					return false;
+				}else{
+					$this->extend_db->where($this->fk, $data['id'])->update($data);
 				}
 			}
 			return $data['id'];
@@ -118,11 +123,13 @@ class Document extends Base{
 	}
 
 	public function del($map){
-		return $this->where($map)->delete();
+		$result = $this->where($map)->delete();
+		$this->extend_db->where(array('doc_id'=>$map['id']))->delete();
+		return $result;
 	}
 
 	public function detail($id){
-		$data = $this->get($id);
+		$data = $this->dao->where('id',$id)->find();
 		$map = array('model_id'=>$data['model_id'], 'type'=>array('in', 'checkbox'));
 		$model_type = db('attribute')->where($map)->column('name');
 		foreach($model_type as $val){
