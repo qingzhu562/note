@@ -61,17 +61,30 @@ class Upload {
 	}
 
 	public function editor() {
+		$callback = request()->get('callback');
 		$file = request()->file('upfile');
 		$info = $file->move(config('editor_upload.rootPath'), true, false);
 		if ($info) {
-			$data              = $this->parseFile($info);
-			$data['success']   = true;
-			$data['file_path'] = $data['url'];
+			$fileInfo              = $this->parseFile($info);
+			$data = array(
+				"originalName" => $fileInfo['name'],
+				"name" => $fileInfo['name'],
+				"url" => $fileInfo['url'],
+				"size" => $fileInfo['size'],
+				"type" => $fileInfo['ext'],
+				"state" => 'SUCCESS'
+			);
 		} else {
-			$data['success'] = false;
-			$data['msg']     = "error message";
+			$data['state'] = $file->getError();
 		}
-		return $data;
+		/**
+		* 返回数据
+		*/
+		if($callback) {
+			return '<script>'.$callback.'('.json_encode($data).')</script>';
+		} else {
+			return json_encode($data);
+		}
 	}
 
 	public function delete() {

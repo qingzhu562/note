@@ -72,7 +72,7 @@ class InitHook {
 			$route["user/" . $value['name'] . "/del"]     = "user/content/del?model_id=" . $value['id'];
 			$route["user/" . $value['name'] . "/status"]  = "user/content/status?model_id=" . $value['id'];
 		}
-		$route["list/:id"]                            = "index/content/category";
+		$route["list/:id"] = "index/content/category";
 		\think\Route::rule($route);
 	}
 }
