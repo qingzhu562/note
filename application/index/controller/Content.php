@@ -169,7 +169,7 @@ class Content extends Fornt {
 		} else {
 			$this->modelInfo = $model_name ? $name_list[$model_name] : $id_list[$model_id];
 			if ($this->modelInfo['extend'] > 1) {
-				$this->model = model($this->modelInfo['name']);
+				$this->model = model('Content')->extend($this->modelInfo['name']);
 			} else {
 				$this->model = model('Document')->extend($this->modelInfo['name']);
 			}
