@@ -13,8 +13,8 @@
 	<div class="left-nav">
 		<ul>
 
-			<li><a href="{:url('index/content/lists',array('model'=>'article','id'=>2))}">公司新闻 <span class="pull-right"><i class="fa fa-chevron-right text-primary"></i></span></a></li>
-			<li><a href="{:url('index/content/lists',array('model'=>'article','id'=>3))}">行业动态 <span class="pull-right"><i class="fa fa-chevron-right text-primary"></i></span></a></li>
+			<li><a href="{:url('index/content/lists?model=article',array('id'=>2))}">公司新闻 <span class="pull-right"><i class="fa fa-chevron-right text-primary"></i></span></a></li>
+			<li><a href="{:url('index/content/lists?model=article',array('id'=>3))}">行业动态 <span class="pull-right"><i class="fa fa-chevron-right text-primary"></i></span></a></li>
 		</ul>
 	</div>
 	<div class="art-list">
@@ -22,7 +22,7 @@
 		<ul class="list">
 			{volist name="list" id="item"}
 			<li>
-				<a href="{:url('index/content/detail',array('model_id'=>$item['model_id'],'id'=>$item['id']))}">
+				<a href="{:url('index/content/detail?model_id='.$item['model_id'],array('id'=>$item['id']))}">
 					<div class="time">
 						<span class="day">{$item['create_time']|date='d',###}</span>
 						<span class="moth">{$item['create_time']|date='m',###}</span>
