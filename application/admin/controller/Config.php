@@ -206,4 +206,34 @@ class Config extends Admin {
 			return $this->error('非法请求！');
 		}
 	}
+
+
+	public function themes() {
+		$list = $this->model->getThemesList();
+		$pc = config('pc_themes');
+		$mobile = config('mobile_themes');
+		$data = array(
+			'pc'     => $pc,
+			'mobile' => $mobile,
+			'list'   => $list,
+		);
+
+		$this->assign($data);
+		$this->setMeta('主题设置');
+		return $this->fetch();
+	}
+
+	/**
+	 * 设置主题
+	 * @return json
+	 */
+	public function setthemes($name, $id){
+		$result = db('Config')->where('name', $name . '_themes')->setField('value', $id);
+		if (false !== $result) {
+			session('config', null, 'sent');
+			return $this->success('设置成功！');
+		}else{
+			return $this->error('设置失败！');
+		}
+	}
 }

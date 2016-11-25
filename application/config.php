@@ -101,5 +101,10 @@ return array(
 	'trace'             => array(
 		//支持Html,Console 设为false则不显示
 		'type' => 'Html',
+	),
+
+	'view_replace_str'       => array(
+		'__ADDONS__' => BASE_PATH . '/addons',
+		'__PUBLIC__' => BASE_PATH . '/public',
 	)
 );

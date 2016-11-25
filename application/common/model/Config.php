@@ -71,4 +71,28 @@ class Config extends Base{
 		}
 		return $value;
 	}
+
+	public function getThemesList(){
+		$files = array();
+		$files['pc'] = $this->getList('pc');
+		$files['mobile'] = $this->getList('mobile');
+		return $files;
+	}
+
+	protected function getList($type){
+		$path = ROOT_PATH . 'template/' . $type . '/';
+		$file  = opendir($path);
+		while (false !== ($filename = readdir($file))) {
+			if (!in_array($filename, array('.', '..'))) {
+				$files = $path . $filename . '/info.php';
+				if (is_file($files)) {
+					$info = include($files);
+					$info['id']  = $filename;
+					$info['img'] = '/template/' . $type . '/' . $filename . '/' . $info['img'];
+					$list[] = $info;
+				}
+			}
+		}
+		return isset($list) ? $list : array();
+	}
 }

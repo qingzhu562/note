@@ -431,42 +431,47 @@ CREATE TABLE `sent_config` (
   PRIMARY KEY (`id`),
   KEY `type` (`type`),
   KEY `group` (`group`)
-) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 
--- -----------------------------
--- Records of `sent_config`
--- -----------------------------
-INSERT INTO `sent_config` VALUES ('1', 'config_group_list', 'textarea', '配置分组', '99', '', '', '', '1447305542', '1452323143', '1', '1:基本\r\n2:会员\r\n3:邮件\r\n4:微信\r\n99:系统', '0');
-INSERT INTO `sent_config` VALUES ('2', 'hooks_type', 'textarea', '钩子的类型', '99', '', '类型 1-用于扩展显示内容，2-用于扩展业务处理', '', '1379313397', '1379313407', '1', '1:视图\r\n2:控制器', '6');
-INSERT INTO `sent_config` VALUES ('3', 'auth_config', 'textarea', 'Auth配置', '99', '', '自定义Auth.class.php类配置', '', '1379409310', '1379409564', '1', 'AUTH_ON:1\r\nAUTH_TYPE:2', '8');
-INSERT INTO `sent_config` VALUES ('5', 'data_backup_path', 'text', '数据库备份根路径', '99', '', '路径必须以 / 结尾', '', '1381482411', '1381482411', '1', './data/backup/', '5');
-INSERT INTO `sent_config` VALUES ('6', 'data_backup_part_size', 'text', '数据库备份卷大小', '99', '', '该值用于限制压缩后的分卷最大长度。单位：B；建议设置20M', '', '1381482488', '1381729564', '1', '20971520', '7');
-INSERT INTO `sent_config` VALUES ('7', 'data_backup_compress', 'bool', '数据库备份文件是否启用压缩', '99', '0:不压缩\r\n1:启用压缩', '压缩备份文件需要PHP环境支持gzopen,gzwrite函数', '', '1381713345', '1447306018', '1', '1', '9');
-INSERT INTO `sent_config` VALUES ('8', 'data_backup_compress_level', 'select', '数据库备份文件压缩级别', '99', '1:普通\r\n4:一般\r\n9:最高', '数据库备份文件的压缩级别，该配置在开启压缩时生效', '', '1381713408', '1447305979', '1', '9', '10');
-INSERT INTO `sent_config` VALUES ('9', 'develop_mode', 'bool', '开启开发者模式', '99', '0:关闭\r\n1:开启', '是否开启开发者模式', '', '1383105995', '1447305960', '1', '1', '11');
-INSERT INTO `sent_config` VALUES ('10', 'allow_visit', 'textarea', '不受限控制器方法', '99', '', '', '', '1386644047', '1438075615', '1', '0:article/draftbox\r\n1:article/mydocument\r\n2:Category/tree\r\n3:Index/verify\r\n4:file/upload\r\n5:file/download\r\n6:user/updatePassword\r\n7:user/updateNickname\r\n8:user/submitPassword\r\n9:user/submitNickname\r\n10:file/uploadpicture', '0');
-INSERT INTO `sent_config` VALUES ('11', 'deny_visit', 'textarea', '超管专限控制器方法', '99', '', '仅超级管理员可访问的控制器方法', '', '1386644141', '1438075628', '1', '0:Addons/addhook\r\n1:Addons/edithook\r\n2:Addons/delhook\r\n3:Addons/updateHook\r\n4:Admin/getMenus\r\n5:Admin/recordList\r\n6:AuthManager/updateRules\r\n7:AuthManager/tree', '0');
-INSERT INTO `sent_config` VALUES ('12', 'admin_allow_ip', 'text', '后台允许访问IP', '99', '', '多个用逗号分隔，如果不配置表示不限制IP访问', '', '1387165454', '1452307198', '1', '', '12');
-INSERT INTO `sent_config` VALUES ('13', 'web_site_title', 'text', '网站标题', '1', '', '网站标题前台显示标题', '', '1378898976', '1379235274', '1', 'SentCMS网站管理系统', '0');
-INSERT INTO `sent_config` VALUES ('14', 'web_site_url', 'text', '网站URL', '1', '', '网站网址', '', '1378898976', '1379235274', '1', 'http://www.tensent.cn', '1');
-INSERT INTO `sent_config` VALUES ('15', 'web_site_description', 'textarea', '网站描述', '1', '', '网站搜索引擎描述', '', '1378898976', '1379235841', '1', 'SentCMS网站管理系统', '3');
-INSERT INTO `sent_config` VALUES ('16', 'web_site_keyword', 'textarea', '网站关键字', '1', '', '网站搜索引擎关键字', '', '1378898976', '1381390100', '1', 'SentCMS网站管理系统,SentCMS', '6');
-INSERT INTO `sent_config` VALUES ('17', 'web_site_close', 'bool', '关闭站点', '1', '0:否,1:是', '站点关闭后其他用户不能访问，管理员可以正常访问', '', '1378898976', '1447321395', '1', '0', '4');
-INSERT INTO `sent_config` VALUES ('18', 'web_site_icp', 'text', '网站备案号', '1', '', '设置在网站底部显示的备案号，如“赣ICP备13006622号', '', '1378900335', '1379235859', '1', '赣ICP备13006622号', '7');
-INSERT INTO `sent_config` VALUES ('19', 'open_mobile_site', 'bool', '开启手机站', '1', '0:关闭\r\n1:开启', '', '', '1440901307', '1440901543', '1', '0', '4');
-INSERT INTO `sent_config` VALUES ('20', 'list_rows', 'num', '列表条数', '99', '', '', '', '1448937662', '1448937662', '1', '20', '10');
-INSERT INTO `sent_config` VALUES ('21', 'user_allow_register', 'bool', '是否可注册', '2', '1:是\r\n0:否', '', '', '1449043544', '1449043586', '1', '1', '0');
-INSERT INTO `sent_config` VALUES ('22', 'user_group_type', 'textarea', '会员分组类别', '2', '', '', '', '1449196835', '1449196835', '1', 'admin:系统管理员\r\nfront:会员等级', '1');
-INSERT INTO `sent_config` VALUES ('23', 'config_type_list', 'textarea', '字段类型', '99', '', '', '', '1459136529', '1459136529', '1', 'text:单行文本:varchar\r\nstring:字符串:int\r\npassword:密码:varchar\r\ntextarea:文本框:text\r\nbool:布尔型:int\r\nselect:选择:varchar\r\nnum:数字:int\r\ndecimal:金额:decimal\r\ntags:标签:varchar\r\ndatetime:时间控件:int\r\ndate:日期控件:varchar\r\neditor:编辑器:text\r\nbind:模型绑定:int\r\nimage:图片上传:int\r\nimages:多图上传:varchar\r\nattach:文件上传:varchar', '0');
-INSERT INTO `sent_config` VALUES ('24', 'document_position', 'textarea', '文档推荐位', '99', '', '', '', '1453449698', '1453449698', '1', '1:首页推荐\r\n2:列表推荐', '0');
-INSERT INTO `sent_config` VALUES ('25', 'mail_host', 'text', 'smtp服务器的名称', '3', '', 'smtp服务器的名称', '', '1455690530', '1455690556', '1', 'smtp.163.com', '0');
-INSERT INTO `sent_config` VALUES ('26', 'mail_smtpauth', 'select', '启用smtp认证', '3', '0:否,1:是', '启用smtp认证', '', '1455690641', '1455690689', '1', '1', '0');
-INSERT INTO `sent_config` VALUES ('27', 'mail_username', 'text', '邮件发送用户名', '3', '', '邮件发送用户名', '', '1455690771', '1455690771', '1', '你的邮箱账号', '0');
-INSERT INTO `sent_config` VALUES ('28', 'mail_password', 'text', '邮箱密码', '3', '', '邮箱密码，如果是qq邮箱，则填安全密码', '', '1455690802', '1455690802', '1', '你的邮箱密码', '0');
-INSERT INTO `sent_config` VALUES ('29', 'mail_fromname', 'text', '发件人姓名', '3', '', '发件人姓名', '', '1455690838', '1455690838', '1', '发件人姓名', '0');
-INSERT INTO `sent_config` VALUES ('30', 'mail_ishtml', 'select', '是否HTML格式邮件', '3', '0:否,1:是', '是否HTML格式邮件', '', '1455690888', '1455690888', '1', '1', '0');
-INSERT INTO `sent_config` VALUES ('31', 'mail_charset', 'text', '邮件编码', '3', '', '设置发送邮件的编码', '', '1455690920', '1455690920', '1', 'UTF8', '0');
-INSERT INTO `sent_config` VALUES ('32', 'wechat_name', 'text', '微信名称', '4', '', '填写微信名称', '', '1459136529', '1461898406', '1', '', '0');
+--
+-- 转存表中的数据 `sent_config`
+--
+
+INSERT INTO `sent_config` (`id`, `name`, `type`, `title`, `group`, `extra`, `remark`, `icon`, `create_time`, `update_time`, `status`, `value`, `sort`) VALUES
+(1, 'config_group_list', 'textarea', '配置分组', 99, '', '', '', 1447305542, 1452323143, 1, '1:基本\r\n2:会员\r\n3:邮件\r\n4:微信\r\n99:系统', 0),
+(2, 'hooks_type', 'textarea', '钩子的类型', 99, '', '类型 1-用于扩展显示内容，2-用于扩展业务处理', '', 1379313397, 1379313407, 1, '1:视图\r\n2:控制器', 6),
+(3, 'auth_config', 'textarea', 'Auth配置', 99, '', '自定义Auth.class.php类配置', '', 1379409310, 1379409564, 1, 'AUTH_ON:1\r\nAUTH_TYPE:2', 8),
+(5, 'data_backup_path', 'text', '数据库备份根路径', 99, '', '路径必须以 / 结尾', '', 1381482411, 1381482411, 1, './data/backup/', 5),
+(6, 'data_backup_part_size', 'text', '数据库备份卷大小', 99, '', '该值用于限制压缩后的分卷最大长度。单位：B；建议设置20M', '', 1381482488, 1381729564, 1, '20971520', 7),
+(7, 'data_backup_compress', 'bool', '数据库备份文件是否启用压缩', 99, '0:不压缩\r\n1:启用压缩', '压缩备份文件需要PHP环境支持gzopen,gzwrite函数', '', 1381713345, 1447306018, 1, '1', 9),
+(8, 'data_backup_compress_level', 'select', '数据库备份文件压缩级别', 99, '1:普通\r\n4:一般\r\n9:最高', '数据库备份文件的压缩级别，该配置在开启压缩时生效', '', 1381713408, 1447305979, 1, '9', 10),
+(9, 'develop_mode', 'bool', '开启开发者模式', 99, '0:关闭\r\n1:开启', '是否开启开发者模式', '', 1383105995, 1447305960, 1, '1', 11),
+(10, 'allow_visit', 'textarea', '不受限控制器方法', 99, '', '', '', 1386644047, 1438075615, 1, '0:article/draftbox\r\n1:article/mydocument\r\n2:Category/tree\r\n3:Index/verify\r\n4:file/upload\r\n5:file/download\r\n6:user/updatePassword\r\n7:user/updateNickname\r\n8:user/submitPassword\r\n9:user/submitNickname\r\n10:file/uploadpicture', 0),
+(11, 'deny_visit', 'textarea', '超管专限控制器方法', 99, '', '仅超级管理员可访问的控制器方法', '', 1386644141, 1438075628, 1, '0:Addons/addhook\r\n1:Addons/edithook\r\n2:Addons/delhook\r\n3:Addons/updateHook\r\n4:Admin/getMenus\r\n5:Admin/recordList\r\n6:AuthManager/updateRules\r\n7:AuthManager/tree', 0),
+(12, 'admin_allow_ip', 'text', '后台允许访问IP', 99, '', '多个用逗号分隔，如果不配置表示不限制IP访问', '', 1387165454, 1452307198, 1, '', 12),
+(13, 'app_debug', 'bool', '是否调试模式', 99, '0:关闭\r\n1:开启', '是否调试模式', '', 1387165685, 1447306056, 1, '0', 1),
+(14, 'web_site_title', 'text', '网站标题', 1, '', '网站标题前台显示标题', '', 1378898976, 1379235274, 1, 'SentCMS网站管理系统', 0),
+(15, 'web_site_url', 'text', '网站URL', 1, '', '网站网址', '', 1378898976, 1379235274, 1, 'http://www.tensent.cn', 1),
+(16, 'web_site_description', 'textarea', '网站描述', 1, '', '网站搜索引擎描述', '', 1378898976, 1379235841, 1, 'SentCMS网站管理系统', 3),
+(17, 'web_site_keyword', 'textarea', '网站关键字', 1, '', '网站搜索引擎关键字', '', 1378898976, 1381390100, 1, 'SentCMS网站管理系统,SentCMS', 6),
+(18, 'web_site_close', 'bool', '关闭站点', 1, '0:否,1:是', '站点关闭后其他用户不能访问，管理员可以正常访问', '', 1378898976, 1447321395, 1, '0', 4),
+(19, 'web_site_icp', 'text', '网站备案号', 1, '', '设置在网站底部显示的备案号，如“赣ICP备13006622号', '', 1378900335, 1379235859, 1, '赣ICP备13006622号', 7),
+(20, 'open_mobile_site', 'bool', '开启手机站', 1, '0:关闭\r\n1:开启', '', '', 1440901307, 1440901543, 1, '0', 4),
+(21, 'list_rows', 'num', '列表条数', 99, '', '', '', 1448937662, 1448937662, 1, '20', 10),
+(22, 'user_allow_register', 'bool', '是否可注册', 2, '1:是\r\n0:否', '', '', 1449043544, 1449043586, 1, '1', 0),
+(23, 'user_group_type', 'textarea', '会员分组类别', 2, '', '', '', 1449196835, 1449196835, 1, 'admin:系统管理员\r\nfront:会员等级', 1),
+(24, 'config_type_list', 'textarea', '字段类型', 99, '', '', '', 1459136529, 1459136529, 1, 'text:单行文本:varchar\r\nstring:字符串:int\r\npassword:密码:varchar\r\ntextarea:文本框:text\r\nbool:布尔型:int\r\nselect:选择:varchar\r\nnum:数字:int\r\ndecimal:金额:decimal\r\ntags:标签:varchar\r\ndatetime:时间控件:int\r\ndate:日期控件:varchar\r\neditor:编辑器:text\r\nbind:模型绑定:int\r\nimage:图片上传:int\r\nimages:多图上传:varchar\r\nattach:文件上传:varchar', 0),
+(25, 'document_position', 'textarea', '文档推荐位', 99, '', '', '', 1453449698, 1453449698, 1, '1:首页推荐\r\n2:列表推荐', 0),
+(26, 'mail_host', 'text', 'smtp服务器的名称', 3, '', 'smtp服务器的名称', '', 1455690530, 1455690556, 1, 'smtp.163.com', 0),
+(27, 'mail_smtpauth', 'select', '启用smtp认证', 3, '0:否,1:是', '启用smtp认证', '', 1455690641, 1455690689, 1, '1', 0),
+(28, 'mail_username', 'text', '邮件发送用户名', 3, '', '邮件发送用户名', '', 1455690771, 1455690771, 1, '你的邮箱账号', 0),
+(29, 'mail_password', 'text', '邮箱密码', 3, '', '邮箱密码，如果是qq邮箱，则填安全密码', '', 1455690802, 1455690802, 1, '你的邮箱密码', 0),
+(30, 'mail_fromname', 'text', '发件人姓名', 3, '', '发件人姓名', '', 1455690838, 1455690838, 1, '发件人姓名', 0),
+(31, 'mail_ishtml', 'select', '是否HTML格式邮件', 3, '0:否,1:是', '是否HTML格式邮件', '', 1455690888, 1455690888, 1, '1', 0),
+(32, 'mail_charset', 'text', '邮件编码', 3, '', '设置发送邮件的编码', '', 1455690920, 1455690920, 1, 'UTF8', 0),
+(33, 'wechat_name', 'text', '微信名称', 4, '', '填写微信名称', '', 1459136529, 1461898406, 1, '', 0),
+(41, 'pc_themes', 'text', 'PC站模板', 0, '', '', '', 1480043043, 1480043043, 1, '', 0),
+(42, 'mobile_themes', 'text', '手机站模板', 0, '', '', '', 1480043066, 1480043066, 1, '', 0);
 
 -- -----------------------------
 -- Table structure for `sent_district`
@@ -1279,35 +1284,38 @@ CREATE TABLE `sent_menu` (
   KEY `status` (`status`)
 ) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
--- -----------------------------
--- Records of `sent_menu`
--- -----------------------------
-INSERT INTO `sent_menu` VALUES ('1', '首页', 'admin', 'home', '0', '0', 'admin/index/index', '0', '', '', '0', '0');
-INSERT INTO `sent_menu` VALUES ('2', '系统', 'admin', 'laptop', '0', '11', 'admin/config/group', '0', '', '', '0', '0');
-INSERT INTO `sent_menu` VALUES ('3', '内容', 'admin', 'list', '0', '22', 'admin/category/index', '0', '', '', '0', '0');
-INSERT INTO `sent_menu` VALUES ('4', '会员', 'admin', 'user', '0', '33', 'admin/user/index', '0', '', '', '0', '0');
-INSERT INTO `sent_menu` VALUES ('5', '运营', 'admin', 'th', '0', '44', 'admin/link/index', '0', '', '', '0', '0');
-INSERT INTO `sent_menu` VALUES ('6', '扩展', 'admin', 'tags', '0', '55', 'admin/addons/index', '0', '', '', '0', '0');
-INSERT INTO `sent_menu` VALUES ('21', '友链管理', 'admin', 'link', '5', '0', 'admin/link/index', '0', '', '运营管理', '0', '0');
-INSERT INTO `sent_menu` VALUES ('7', '更新缓存', 'admin', 'refresh', '1', '0', 'admin/index/clear', '0', '', '后台首页', '0', '0');
-INSERT INTO `sent_menu` VALUES ('8', '配置管理', 'admin', 'cog', '2', '0', 'admin/config/group', '0', '', '系统配置', '0', '0');
-INSERT INTO `sent_menu` VALUES ('9', '菜单管理', 'admin', 'book', '2', '0', 'admin/menu/index', '0', '', '系统配置', '0', '0');
-INSERT INTO `sent_menu` VALUES ('10', '导航管理', 'admin', 'map-marker', '2', '0', 'admin/channel/index', '0', '', '系统配置', '0', '0');
-INSERT INTO `sent_menu` VALUES ('11', '数据备份', 'admin', 'exchange', '2', '0', 'admin/database/index?type=export', '0', '', '数据库管理', '0', '0');
-INSERT INTO `sent_menu` VALUES ('12', '数据恢复', 'admin', 'table', '2', '0', 'admin/database/index?type=import', '0', '', '数据库管理', '0', '0');
-INSERT INTO `sent_menu` VALUES ('13', 'SEO设置', 'admin', 'anchor', '2', '0', 'admin/seo/index', '0', '', '优化设置', '0', '0');
-INSERT INTO `sent_menu` VALUES ('14', '栏目管理', 'admin', 'list-ol', '3', '0', 'admin/category/index', '0', '', '内容配置', '0', '0');
-INSERT INTO `sent_menu` VALUES ('15', '模型管理', 'admin', 'th-list', '3', '0', 'admin/model/index', '0', '', '内容配置', '0', '0');
-INSERT INTO `sent_menu` VALUES ('16', '用户列表', 'admin', 'user', '4', '0', 'admin/user/index', '0', '', '用户管理', '0', '0');
-INSERT INTO `sent_menu` VALUES ('17', '用户组表', 'admin', 'users', '4', '0', 'admin/group/index', '0', '', '用户管理', '0', '0');
-INSERT INTO `sent_menu` VALUES ('18', '权限列表', 'admin', 'paw', '4', '0', 'admin/group/access', '0', '', '用户管理', '0', '0');
-INSERT INTO `sent_menu` VALUES ('19', '行为列表', 'admin', 'file-text', '4', '0', 'admin/action/index', '0', '', '行为管理', '0', '0');
-INSERT INTO `sent_menu` VALUES ('20', '行为日志', 'admin', 'clipboard', '4', '0', 'admin/action/log', '0', '', '行为管理', '0', '0');
-INSERT INTO `sent_menu` VALUES ('22', '广告管理', 'admin', 'cc', '5', '0', 'admin/ad/index', '0', '', '运营管理', '0', '0');
-INSERT INTO `sent_menu` VALUES ('23', '插件列表', 'admin', 'usb', '6', '0', 'admin/addons/index', '0', '', '插件管理', '0', '0');
-INSERT INTO `sent_menu` VALUES ('24', '钩子列表', 'admin', 'code', '6', '0', 'admin/addons/hooks', '0', '', '插件管理', '0', '0');
-INSERT INTO `sent_menu` VALUES ('25', '自定义表单', 'admin', '', '5', '0', 'admin/form/index', '0', '', '运营管理', '0', '0');
-INSERT INTO `sent_menu` VALUES ('26', '伪静态规则', 'admin', '', '2', '0', 'admin/seo/rewrite', '0', '', '优化设置', '0', '0');
+--
+-- 转存表中的数据 `sent_menu`
+--
+
+INSERT INTO `sent_menu` (`id`, `title`, `type`, `icon`, `pid`, `sort`, `url`, `hide`, `tip`, `group`, `is_dev`, `status`) VALUES
+(1, '首页', 'admin', 'home', 0, 0, 'admin/index/index', 0, '', '', 0, 0),
+(2, '系统', 'admin', 'laptop', 0, 11, 'admin/config/group', 0, '', '', 0, 0),
+(3, '内容', 'admin', 'list', 0, 22, 'admin/category/index', 0, '', '', 0, 0),
+(4, '会员', 'admin', 'user', 0, 33, 'admin/user/index', 0, '', '', 0, 0),
+(5, '运营', 'admin', 'th', 0, 44, 'admin/link/index', 0, '', '', 0, 0),
+(6, '扩展', 'admin', 'tags', 0, 55, 'admin/addons/index', 0, '', '', 0, 0),
+(21, '友链管理', 'admin', 'link', 5, 0, 'admin/link/index', 0, '', '运营管理', 0, 0),
+(7, '更新缓存', 'admin', 'refresh', 1, 0, 'admin/index/clear', 0, '', '后台首页', 0, 0),
+(8, '配置管理', 'admin', 'cog', 2, 0, 'admin/config/group', 0, '', '系统配置', 0, 0),
+(9, '菜单管理', 'admin', 'book', 2, 0, 'admin/menu/index', 0, '', '系统配置', 0, 0),
+(10, '导航管理', 'admin', 'map-marker', 2, 0, 'admin/channel/index', 0, '', '系统配置', 0, 0),
+(11, '数据备份', 'admin', 'exchange', 2, 0, 'admin/database/index?type=export', 0, '', '数据库管理', 0, 0),
+(12, '数据恢复', 'admin', 'table', 2, 0, 'admin/database/index?type=import', 0, '', '数据库管理', 0, 0),
+(13, 'SEO设置', 'admin', 'anchor', 2, 0, 'admin/seo/index', 0, '', '优化设置', 0, 0),
+(14, '栏目管理', 'admin', 'list-ol', 3, 0, 'admin/category/index', 0, '', '内容配置', 0, 0),
+(15, '模型管理', 'admin', 'th-list', 3, 0, 'admin/model/index', 0, '', '内容配置', 0, 0),
+(16, '用户列表', 'admin', 'user', 4, 0, 'admin/user/index', 0, '', '用户管理', 0, 0),
+(17, '用户组表', 'admin', 'users', 4, 0, 'admin/group/index', 0, '', '用户管理', 0, 0),
+(18, '权限列表', 'admin', 'paw', 4, 0, 'admin/group/access', 0, '', '用户管理', 0, 0),
+(19, '行为列表', 'admin', 'file-text', 4, 0, 'admin/action/index', 0, '', '行为管理', 0, 0),
+(20, '行为日志', 'admin', 'clipboard', 4, 0, 'admin/action/log', 0, '', '行为管理', 0, 0),
+(22, '广告管理', 'admin', 'cc', 5, 0, 'admin/ad/index', 0, '', '运营管理', 0, 0),
+(23, '插件列表', 'admin', 'usb', 6, 0, 'admin/addons/index', 0, '', '插件管理', 0, 0),
+(24, '钩子列表', 'admin', 'code', 6, 0, 'admin/addons/hooks', 0, '', '插件管理', 0, 0),
+(25, '自定义表单', 'admin', 'object-group', 5, 0, 'admin/form/index', 0, '', '运营管理', 0, 0),
+(26, '伪静态规则', 'admin', 'magnet', 2, 0, 'admin/seo/rewrite', 0, '', '优化设置', 0, 0),
+(27, '主题管理', 'admin', 'heartbeat', 2, 0, 'admin/config/themes', 0, '', '系统配置', 0, 0);
 
 -- -----------------------------
 -- Table structure for `sent_model`
