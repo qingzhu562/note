@@ -1223,7 +1223,7 @@ class Route
                         $find = true;
                         break;
                     } else {
-                        $dir .= DS . $val;
+                        $dir .= DS . Loader::parseName($val);
                     }
                 }
                 if ($find) {
@@ -1480,12 +1480,15 @@ class Route
             $result = ['type' => 'redirect', 'url' => $route, 'status' => isset($option['status']) ? $option['status'] : 301];
         } elseif (false !== strpos($route, '\\')) {
             // 路由到方法
-            $route  = str_replace('/', '@', $route);
-            $method = strpos($route, '@') ? explode('@', $route) : $route;
-            $result = ['type' => 'method', 'method' => $method];
+            list($path, $var) = self::parseUrlPath($route);
+            $route            = str_replace('/', '@', implode('/', $path));
+            $method           = strpos($route, '@') ? explode('@', $route) : $route;
+            $result           = ['type' => 'method', 'method' => $method, 'var' => $var];
         } elseif (0 === strpos($route, '@')) {
             // 路由到控制器
-            $result = ['type' => 'controller', 'controller' => substr($route, 1)];
+            $route             = substr($route, 1);
+            list($route, $var) = self::parseUrlPath($route);
+            $result            = ['type' => 'controller', 'controller' => implode('/', $route), 'var' => $var];
         } else {
             // 路由到模块/控制器/操作
             $result = self::parseModule($route);
@@ -1496,7 +1499,7 @@ class Route
             if (is_array($cache)) {
                 list($key, $expire) = $cache;
             } else {
-                $key    = $pathinfo;
+                $key    = str_replace('|', '/', $pathinfo);
                 $expire = $cache;
             }
             $request->cache($key, $expire);

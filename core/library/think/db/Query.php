@@ -917,6 +917,9 @@ class Query
             if (is_array($field)) {
                 // 数组批量查询
                 $where = $field;
+                foreach ($where as $k => $val) {
+                    $this->options['multi'][$k][] = $val;
+                }
             } elseif ($field && is_string($field)) {
                 // 字符串查询
                 $where[$field] = ['null', ''];
@@ -931,13 +934,30 @@ class Query
             $where[$field] = ['eq', $op];
         } else {
             $where[$field] = [$op, $condition];
+            // 记录一个字段多次查询条件
+            $this->options['multi'][$field][] = $where[$field];
         }
         if (!empty($where)) {
             if (!isset($this->options['where'][$logic])) {
                 $this->options['where'][$logic] = [];
             }
+            if (is_string($field) && $this->checkMultiField($field)) {
+                $where[$field] = $this->options['multi'][$field];
+            } elseif (is_array($field)) {
+                foreach ($field as $key => $val) {
+                    if ($this->checkMultiField($key)) {
+                        $where[$key] = $this->options['multi'][$key];
+                    }
+                }
+            }
             $this->options['where'][$logic] = array_merge($this->options['where'][$logic], $where);
         }
+    }
+
+    // 检查是否存在一个字段多次查询条件
+    private function checkMultiField($field)
+    {
+        return isset($this->options['multi'][$field]) && count($this->options['multi'][$field]) > 1;
     }
 
     /**
@@ -1416,9 +1436,10 @@ class Query
         }
 
         list($guid) = explode(' ', $tableName);
-        if (!isset(self::$info[$guid])) {
+        $db         = $this->getConfig('database');
+        if (!isset(self::$info[$db . '.' . $guid])) {
             if (!strpos($guid, '.')) {
-                $schema = $this->getConfig('database') . '.' . $guid;
+                $schema = $db . '.' . $guid;
             } else {
                 $schema = $guid;
             }
@@ -1444,9 +1465,9 @@ class Query
             } else {
                 $pk = null;
             }
-            self::$info[$guid] = ['fields' => $fields, 'type' => $type, 'bind' => $bind, 'pk' => $pk];
+            self::$info[$db . '.' . $guid] = ['fields' => $fields, 'type' => $type, 'bind' => $bind, 'pk' => $pk];
         }
-        return $fetch ? self::$info[$guid][$fetch] : self::$info[$guid];
+        return $fetch ? self::$info[$db . '.' . $guid][$fetch] : self::$info[$db . '.' . $guid];
     }
 
     /**
@@ -2138,19 +2159,30 @@ class Query
         $column    = $column ?: $this->getPk($table);
         $bind      = $this->bind;
         $resultSet = $this->limit($count)->order($column, 'asc')->select();
+        if (strpos($column, '.')) {
+            list($alias, $key) = explode('.', $column);
+        } else {
+            $key = $column;
+        }
+        if ($resultSet instanceof Collection) {
+            $resultSet = $resultSet->all();
+        }
 
         while (!empty($resultSet)) {
             if (false === call_user_func($callback, $resultSet)) {
                 return false;
             }
             $end       = end($resultSet);
-            $lastId    = is_array($end) ? $end[$column] : $end->$column;
+            $lastId    = is_array($end) ? $end[$key] : $end->$key;
             $resultSet = $this->options($options)
                 ->limit($count)
                 ->bind($bind)
                 ->where($column, '>', $lastId)
                 ->order($column, 'asc')
                 ->select();
+            if ($resultSet instanceof Collection) {
+                $resultSet = $resultSet->all();
+            }
         }
         return true;
     }

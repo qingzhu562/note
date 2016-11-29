@@ -156,8 +156,14 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
     {
         $model = $this->class;
         if (!isset(self::$links[$model])) {
+            // 合并数据库配置
+            if (is_array($this->connection)) {
+                $connection = array_merge(Config::get('database'), $this->connection);
+            } else {
+                $connection = $this->connection;
+            }
             // 设置当前模型 确保查询返回模型对象
-            $query = Db::connect($this->connection)->model($model, $this->query);
+            $query = Db::connect($connection)->model($model, $this->query);
 
             // 设置当前数据表和模型名
             if (!empty($this->table)) {
@@ -294,7 +300,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         }
 
         // 标记字段更改
-        if (!isset($this->data[$name]) || ($this->data[$name] != $value && !in_array($name, $this->change))) {
+        if (!isset($this->data[$name]) || (0 !== strcmp($this->data[$name], $value) && !in_array($name, $this->change))) {
             $this->change[] = $name;
         }
         // 设置数据对象属性
@@ -1470,6 +1476,49 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
     public function __wakeup()
     {
         $this->initialize();
+    }
+
+    /**
+     * 模型事件快捷方法
+     */
+    protected static function beforeInsert($callback, $override = false)
+    {
+        self::event('before_insert', $callback, $override);
+    }
+
+    protected static function afterInsert($callback, $override = false)
+    {
+        self::event('after_insert', $callback, $override);
+    }
+
+    protected static function beforeUpdate($callback, $override = false)
+    {
+        self::event('before_update', $callback, $override);
+    }
+
+    protected static function afterUpdate($callback, $override = false)
+    {
+        self::event('after_update', $callback, $override);
+    }
+
+    protected static function beforeWrite($callback, $override = false)
+    {
+        self::event('before_write', $callback, $override);
+    }
+
+    protected static function afterWrite($callback, $override = false)
+    {
+        self::event('after_write', $callback, $override);
+    }
+
+    protected static function beforeDelete($callback, $override = false)
+    {
+        self::event('before_delete', $callback, $override);
+    }
+
+    protected static function afterDelete($callback, $override = false)
+    {
+        self::event('after_delete', $callback, $override);
     }
 
 }

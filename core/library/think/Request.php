@@ -686,7 +686,12 @@ class Request
     public function post($name = '', $default = null, $filter = '')
     {
         if (empty($this->post)) {
-            $this->post = $_POST;
+            $content = $this->input;
+            if (empty($_POST) && strpos($content, '":')) {
+                $this->post = json_decode($content, true);
+            } else {
+                $this->post = $_POST;
+            }
         }
         if (is_array($name)) {
             $this->param       = [];
@@ -1258,7 +1263,7 @@ class Request
         }
         // IP地址合法验证
         $long = sprintf("%u", ip2long($ip));
-        $ip   = $long ? array($ip, $long) : array('0.0.0.0', 0);
+        $ip   = $long ? [$ip, $long] : ['0.0.0.0', 0];
         return $ip[$type];
     }
 
