@@ -230,7 +230,7 @@ class Config extends Admin {
 	public function setthemes($name, $id){
 		$result = db('Config')->where('name', $name . '_themes')->setField('value', $id);
 		if (false !== $result) {
-			session('config', null, 'sent');
+			\think\Cache::clear();
 			return $this->success('设置成功！');
 		}else{
 			return $this->error('设置失败！');
