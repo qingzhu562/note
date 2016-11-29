@@ -80,16 +80,20 @@ class Config extends Base{
 	}
 
 	protected function getList($type){
-		$path = ROOT_PATH . 'template/' . $type . '/';
+		$path = ROOT_PATH . 'template/';
 		$file  = opendir($path);
 		while (false !== ($filename = readdir($file))) {
 			if (!in_array($filename, array('.', '..'))) {
 				$files = $path . $filename . '/info.php';
 				if (is_file($files)) {
 					$info = include($files);
-					$info['id']  = $filename;
-					$info['img'] = '/template/' . $type . '/' . $filename . '/' . $info['img'];
-					$list[] = $info;
+					if ($info['type'] == $type) {
+						$info['id']  = $filename;
+						$info['img'] = '/template/' . $filename . '/' . $info['img'];
+						$list[] = $info;
+					}else{
+						continue;
+					}
 				}
 			}
 		}
