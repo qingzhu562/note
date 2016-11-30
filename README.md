@@ -39,19 +39,16 @@
 │ │ ├─view
 │ │ ├─config.php
 │ ├─common             COMMON公共模型，不可访问
-│ │ ├─controller
-│ │ ├─static
-│ │ ├─view
-│ │ ├─config.php
+│ │ ├─controller      公共基类目录
+│ │ ├─model           模型目录
+│ │ ├─validate        验证配置
+│ │ ├─view            公共模板目录
+│ │ ├─widget          扩展组件目录
 │ ├─index             前台模型
 │ │ ├─controller
-│ │ ├─static
-│ │ ├─view
 │ │ ├─config.php
 │ ├─user              用户中心模型
 │ │ ├─controller
-│ │ ├─static
-│ │ ├─view
 │ │ ├─config.php
 │ ├─common.php        公共函数库文件
 │ ├─config.php        基础配置文件
@@ -63,6 +60,7 @@
 ├─data                缓存以及备份目录
 ├─public         公共资源库
 ├─uploads        上传文件目录
+├─template       网站主题模板目录
 ├─.htaccess      Apache下伪静态文件
 ├─favicon.ico    ico图标
 ├─index.php      入口文件
