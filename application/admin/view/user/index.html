@@ -24,6 +24,9 @@
 							<span>手机号码</span>
 						</th>
 						<th>
+							<span>授权分组</span>
+						</th>
+						<th>
 							<span>创建时间</span>
 						</th>
 						<th class="text-center">
@@ -46,6 +49,7 @@
 						<td>
 							<span >{$item['mobile']}</span>
 						</td>
+						<td>{$item['group_list']|implode=',',###}</td>
 						<td>{$item['reg_time']|date='Y-m-d',###}</td>
 						<td class="text-center">
 							{if condition="$item['status']"}

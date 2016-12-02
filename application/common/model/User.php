@@ -72,6 +72,11 @@ class User extends Base{
 		return md5($value.$data['salt']);
 	}
 
+	protected function getGroupListAttr($value, $data){
+		$sql = db('AuthGroupAccess')->where('uid', $data['uid'])->fetchSql(true)->column('group_id');
+		return db('AuthGroup')->where('id in ('.$sql.')')->column('title', 'id');
+	}
+
 	/**
 	* 用户登录模型
 	*/
@@ -175,11 +180,7 @@ class User extends Base{
 
 	public function getInfo($uid){
 		$data = $this->where(array('uid'=>$uid))->find();
-		if ($data) {
-			return $data->toArray();
-		}else{
-			return false;
-		}
+		return $data;
 	}
 
 	/**
