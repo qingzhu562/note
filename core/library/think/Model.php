@@ -1363,6 +1363,51 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         return $this->relation()->belongsToMany($model, $table, $foreignKey, $localKey, $alias);
     }
 
+    /**
+     * MORPH  MANY 关联定义
+     * @access public
+     * @param string $model 模型名
+     * @param string|array $morph 多态字段信息
+     * @param string $type 多态类型
+     * @return Relation
+     */
+    public function morphMany($model, $morph, $type = '')
+    {
+        // 记录当前关联信息
+        $model = $this->parseModel($model);
+        $type  = $type ?: Loader::parseName($this->name);
+        if (is_array($morph)) {
+            list($morphType, $foreignKey) = $morph;
+        } else {
+            $morphType  = $morph . '_type';
+            $foreignKey = $morph . '_id';
+        }
+        return $this->relation()->morphMany($model, $foreignKey, $morphType, $type);
+    }
+
+    /**
+     * MORPH TO 关联定义
+     * @access public
+     * @param string|array  $morph 多态字段信息
+     * @param array         $alias 多态别名定义
+     * @return Relation
+     */
+    public function morphTo($morph = null, $alias = [])
+    {
+        if (is_null($morph)) {
+            $trace = debug_backtrace(false, 2);
+            $morph = Loader::parseName($trace[1]['function']);
+        }
+        // 记录当前关联信息
+        if (is_array($morph)) {
+            list($morphType, $foreignKey) = $morph;
+        } else {
+            $morphType  = $morph . '_type';
+            $foreignKey = $morph . '_id';
+        }
+        return $this->relation()->morphTo($morphType, $foreignKey, $alias);
+    }
+
     public function __call($method, $args)
     {
         $query = $this->db();

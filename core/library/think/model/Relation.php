@@ -21,9 +21,11 @@ class Relation
 {
     const HAS_ONE          = 1;
     const HAS_MANY         = 2;
-    const HAS_MANY_THROUGH = 5;
     const BELONGS_TO       = 3;
     const BELONGS_TO_MANY  = 4;
+    const HAS_MANY_THROUGH = 5;
+    const MORPH_TO         = 6;
+    const MORPH_MANY       = 7;
 
     // 父模型对象
     protected $parent;
@@ -49,6 +51,7 @@ class Relation
     protected $where;
     // 关联查询参数
     protected $option;
+
     /**
      * 架构函数
      * @access public
@@ -57,6 +60,44 @@ class Relation
     public function __construct(Model $model)
     {
         $this->parent = $model;
+    }
+
+    /**
+     * 获取关联的所属模型
+     * @access public
+     */
+    public function getModel()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * 获取关联的查询对象
+     * @access public
+     */
+    public function getQuery()
+    {
+        return $this->query;
+    }
+
+    /**
+     * 解析模型的完整命名空间
+     * @access public
+     * @param string $model 模型名（或者完整类名）
+     * @return string
+     */
+    protected function parseModel($model)
+    {
+        if (isset($this->alias[$model])) {
+            $model = $this->alias[$model];
+        }
+        if (false === strpos($model, '\\')) {
+            $path = explode('\\', get_class($this->parent));
+            array_pop($path);
+            array_push($path, Loader::parseName($model, 1));
+            $model = implode('\\', $path);
+        }
+        return $model;
     }
 
     /**
@@ -87,6 +128,7 @@ class Relation
         $relation   = $this->parent->$name();
         $foreignKey = $this->foreignKey;
         $localKey   = $this->localKey;
+        $middle     = $this->middle;
 
         // 判断关联类型执行查询
         switch ($this->type) {
@@ -106,7 +148,7 @@ class Relation
                 // 关联查询
                 $pk                              = $this->parent->getPk();
                 $condition['pivot.' . $localKey] = $this->parent->$pk;
-                $result                          = $this->belongsToManyQuery($relation, $this->middle, $foreignKey, $localKey, $condition)->select();
+                $result                          = $this->belongsToManyQuery($relation->getQuery(), $middle, $foreignKey, $localKey, $condition)->select();
                 foreach ($result as $set) {
                     $pivot = [];
                     foreach ($set->getData() as $key => $val) {
@@ -120,6 +162,16 @@ class Relation
                     }
                     $set->pivot = new Pivot($pivot, $this->middle);
                 }
+                break;
+            case self::MORPH_MANY:
+                $result = $relation->select();
+                break;
+            case self::MORPH_TO:
+                // 多态模型
+                $model = $this->parseModel($this->parent->$middle);
+                // 主键数据
+                $pk     = $this->parent->$foreignKey;
+                $result = (new $model)->find($pk);
                 break;
             default:
                 // 直接返回
@@ -156,6 +208,7 @@ class Relation
             // 获取关联信息
             $localKey   = $this->localKey;
             $foreignKey = $this->foreignKey;
+            $middle     = $this->middle;
             switch ($this->type) {
                 case self::HAS_ONE:
                 case self::BELONGS_TO:
@@ -220,6 +273,64 @@ class Relation
                         }
                     }
                     break;
+                case self::MORPH_MANY:
+                    $range = [];
+                    foreach ($resultSet as $result) {
+                        $pk = $result->getPk();
+                        // 获取关联外键列表
+                        if (isset($result->$pk)) {
+                            $range[] = $result->$pk;
+                        }
+                    }
+
+                    if (!empty($range)) {
+                        $this->where[$foreignKey] = ['in', $range];
+                        $this->where[$localKey]   = $middle;
+                        $data                     = $this->eagerlyMorphToMany($model, [
+                            $foreignKey => ['in', $range],
+                            $localKey   => $middle,
+                        ], $relation, $subRelation, $closure);
+
+                        // 关联数据封装
+                        foreach ($resultSet as $result) {
+                            if (!isset($data[$result->$pk])) {
+                                $data[$result->$pk] = [];
+                            }
+                            $result->setAttr($relation, $this->resultSetBuild($data[$result->$pk], $class));
+                        }
+                    }
+                    break;
+                case self::MORPH_TO:
+                    $range = [];
+                    foreach ($resultSet as $result) {
+                        // 获取关联外键列表
+                        if (!empty($result->$foreignKey)) {
+                            $range[$result->$middle][] = $result->$foreignKey;
+                        }
+                    }
+
+                    if (!empty($range)) {
+                        foreach ($range as $key => $val) {
+                            // 多态类型映射
+                            $model = $this->parseModel($key);
+                            $obj   = new $model;
+                            $pk    = $obj->getPk();
+                            $list  = $obj->all($val, $subRelation);
+                            $data  = [];
+                            foreach ($list as $k => $vo) {
+                                $data[$vo->$pk] = $vo;
+                            }
+                            foreach ($resultSet as $result) {
+                                if ($key == $result->$middle) {
+                                    if (!isset($data[$result->$foreignKey])) {
+                                        $data[$result->$foreignKey] = [];
+                                    }
+                                    $result->setAttr($relation, $this->resultSetBuild($data[$result->$foreignKey], $class));
+                                }
+                            }
+                        }
+                    }
+                    break;
             }
         }
         return $resultSet;
@@ -263,6 +374,7 @@ class Relation
             $model      = $this->parent->$relation();
             $localKey   = $this->localKey;
             $foreignKey = $this->foreignKey;
+            $middle     = $this->middle;
             switch ($this->type) {
                 case self::HAS_ONE:
                 case self::BELONGS_TO:
@@ -292,6 +404,18 @@ class Relation
                         }
                         $result->setAttr($relation, $this->resultSetBuild($data[$pk], $class));
                     }
+                    break;
+                case self::MORPH_MANY:
+                    $pk = $result->getPk();
+                    if (isset($result->$pk)) {
+                        $data = $this->eagerlyMorphToMany($model, [$foreignKey => $result->$pk, $localKey => $middle], $relation, $subRelation, $closure);
+                        $result->setAttr($relation, $this->resultSetBuild($data[$result->$pk], $class));
+                    }
+                    break;
+                case self::MORPH_TO:
+                    // 多态类型映射
+                    $model = $this->parseModel($result->{$this->middle});
+                    $this->eagerlyMorphToOne($model, $relation, $result, $subRelation);
                     break;
 
             }
@@ -364,7 +488,7 @@ class Relation
         $foreignKey = $this->foreignKey;
         $localKey   = $this->localKey;
         // 预载入关联查询 支持嵌套预载入
-        $list = $this->belongsToManyQuery($model, $this->middle, $foreignKey, $localKey, $where)->with($subRelation)->select();
+        $list = $this->belongsToManyQuery($model->getQuery(), $this->middle, $foreignKey, $localKey, $where)->with($subRelation)->select();
 
         // 组装模型数据
         $data = [];
@@ -381,6 +505,51 @@ class Relation
             }
             $set->pivot                = new Pivot($pivot, $this->middle);
             $data[$pivot[$localKey]][] = $set;
+        }
+        return $data;
+    }
+
+    /**
+     * 多态MorphTo 关联模型预查询
+     * @access public
+     * @param object    $model 关联模型对象
+     * @param array     $where 关联预查询条件
+     * @param string    $relation 关联名
+     * @param string    $subRelation 子关联
+     * @return array
+     */
+    protected function eagerlyMorphToOne($model, $relation, &$result, $subRelation = '')
+    {
+        // 预载入关联查询 支持嵌套预载入
+        $pk   = $this->parent->{$this->foreignKey};
+        $data = (new $model)->with($subRelation)->find($pk);
+        if ($data) {
+            $data->isUpdate(true);
+        }
+        $result->setAttr($relation, $data ?: null);
+    }
+
+    /**
+     * 多态一对多 关联模型预查询
+     * @access public
+     * @param object    $model 关联模型对象
+     * @param array     $where 关联预查询条件
+     * @param string    $relation 关联名
+     * @param string    $subRelation 子关联
+     * @return array
+     */
+    protected function eagerlyMorphToMany($model, $where, $relation, $subRelation = '', $closure = false)
+    {
+        // 预载入关联查询 支持嵌套预载入
+        if ($closure) {
+            call_user_func_array($closure, [ & $model]);
+        }
+        $list       = $model->getQuery()->where($where)->with($subRelation)->select();
+        $foreignKey = $this->foreignKey;
+        // 组装模型数据
+        $data = [];
+        foreach ($list as $set) {
+            $data[$set->$foreignKey][] = $set;
         }
         return $data;
     }
@@ -517,6 +686,47 @@ class Relation
     }
 
     /**
+     * MORPH_MANY 关联定义
+     * @access public
+     * @param string $model 模型名
+     * @param string $id 关联外键
+     * @param string $morphType 多态字段名
+     * @param string $type 多态类型
+     * @return $this
+     */
+    public function morphMany($model, $foreignKey, $morphType, $type)
+    {
+        // 记录当前关联信息
+        $this->type       = self::MORPH_MANY;
+        $this->model      = $model;
+        $this->middle     = $type;
+        $this->foreignKey = $foreignKey;
+        $this->localKey   = $morphType;
+        $this->query      = (new $model)->db();
+        // 返回关联的模型对象
+        return $this;
+    }
+
+    /**
+     * MORPH_TO 关联定义
+     * @access public
+     * @param string $morphType 多态字段名
+     * @param string $foreignKey 外键名
+     * @param array  $alias 多态别名定义
+     * @return $this
+     */
+    public function morphTo($morphType, $foreignKey, $alias)
+    {
+        // 记录当前关联信息
+        $this->type       = self::MORPH_TO;
+        $this->middle     = $morphType;
+        $this->foreignKey = $foreignKey;
+        $this->alias      = $alias;
+        // 返回关联的模型对象
+        return $this;
+    }
+
+    /**
      * BELONGS TO MANY 关联查询
      * @access public
      * @param object    $model 关联模型对象
@@ -531,7 +741,7 @@ class Relation
         // 关联查询封装
         $tableName  = $model->getTable();
         $relationFk = $model->getPk();
-        return $model::field($tableName . '.*')
+        return $model->field($tableName . '.*')
             ->field(true, false, $table, 'pivot', 'pivot__')
             ->join($table . ' pivot', 'pivot.' . $foreignKey . '=' . $tableName . '.' . $relationFk)
             ->where($condition);
@@ -662,39 +872,52 @@ class Relation
 
     public function __call($method, $args)
     {
+        static $baseQuery = [];
         if ($this->query) {
-            switch ($this->type) {
-                case self::HAS_MANY:
-                    if (isset($this->where)) {
-                        $this->query->where($this->where);
-                    } elseif (isset($this->parent->{$this->localKey})) {
-                        // 关联查询带入关联条件
-                        $this->query->where($this->foreignKey, $this->parent->{$this->localKey});
-                    }
-                    break;
-                case self::HAS_MANY_THROUGH:
-                    $through      = $this->middle;
-                    $model        = $this->model;
-                    $alias        = Loader::parseName(basename(str_replace('\\', '/', $model)));
-                    $throughTable = $through::getTable();
-                    $pk           = (new $this->model)->getPk();
-                    $throughKey   = $this->throughKey;
-                    $modelTable   = $this->parent->getTable();
-                    $this->query->field($alias . '.*')->alias($alias)
-                        ->join($throughTable, $throughTable . '.' . $pk . '=' . $alias . '.' . $throughKey)
-                        ->join($modelTable, $modelTable . '.' . $this->localKey . '=' . $throughTable . '.' . $this->foreignKey)
-                        ->where($throughTable . '.' . $this->foreignKey, $this->parent->{$this->localKey});
-                    break;
-                case self::BELONGS_TO_MANY:
-                    // TODO
-
+            if (empty($baseQuery[$this->type])) {
+                $baseQuery[$this->type] = true;
+                switch ($this->type) {
+                    case self::HAS_MANY:
+                        if (isset($this->where)) {
+                            $this->query->where($this->where);
+                        } elseif (isset($this->parent->{$this->localKey})) {
+                            // 关联查询带入关联条件
+                            $this->query->where($this->foreignKey, $this->parent->{$this->localKey});
+                        }
+                        break;
+                    case self::HAS_MANY_THROUGH:
+                        $through      = $this->middle;
+                        $model        = $this->model;
+                        $alias        = Loader::parseName(basename(str_replace('\\', '/', $model)));
+                        $throughTable = $through::getTable();
+                        $pk           = (new $this->model)->getPk();
+                        $throughKey   = $this->throughKey;
+                        $modelTable   = $this->parent->getTable();
+                        $this->query->field($alias . '.*')->alias($alias)
+                            ->join($throughTable, $throughTable . '.' . $pk . '=' . $alias . '.' . $throughKey)
+                            ->join($modelTable, $modelTable . '.' . $this->localKey . '=' . $throughTable . '.' . $this->foreignKey)
+                            ->where($throughTable . '.' . $this->foreignKey, $this->parent->{$this->localKey});
+                        break;
+                    case self::BELONGS_TO_MANY:
+                        $pk = $this->parent->getPk();
+                        $this->query->join($this->middle . ' pivot', 'pivot.' . $this->foreignKey . '=' . $this->query->getTable() . '.' . $this->query->getPk())->where('pivot.' . $this->localKey, $this->parent->$pk);
+                        break;
+                    case self::MORPH_MANY:
+                        $pk                     = $this->parent->getPk();
+                        $map[$this->foreignKey] = $this->parent->$pk;
+                        $map[$this->localKey]   = $this->middle;
+                        $this->query->where($map);
+                        break;
+                }
             }
+
             $result = call_user_func_array([$this->query, $method], $args);
             if ($result instanceof \think\db\Query) {
                 $this->option = $result->getOptions();
                 return $this;
             } else {
                 $this->option = [];
+                $baseQuery    = false;
                 return $result;
             }
         } else {

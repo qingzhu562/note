@@ -87,7 +87,7 @@ class Config extends Base{
 				$files = $path . $filename . '/info.php';
 				if (is_file($files)) {
 					$info = include($files);
-					if ($info['type'] == $type) {
+					if (isset($info['type']) && $info['type'] == $type) {
 						$info['id']  = $filename;
 						$info['img'] = '/template/' . $filename . '/' . $info['img'];
 						$list[] = $info;

@@ -107,7 +107,7 @@ class User extends Base{
 				return 0; //参数错误
 		}
 
-		$user = $this->db()->where($map)->find()->toArray();
+		$user = $this->where($map)->find();
 		if(is_array($user) && $user['status']){
 			/* 验证用户密码 */
 			if(md5($password.$user['salt']) === $user['password']){
