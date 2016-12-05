@@ -108,7 +108,7 @@ class User extends Base{
 		}
 
 		$user = $this->where($map)->find();
-		if(is_array($user) && $user['status']){
+		if(isset($user['status']) && $user['status']){
 			/* 验证用户密码 */
 			if(md5($password.$user['salt']) === $user['password']){
 				$this->autoLogin($user); //更新用户登录信息
