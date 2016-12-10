@@ -113,7 +113,7 @@ class Hooks extends Base {
 				$addons = explode(',', $value['addons']);
 				$key    = array_search($addons_name, $addons);
 				if ($key) {
-					unset($value['addons'][$key]);
+					unset($addons[$key]);
 					$addons = implode(',', $addons);
 					$this->where('id', $value['id'])->setField('addons', $addons);
 				}
