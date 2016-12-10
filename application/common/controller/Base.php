@@ -195,4 +195,11 @@ class Base extends \think\Controller {
 		}
 		return false;
 	}
+
+	public function is_wechat() {
+		if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+			return true;
+		}
+		return false;
+	}
 }

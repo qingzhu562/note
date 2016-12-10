@@ -133,7 +133,9 @@ class Response
         Hook::listen('response_end', $this);
 
         // 清空当次请求有效的数据
-        Session::flush();
+        if (!($this instanceof RedirectResponse)) {
+            Session::flush();
+        }
     }
 
     /**
@@ -282,7 +284,11 @@ class Response
      */
     public function getHeader($name = '')
     {
-        return !empty($name) ? $this->header[$name] : $this->header;
+        if (!empty($name)) {
+            return isset($this->header[$name]) ? $this->header[$name] : null;
+        } else {
+            return $this->header;
+        }
     }
 
     /**
