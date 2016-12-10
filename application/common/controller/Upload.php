@@ -62,7 +62,8 @@ class Upload {
 
 	public function editor() {
 		$callback = request()->get('callback');
-		$file = request()->file('upfile');
+		$CKEditorFuncNum = request()->get('CKEditorFuncNum');
+		$file = request()->file('upload');
 		$info = $file->move(config('editor_upload.rootPath'), true, false);
 		if ($info) {
 			$fileInfo              = $this->parseFile($info);
@@ -82,6 +83,8 @@ class Upload {
 		*/
 		if($callback) {
 			return '<script>'.$callback.'('.json_encode($data).')</script>';
+		}elseif($CKEditorFuncNum) {
+			return '<script>window.parent.CKEDITOR.tools.callFunction("'.$CKEditorFuncNum.'","'.$fileInfo['url'].'","'.$data['state'].'");</script>';
 		} else {
 			return json_encode($data);
 		}
