@@ -32,6 +32,7 @@ class Attribute extends Base{
 				$value['option'] = parse_field_attr($value['extra']);
 			} elseif ($value['type'] == 'bind') {
 				$extra = parse_field_bind($value['extra']);
+				$option = array();
 				foreach ($extra as $k => $v) {
 					$option[$v['id']] = $v['title_show'];
 				}

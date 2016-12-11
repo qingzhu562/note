@@ -583,6 +583,7 @@ function parse_field_attr($string) {
 }
 
 function parse_field_bind($table, $selected = '', $model = 0) {
+	$list = array();
 	if ($table) {
 		$select = db($table);
 		$res    = $select->select();
@@ -600,8 +601,6 @@ function parse_field_bind($table, $selected = '', $model = 0) {
 			$tree = new \com\Tree();
 			$list = $tree->toFormatTree($list);
 		}
-	} else {
-		$list = array();
 	}
 	return $list;
 }
