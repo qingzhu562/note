@@ -390,6 +390,7 @@ CREATE TABLE `sent_channel` (
   `pid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上级频道ID',
   `title` char(30) NOT NULL COMMENT '频道标题',
   `url` char(100) NOT NULL COMMENT '频道连接',
+  `type` int(2) NOT NULL DEFAULT '0' COMMENT '导航类型',
   `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '导航排序',
   `icon` varchar(20) DEFAULT NULL COMMENT '图标',
   `color` varchar(20) DEFAULT NULL COMMENT '导航颜色',
@@ -404,11 +405,13 @@ CREATE TABLE `sent_channel` (
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
--- -----------------------------
--- Records of `sent_channel`
--- -----------------------------
-INSERT INTO `sent_channel` VALUES ('1', '0', '网站首页', 'index/index/index', '1', 'home', '', '', '', 'home', '1379475111', '1464490544', '1', '0');
-INSERT INTO `sent_channel` VALUES ('2', '0', '新闻资讯', 'article/list/1', '1', 'article', '', '', '', 'article', '1379475111', '1464490544', '1', '0');
+--
+-- 转存表中的数据 `sent_channel`
+--
+
+INSERT INTO `sent_channel` (`id`, `pid`, `title`, `url`, `type`, `sort`, `icon`, `color`, `band_color`, `band_text`, `active`, `create_time`, `update_time`, `status`, `target`) VALUES
+(1, 0, '网站首页', 'index/index/index', 0, 1, 'home', '', '', '', 'home', 1379475111, 1464490544, 1, 0),
+(2, 0, '新闻资讯', 'article/list/1', 0, 1, 'article', '', '', '', 'article', 1379475111, 1464490544, 1, 0);
 
 -- -----------------------------
 -- Table structure for `sent_config`
@@ -449,7 +452,7 @@ INSERT INTO `sent_config` (`id`, `name`, `type`, `title`, `group`, `extra`, `rem
 (10, 'allow_visit', 'textarea', '不受限控制器方法', 99, '', '', '', 1386644047, 1438075615, 1, '0:article/draftbox\r\n1:article/mydocument\r\n2:Category/tree\r\n3:Index/verify\r\n4:file/upload\r\n5:file/download\r\n6:user/updatePassword\r\n7:user/updateNickname\r\n8:user/submitPassword\r\n9:user/submitNickname\r\n10:file/uploadpicture', 0),
 (11, 'deny_visit', 'textarea', '超管专限控制器方法', 99, '', '仅超级管理员可访问的控制器方法', '', 1386644141, 1438075628, 1, '0:Addons/addhook\r\n1:Addons/edithook\r\n2:Addons/delhook\r\n3:Addons/updateHook\r\n4:Admin/getMenus\r\n5:Admin/recordList\r\n6:AuthManager/updateRules\r\n7:AuthManager/tree', 0),
 (12, 'admin_allow_ip', 'text', '后台允许访问IP', 99, '', '多个用逗号分隔，如果不配置表示不限制IP访问', '', 1387165454, 1452307198, 1, '', 12),
-(13, 'app_debug', 'bool', '是否调试模式', 99, '0:关闭\r\n1:开启', '是否调试模式', '', 1387165685, 1447306056, 1, '0', 1),
+(13, 'app_debug', 'bool', '是否调试模式', 99, '0:关闭\r\n1:开启', '是否调试模式', '', 1387165685, 1481539829, 1, '0', 6),
 (14, 'web_site_title', 'text', '网站标题', 1, '', '网站标题前台显示标题', '', 1378898976, 1379235274, 1, 'SentCMS网站管理系统', 0),
 (15, 'web_site_url', 'text', '网站URL', 1, '', '网站网址', '', 1378898976, 1379235274, 1, 'http://www.tensent.cn', 1),
 (16, 'web_site_description', 'textarea', '网站描述', 1, '', '网站搜索引擎描述', '', 1378898976, 1379235841, 1, 'SentCMS网站管理系统', 3),
@@ -470,8 +473,9 @@ INSERT INTO `sent_config` (`id`, `name`, `type`, `title`, `group`, `extra`, `rem
 (31, 'mail_ishtml', 'select', '是否HTML格式邮件', 3, '0:否,1:是', '是否HTML格式邮件', '', 1455690888, 1455690888, 1, '1', 0),
 (32, 'mail_charset', 'text', '邮件编码', 3, '', '设置发送邮件的编码', '', 1455690920, 1455690920, 1, 'UTF8', 0),
 (33, 'wechat_name', 'text', '微信名称', 4, '', '填写微信名称', '', 1459136529, 1461898406, 1, '', 0),
-(41, 'pc_themes', 'text', 'PC站模板', 0, '', '', '', 1480043043, 1480043043, 1, '', 0),
-(42, 'mobile_themes', 'text', '手机站模板', 0, '', '', '', 1480043066, 1480043066, 1, '', 0);
+(41, 'pc_themes', 'text', 'PC站模板', 0, '', '', '', 1480043043, 1480043043, 1, 'default', 0),
+(42, 'mobile_themes', 'text', '手机站模板', 0, '', '', '', 1480043066, 1480043066, 1, '', 0),
+(43, 'nav_type_list', 'textarea', '导航分类', 99, '', '', '', 1481539756, 1481539801, 1, '1:顶部\r\n2:底部', 1);
 
 -- -----------------------------
 -- Table structure for `sent_district`
