@@ -46,16 +46,9 @@ class User extends Admin {
 		if (IS_POST) {
 			$data = $this->request->param();
 			//创建注册用户
-			$uid = $model->register($data['username'], $data['password'], $data['repassword'], $data['email'], false);
-
-			if (0 < $uid) {
-				$userinfo = array('nickname' => $data['username'], 'status' => 1, 'reg_time' => time(), 'last_login_time' => time(), 'last_login_ip' => get_client_ip(1));
-				/*保存信息*/
-				if (!db('Member')->where(array('uid' => $uid))->update($userinfo)) {
-					return $this->error('用户添加失败！', '');
-				} else {
-					return $this->success('用户添加成功！', url('admin/user/index'));
-				}
+			$result = $model->register($data['username'], $data['password'], $data['repassword'], $data['email'], false);
+			if ($result) {
+				return $this->success('用户添加成功！', url('admin/user/index'));
 			} else {
 				return $this->error($model->getError());
 			}
