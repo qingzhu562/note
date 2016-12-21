@@ -88,6 +88,7 @@ class Addons extends Base {
 		if ($config) {
 			$config = json_decode($config, true);
 		} else {
+			$config = array();
 			$temp_arr = include $this->config_file;
 			foreach ($temp_arr as $key => $value) {
 				if ($value['type'] == 'group') {
@@ -97,7 +98,7 @@ class Addons extends Base {
 						}
 					}
 				} else {
-					$config[$key] = $temp_arr[$key]['value'];
+					$config[$key] = $value['value'];
 				}
 			}
 		}

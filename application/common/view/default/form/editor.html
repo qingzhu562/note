@@ -1,5 +1,5 @@
 <textarea name="{$field}" id="{$field}" style="width: 100%;">{$value}</textarea>
 <!-- 实例化编辑器代码 -->
 <script type="text/javascript">
-	 CKEDITOR.replace('{$field}');
+	 var ue = UE.getEditor('{$field}');
 </script>
