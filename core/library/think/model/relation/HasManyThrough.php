@@ -21,6 +21,8 @@ class HasManyThrough extends Relation
 {
     // 中间关联表外键
     protected $throughKey;
+    // 中间表模型
+    protected $through;
 
     /**
      * 架构函数
@@ -37,7 +39,7 @@ class HasManyThrough extends Relation
     {
         $this->parent     = $parent;
         $this->model      = $model;
-        $this->middle     = $through;
+        $this->through    = $through;
         $this->foreignKey = $foreignKey;
         $this->throughKey = $throughKey;
         $this->localKey   = $localKey;
@@ -65,8 +67,7 @@ class HasManyThrough extends Relation
      * @return void
      */
     public function eagerlyResultSet(&$resultSet, $relation, $subRelation, $closure, $class)
-    {
-    }
+    {}
 
     /**
      * 预载入关联查询 返回模型对象
@@ -79,8 +80,17 @@ class HasManyThrough extends Relation
      * @return void
      */
     public function eagerlyResult(&$result, $relation, $subRelation, $closure, $class)
-    {
-    }
+    {}
+
+    /**
+     * 关联统计
+     * @access public
+     * @param Model     $result 数据对象
+     * @param \Closure  $closure 闭包
+     * @return integer
+     */
+    public function relationCount($result, $closure)
+    {}
 
     /**
      * 执行基础查询（进执行一次）
@@ -90,7 +100,7 @@ class HasManyThrough extends Relation
     protected function baseQuery()
     {
         if (empty($this->baseQuery)) {
-            $through      = $this->middle;
+            $through      = $this->through;
             $model        = $this->model;
             $alias        = Loader::parseName(basename(str_replace('\\', '/', $model)));
             $throughTable = $through::getTable();

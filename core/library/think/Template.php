@@ -12,7 +12,6 @@
 namespace think;
 
 use think\exception\TemplateNotFoundException;
-use think\Request;
 
 /**
  * ThinkPHP分离出来的模板引擎
@@ -130,7 +129,7 @@ class Template
         } elseif (isset($this->config[$config])) {
             return $this->config[$config];
         } else {
-            return null;
+            return;
         }
     }
 
@@ -669,7 +668,7 @@ class Template
             $content = str_replace($matches[0], '', $content);
             return explode(',', $matches['name']);
         }
-        return null;
+        return;
     }
 
     /**
@@ -1067,6 +1066,8 @@ class Template
             }
             if (0 !== strpos($template, '/')) {
                 $template = str_replace(['/', ':'], $this->config['view_depr'], $template);
+            } else {
+                $template = str_replace(['/', ':'], $this->config['view_depr'], substr($template, 1));
             }
             if ($this->config['view_base']) {
                 $module = isset($module) ? $module : Request::instance()->module();

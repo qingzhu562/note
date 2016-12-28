@@ -11,6 +11,8 @@
 
 namespace think\log\driver;
 
+use think\App;
+
 /**
  * github: https://github.com/luofei614/SocketLog
  * @author luofei614<weibo.com/luofei614>
@@ -65,7 +67,7 @@ class Socket
         }
         $trace = [];
         if (App::$debug) {
-            $runtime    = number_format(microtime(true) - THINK_START_TIME, 10);
+            $runtime    = round(microtime(true) - THINK_START_TIME, 10);
             $reqs       = $runtime > 0 ? number_format(1 / $runtime, 2) : '∞';
             $time_str   = ' [运行时间：' . number_format($runtime, 6) . 's][吞吐率：' . $reqs . 'req/s]';
             $memory_use = number_format((memory_get_usage() - THINK_START_MEM) / 1024, 2);
@@ -207,19 +209,19 @@ class Socket
         }
 
         if (!isset($_SERVER[$key])) {
-            return null;
+            return;
         }
         if (empty($args)) {
             if (!preg_match('/SocketLog\((.*?)\)/', $_SERVER[$key], $match)) {
                 $args = ['tabid' => null];
-                return null;
+                return;
             }
             parse_str($match[1], $args);
         }
         if (isset($args[$name])) {
             return $args[$name];
         }
-        return null;
+        return;
     }
 
     /**

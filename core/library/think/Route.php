@@ -11,14 +11,7 @@
 
 namespace think;
 
-use think\App;
-use think\Config;
 use think\exception\HttpException;
-use think\Hook;
-use think\Loader;
-use think\Log;
-use think\Request;
-use think\Response;
 
 class Route
 {
@@ -296,12 +289,14 @@ class Route
             } elseif ('$' == substr($rule, -1, 1)) {
                 // 是否完整匹配
                 $option['complete_match'] = true;
-                $rule                     = substr($rule, 0, -1);
             }
         } elseif (empty($option['complete_match']) && '$' == substr($rule, -1, 1)) {
             // 是否完整匹配
             $option['complete_match'] = true;
-            $rule                     = substr($rule, 0, -1);
+        }
+
+        if ('$' == substr($rule, -1, 1)) {
+            $rule = substr($rule, 0, -1);
         }
 
         if ('/' != $rule || $group) {
@@ -661,14 +656,14 @@ class Route
     /**
      * rest方法定义和修改
      * @access public
-     * @param string    $name 方法名称
-     * @param array     $resource 资源
+     * @param string        $name 方法名称
+     * @param array|bool    $resource 资源
      * @return void
      */
     public static function rest($name, $resource = [])
     {
         if (is_array($name)) {
-            self::$rest = array_merge(self::$rest, $name);
+            self::$rest = $resource ? $name : array_merge(self::$rest, $name);
         } else {
             self::$rest[$name] = $resource;
         }
@@ -1493,6 +1488,10 @@ class Route
             $route             = substr($route, 1);
             list($route, $var) = self::parseUrlPath($route);
             $result            = ['type' => 'controller', 'controller' => implode('/', $route), 'var' => $var];
+            $request->action(array_pop($route));
+            $request->controller($route ? array_pop($route) : Config::get('default_controller'));
+            $request->module($route ? array_pop($route) : Config::get('default_module'));
+            App::$modulePath = APP_PATH . (Config::get('app_multi_module') ? $request->module() . DS : '');
         } else {
             // 路由到模块/控制器/操作
             $result = self::parseModule($route);
