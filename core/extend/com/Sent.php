@@ -54,7 +54,7 @@ class Sent extends Taglib{
 		$cid     = !empty($tag['cid']) ? $tag['cid']:'0';
 		$field     = empty($tag['field']) ? '*' : $tag['field'];
 		$limit        = empty($tag['limit']) ? 20 : $tag['limit'];
-		$order        = empty($tag['order']) ? 'create_time desc' : $tag['order'];
+		$order        = empty($tag['order']) ? 'id desc' : $tag['order'];
 
 		//获得当前栏目的所有子栏目
 		$ids = get_category_child($cid);
@@ -63,7 +63,7 @@ class Sent extends Taglib{
 		$where .= " and model_id = {$model} and status >= 1";
 
 		$parse  = $parse   = '<?php ';
-		$parse .= '$__LIST__ = model(\'Document\')->extend(\''.$model.'\')->where(\''.$where.'\')->field(\''.$field.'\')->limit(\''.$limit.'\')->order(\''.$order.'\')->select();';
+		$parse .= '$__LIST__ = model(\'Document\')->where(\''.$where.'\')->field(\''.$field.'\')->limit(\''.$limit.'\')->order(\''.$order.'\')->select();';
 		$parse .= 'foreach ($__LIST__ as $key => $'.$tag['name'].') {';
 		$parse .= '?>';
 		$parse .= $content;

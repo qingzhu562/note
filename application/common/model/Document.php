@@ -71,6 +71,9 @@ class Document extends Base{
 	}
 
 	public function extend($name){
+		if (is_numeric($name)) {
+			$name = db('Model')->where('id', $name)->value('name');
+		}
 		$this->extend_db = db('Document' . ucfirst($name));
 		$name = strtoupper($name);
 		//$this->join('__DOCUMENT_' . $name . '__', $this->fk . '=' . $this->pk, 'LEFT');
