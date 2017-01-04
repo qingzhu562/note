@@ -38,7 +38,7 @@ class Fornt extends Base {
 		//网站主题设置
 		$themes['mobile'] = config('mobile_themes') ? config('mobile_themes') : 'mobile';
 		$themes['pc']     = config('pc_themes') ? config('pc_themes') : 'default';
-		$view_path        = ($this->isMobile() && config('open_mobile_site')) ? 'template/' . $themes['mobile'] . '/' : 'template/' . $themes['pc'] . '/';
+		$view_path        = ($this->isMobile() && config('open_mobile_site') == '1') ? 'template/' . $themes['mobile'] . '/' : 'template/' . $themes['pc'] . '/';
 		$module = $this->request->module();
 		if (!in_array($module, array('index', 'install'))) {
 			$view_path_pre = $module . '/';
