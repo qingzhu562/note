@@ -124,8 +124,7 @@ class Query
      */
     protected function setBuilder()
     {
-        $builder       = $this->connection->getConfig('builder') ?: $this->connection->getConfig('type');
-        $class         = false !== strpos($builder, '\\') ? $builder : '\\think\\db\\builder\\' . ucfirst($builder);
+        $class         = $this->connection->getBuilder();
         $this->builder = new $class($this->connection, $this);
     }
 
@@ -229,8 +228,8 @@ class Query
     /**
      * 执行语句
      * @access public
-     * @param string  $sql          sql指令
-     * @param array   $bind         参数绑定
+     * @param string $sql  sql指令
+     * @param array  $bind 参数绑定
      * @return int
      * @throws BindParamException
      * @throws PDOException
@@ -243,7 +242,7 @@ class Query
     /**
      * 获取最近插入的ID
      * @access public
-     * @param string  $sequence     自增序列名
+     * @param string $sequence 自增序列名
      * @return string
      */
     public function getLastInsID($sequence = null)
@@ -390,7 +389,7 @@ class Query
      * @access public
      * @param string $field   字段名
      * @param mixed  $default 默认值
-     * @param bool   $force 强制转为数字类型
+     * @param bool   $force   强制转为数字类型
      * @return mixed
      */
     public function value($field, $default = null, $force = false)
@@ -509,10 +508,17 @@ class Query
      * COUNT查询
      * @access public
      * @param string $field 字段名
-     * @return integer
+     * @return integer|string
      */
     public function count($field = '*')
     {
+        if (isset($this->options['group'])) {
+            // 支持GROUP
+            $options = $this->getOptions();
+            $subSql  = $this->options($options)->field('count(' . $field . ')')->bind($this->bind)->buildSql();
+            return $this->table([$subSql => '_group_count_'])->value('COUNT(*) AS tp_count', 0, true);
+        }
+
         return $this->value('COUNT(' . $field . ') AS tp_count', 0, true);
     }
 
@@ -694,7 +700,7 @@ class Query
      * 获取Join表名及别名 支持
      * ['prefix_table或者子查询'=>'alias'] 'prefix_table alias' 'table alias'
      * @access public
-     * @param array|string   $join
+     * @param array|string $join
      * @return array|string
      */
     protected function getJoinTable($join, &$alias = null)
@@ -817,8 +823,8 @@ class Query
     /**
      * 字段值增长
      * @access public
-     * @param string|array  $field    字段名
-     * @param integer       $step     增长值
+     * @param string|array $field 字段名
+     * @param integer      $step  增长值
      * @return $this
      */
     public function inc($field, $step = 1)
@@ -833,8 +839,8 @@ class Query
     /**
      * 字段值减少
      * @access public
-     * @param string|array  $field    字段名
-     * @param integer       $step     增长值
+     * @param string|array $field 字段名
+     * @param integer      $step  增长值
      * @return $this
      */
     public function dec($field, $step = 1)
@@ -849,8 +855,8 @@ class Query
     /**
      * 使用表达式设置数据
      * @access public
-     * @param string  $field    字段名
-     * @param string  $value    字段值
+     * @param string $field 字段名
+     * @param string $value 字段值
      * @return $this
      */
     public function exp($field, $value)
@@ -975,8 +981,8 @@ class Query
     /**
      * 指定Null查询条件
      * @access public
-     * @param mixed     $field     查询字段
-     * @param string    $logic     查询逻辑 and or xor
+     * @param mixed  $field 查询字段
+     * @param string $logic 查询逻辑 and or xor
      * @return $this
      */
     public function whereNull($field, $logic = 'AND')
@@ -988,8 +994,8 @@ class Query
     /**
      * 指定NotNull查询条件
      * @access public
-     * @param mixed     $field     查询字段
-     * @param string    $logic     查询逻辑 and or xor
+     * @param mixed  $field 查询字段
+     * @param string $logic 查询逻辑 and or xor
      * @return $this
      */
     public function whereNotNull($field, $logic = 'AND')
@@ -1001,8 +1007,8 @@ class Query
     /**
      * 指定Exists查询条件
      * @access public
-     * @param mixed     $condition 查询条件
-     * @param string    $logic     查询逻辑 and or xor
+     * @param mixed  $condition 查询条件
+     * @param string $logic     查询逻辑 and or xor
      * @return $this
      */
     public function whereExists($condition, $logic = 'AND')
@@ -1014,8 +1020,8 @@ class Query
     /**
      * 指定NotExists查询条件
      * @access public
-     * @param mixed     $condition 查询条件
-     * @param string    $logic     查询逻辑 and or xor
+     * @param mixed  $condition 查询条件
+     * @param string $logic     查询逻辑 and or xor
      * @return $this
      */
     public function whereNotExists($condition, $logic = 'AND')
@@ -1027,9 +1033,9 @@ class Query
     /**
      * 指定In查询条件
      * @access public
-     * @param mixed     $field     查询字段
-     * @param mixed     $condition 查询条件
-     * @param string    $logic     查询逻辑 and or xor
+     * @param mixed  $field     查询字段
+     * @param mixed  $condition 查询条件
+     * @param string $logic     查询逻辑 and or xor
      * @return $this
      */
     public function whereIn($field, $condition, $logic = 'AND')
@@ -1041,9 +1047,9 @@ class Query
     /**
      * 指定NotIn查询条件
      * @access public
-     * @param mixed     $field     查询字段
-     * @param mixed     $condition 查询条件
-     * @param string    $logic     查询逻辑 and or xor
+     * @param mixed  $field     查询字段
+     * @param mixed  $condition 查询条件
+     * @param string $logic     查询逻辑 and or xor
      * @return $this
      */
     public function whereNotIn($field, $condition, $logic = 'AND')
@@ -1055,9 +1061,9 @@ class Query
     /**
      * 指定Like查询条件
      * @access public
-     * @param mixed     $field     查询字段
-     * @param mixed     $condition 查询条件
-     * @param string    $logic     查询逻辑 and or xor
+     * @param mixed  $field     查询字段
+     * @param mixed  $condition 查询条件
+     * @param string $logic     查询逻辑 and or xor
      * @return $this
      */
     public function whereLike($field, $condition, $logic = 'AND')
@@ -1069,9 +1075,9 @@ class Query
     /**
      * 指定NotLike查询条件
      * @access public
-     * @param mixed     $field     查询字段
-     * @param mixed     $condition 查询条件
-     * @param string    $logic     查询逻辑 and or xor
+     * @param mixed  $field     查询字段
+     * @param mixed  $condition 查询条件
+     * @param string $logic     查询逻辑 and or xor
      * @return $this
      */
     public function whereNotLike($field, $condition, $logic = 'AND')
@@ -1083,9 +1089,9 @@ class Query
     /**
      * 指定Between查询条件
      * @access public
-     * @param mixed     $field     查询字段
-     * @param mixed     $condition 查询条件
-     * @param string    $logic     查询逻辑 and or xor
+     * @param mixed  $field     查询字段
+     * @param mixed  $condition 查询条件
+     * @param string $logic     查询逻辑 and or xor
      * @return $this
      */
     public function whereBetween($field, $condition, $logic = 'AND')
@@ -1097,9 +1103,9 @@ class Query
     /**
      * 指定NotBetween查询条件
      * @access public
-     * @param mixed     $field     查询字段
-     * @param mixed     $condition 查询条件
-     * @param string    $logic     查询逻辑 and or xor
+     * @param mixed  $field     查询字段
+     * @param mixed  $condition 查询条件
+     * @param string $logic     查询逻辑 and or xor
      * @return $this
      */
     public function whereNotBetween($field, $condition, $logic = 'AND')
@@ -1111,9 +1117,9 @@ class Query
     /**
      * 指定Exp查询条件
      * @access public
-     * @param mixed     $field     查询字段
-     * @param mixed     $condition 查询条件
-     * @param string    $logic     查询逻辑 and or xor
+     * @param mixed  $field     查询字段
+     * @param mixed  $condition 查询条件
+     * @param string $logic     查询逻辑 and or xor
      * @return $this
      */
     public function whereExp($field, $condition, $logic = 'AND')
@@ -1169,8 +1175,10 @@ class Query
             $this->options['multi'][$logic][$field][] = $where[$field];
         } elseif (is_null($condition)) {
             // 字段相等查询
-            $where[$field]                            = ['eq', $op];
-            $this->options['multi'][$logic][$field][] = $where[$field];
+            $where[$field] = ['eq', $op];
+            if ('AND' != $logic) {
+                $this->options['multi'][$logic][$field][] = $where[$field];
+            }
         } else {
             $where[$field] = [$op, $condition, isset($param[2]) ? $param[2] : null];
             if ('exp' == strtolower($op) && isset($param[2]) && is_array($param[2])) {
@@ -1200,8 +1208,8 @@ class Query
     /**
      * 检查是否存在一个字段多次查询条件
      * @access public
-     * @param string $field     查询字段
-     * @param string $logic     查询逻辑 and or xor
+     * @param string $field 查询字段
+     * @param string $logic 查询逻辑 and or xor
      * @return bool
      */
     private function checkMultiField($field, $logic)
@@ -1212,8 +1220,8 @@ class Query
     /**
      * 去除某个查询条件
      * @access public
-     * @param string $field     查询字段
-     * @param string $logic     查询逻辑 and or xor
+     * @param string $field 查询字段
+     * @param string $logic 查询逻辑 and or xor
      * @return $this
      */
     public function removeWhereField($field, $logic = 'AND')
@@ -1228,7 +1236,7 @@ class Query
     /**
      * 去除查询参数
      * @access public
-     * @param string|bool $option     参数名 true 表示去除所有参数
+     * @param string|bool $option 参数名 true 表示去除所有参数
      * @return $this
      */
     public function removeOption($option = true)
@@ -1278,14 +1286,14 @@ class Query
      * @param int|array $listRows 每页数量 数组表示配置参数
      * @param int|bool  $simple   是否简洁模式或者总记录数
      * @param array     $config   配置参数
-     *                           page:当前页,
-     *                           path:url路径,
-     *                           query:url额外参数,
-     *                           fragment:url锚点,
-     *                           var_page:分页变量,
-     *                           list_rows:每页数量
-     *                           type:分页类名
-     * @return \think\paginator\Collection
+     *                            page:当前页,
+     *                            path:url路径,
+     *                            query:url额外参数,
+     *                            fragment:url锚点,
+     *                            var_page:分页变量,
+     *                            list_rows:每页数量
+     *                            type:分页类名
+     * @return \think\Paginator
      * @throws DbException
      */
     public function paginate($listRows = null, $simple = false, $config = [])
@@ -1315,9 +1323,9 @@ class Query
 
         if (!isset($total) && !$simple) {
             $options = $this->getOptions();
-            if (isset($options['order'])) {
-                unset($this->options['order']);
-            }
+
+            unset($this->options['order'], $this->options['limit'], $this->options['page'], $this->options['field']);
+
             $bind    = $this->bind;
             $total   = $this->count();
             $results = $this->options($options)->bind($bind)->page($page, $listRows)->select();
@@ -1902,15 +1910,19 @@ class Query
             }
         }
         $this->via();
-        $this->options['with'] = $with;
+        if (isset($this->options['with'])) {
+            $this->options['with'] = array_merge($this->options['with'], $with);
+        } else {
+            $this->options['with'] = $with;
+        }
         return $this;
     }
 
     /**
      * 关联统计
      * @access public
-     * @param string|array    $relation 关联方法名
-     * @param bool            $subQuery 是否使用子查询
+     * @param string|array $relation 关联方法名
+     * @param bool         $subQuery 是否使用子查询
      * @return $this
      */
     public function withCount($relation, $subQuery = true)
@@ -1967,12 +1979,22 @@ class Query
     /**
      * 设置关联查询
      * @access public
-     * @param string $relation 关联名称
+     * @param string|array $relation 关联名称
      * @return $this
      */
     public function relation($relation)
     {
-        $this->options['relation'] = $relation;
+        if (empty($relation)) {
+            return $this;
+        }
+        if (is_string($relation)) {
+            $relation = explode(',', $relation);
+        }
+        if (isset($this->options['relation'])) {
+            $this->options['relation'] = array_mrege($this->options['relation'], $relation);
+        } else {
+            $this->options['relation'] = $relation;
+        }
         return $this;
     }
 
@@ -2280,29 +2302,35 @@ class Query
         // 数据列表读取后的处理
         if (!empty($this->model)) {
             // 生成模型对象
-            $model = $this->model;
+            $modelName = $this->model;
             if (count($resultSet) > 0) {
                 foreach ($resultSet as $key => $result) {
                     /** @var Model $result */
-                    $result = new $model($result);
-                    $result->isUpdate(true);
+                    $model = new $modelName($result);
+                    $model->isUpdate(true);
+
                     // 关联查询
                     if (!empty($options['relation'])) {
-                        $result->relationQuery($options['relation']);
+                        $model->relationQuery($options['relation']);
                     }
                     // 关联统计
                     if (!empty($options['with_count'])) {
-                        $result->relationCount($result, $options['with_count']);
+                        $model->relationCount($model, $options['with_count']);
                     }
-                    $resultSet[$key] = $result;
+                    $resultSet[$key] = $model;
                 }
                 if (!empty($options['with'])) {
                     // 预载入
-                    $result->eagerlyResultSet($resultSet, $options['with'], is_object($resultSet) ? get_class($resultSet) : '');
+                    $model->eagerlyResultSet($resultSet, $options['with']);
                 }
+                // 模型数据集转换
+                $resultSet = $model->toCollection($resultSet);
+            } else {
+                $resultSet = (new $modelName)->toCollection($resultSet);
             }
-            // 模型数据集转换
-            $resultSet = (new $model)->toCollection($resultSet);
+        } elseif ('collection' == $this->connection->getConfig('resultset_type')) {
+            // 返回Collection对象
+            $resultSet = new Collection($resultSet);
         }
         // 返回结果处理
         if (!empty($options['fail']) && count($resultSet) == 0) {
@@ -2394,7 +2422,7 @@ class Query
                 }
                 // 预载入查询
                 if (!empty($options['with'])) {
-                    $data->eagerlyResult($data, $options['with'], is_object($result) ? get_class($result) : '');
+                    $data->eagerlyResult($data, $options['with']);
                 }
                 // 关联统计
                 if (!empty($options['with_count'])) {
@@ -2670,8 +2698,8 @@ class Query
     /**
      * 注册回调方法
      * @access public
-     * @param string        $event 事件名
-     * @param callable      $callback 回调方法
+     * @param string   $event    事件名
+     * @param callable $callback 回调方法
      * @return void
      */
     public static function event($event, $callback)
@@ -2682,8 +2710,8 @@ class Query
     /**
      * 触发事件
      * @access protected
-     * @param string    $event 事件名
-     * @param mixed     $options 当前查询参数
+     * @param string $event   事件名
+     * @param mixed  $options 当前查询参数
      * @return bool
      */
     protected function trigger($event, $options = [])

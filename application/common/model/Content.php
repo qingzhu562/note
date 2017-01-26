@@ -22,6 +22,8 @@ class Content extends Base{
 	protected $type = array(
 		'id'  => 'integer',
 		'cover_id'  => 'integer',
+		'create_time'  => 'integer',
+		'update_time'  => 'integer',
 	);
 
 	protected function setUidAttr(){

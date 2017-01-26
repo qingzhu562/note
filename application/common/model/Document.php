@@ -30,6 +30,8 @@ class Document extends Base{
 		'level'  => 'integer',
 		'comment'  => 'integer',
 		'view'  => 'integer',
+		'create_time'  => 'integer',
+		'update_time'  => 'integer',
 	);
 
 	protected function setUidAttr(){
