@@ -66,3 +66,10 @@
 ├─index.php      入口文件
 ├─README.md      系统介绍文件
 ~~~
+
+## 版本列表
+
+> 3.0.170127： https://git.oschina.net/sentcms/sentcms/repository/archive/3.0.170127
+> 3.0.161201：https://git.oschina.net/sentcms/sentcms/repository/archive/3.0.161201
+> 3.0.1611：https://git.oschina.net/sentcms/sentcms/repository/archive/3.0.1611
+> 3.0.1609：https://git.oschina.net/sentcms/sentcms/repository/archive/3.0.1609
