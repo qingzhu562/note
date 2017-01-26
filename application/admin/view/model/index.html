@@ -30,33 +30,33 @@
 				</thead>
 				<tbody>
 					{notempty name="list"}
-					{volist name="list" id="vo"}
+					{volist name="list" id="item"}
 					<tr>
 						<td>
-							<input class="ids" type="checkbox" name="ids[]" value="{$vo.id}" />
+							<input class="ids" type="checkbox" name="ids[]" value="{$item['id']}" />
 						</td>
-						<td>{$vo.id}</td>
-						<td>{$vo.name}</td>
+						<td>{$item['id']}</td>
+						<td>{$item['name']}</td>
 						<td>
-							<a data-id="{$vo.id}" href="{:url('model/edit?id='.$vo['id'])}">{$vo.title}</a>
-						</td>
-						<td>
-							<span>{$vo.create_time|time_format}</span>
+							<a data-id="{$item.id}" href="{:url('model/edit?id='.$item['id'])}">{$item.title}</a>
 						</td>
 						<td>
-							{if $vo['status']}
-							<span class="label label-primary">{$vo['status_text']}</span>
+							<span>{$item.create_time|time_format}</span>
+						</td>
+						<td>
+							{if $item['status']}
+							<span class="label label-primary">{$item['status_text']}</span>
 							{else/}
-							<span class="label label-danger">{$vo['status_text']}</span>
+							<span class="label label-danger">{$item['status_text']}</span>
 							{/if}
 						</td>
 						<td>
-							<a href="{:url('admin/attribute/index?model_id='.$vo['id'])}">字段</a>
-							<a href="{:url('model/status?ids='.$vo['id'].'&status='.abs(1-$vo['status']))}" class="ajax-get">{$vo.status|show_status_op}</a>
-							<a href="{:url('model/edit?id='.$vo['id'])}">编辑</a>
-							<a href="{:url('model/del?id='.$vo['id'])}" class="confirm ajax-get">删除</a>
-							{if $vo['extend']}
-							<a href="{:url('admin/content/index?model_id='.$vo['id'])}">数据</a>
+							<a href="{:url('admin/attribute/index?model_id='.$item['id'])}">字段</a>
+							<a href="{:url('model/status?ids='.$item['id'].'&status='.abs(1-$item['status']))}" class="ajax-get">{$item['status']|show_status_op}</a>
+							<a href="{:url('model/edit?id='.$item['id'])}">编辑</a>
+							<a href="{:url('model/del?id='.$item['id'])}" class="confirm ajax-get">删除</a>
+							{if $item['extend']}
+							<a href="{:url('admin/content/index?model_id='.$item['id'])}">数据</a>
 							{/if}
 						</td>
 					</tr>

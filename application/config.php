@@ -97,7 +97,7 @@ return array(
 		// 日志保存目录
 		'path' => LOG_PATH,
 	),
-	'app_trace' => true,
+	'app_trace' => false,
 	// 页面Trace信息
 	'trace'             => array(
 		//支持Html,Console 设为false则不显示

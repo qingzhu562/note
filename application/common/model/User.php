@@ -20,6 +20,7 @@ class User extends Base{
 
 	protected $type = array(
 		'uid'  => 'integer',
+		'reg_time' => 'integer'
 	);
 	protected $insert = array('salt', 'password', 'status', 'reg_time');
 	protected $update = array();

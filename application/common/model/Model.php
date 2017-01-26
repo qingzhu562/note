@@ -17,7 +17,9 @@ class Model extends Base{
 	protected $auto = [ 'update_time', 'field_sort', 'attribute_list'];
 	protected $insert = ['name', 'create_time', 'status'=>1];
 	protected $type = array(
-		'id'   => 'integer'
+		'id'   => 'integer',
+		'create_time' => 'integer',
+		'update_time' => 'integer'
 	);
 
 	public function setFieldSortAttr($value){

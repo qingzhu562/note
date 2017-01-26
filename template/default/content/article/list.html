@@ -24,8 +24,8 @@
 			<li>
 				<a href="{:url('index/content/detail?model_id='.$item['model_id'],array('id'=>$item['id']))}">
 					<div class="time">
-						<span class="day">{$item['create_time']|date='Y-m-d H:i:s',###}</span>
-						<span class="moth">{$item['create_time']|date='Y-m-d H:i:s',###}</span>
+						<span class="day">{$item['create_time']|date='m',###}</span>
+						<span class="moth">{$item['create_time']|date='d',###}</span>
 					</div>
 					<div class="info">
 						<div class="tit">{$item['title']|msubstr=###,0,80}</div>
