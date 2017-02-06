@@ -189,7 +189,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         }
         // 全局作用域
         if ($baseQuery && method_exists($this, 'base')) {
-            call_user_func_array([$this, 'base'], [& self::$links[$model]]);
+            call_user_func_array([$this, 'base'], [ & self::$links[$model]]);
         }
         // 返回当前模型的数据库查询对象
         return self::$links[$model];
@@ -326,10 +326,10 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                     break;
             }
         } elseif (is_string($this->autoWriteTimestamp) && in_array(strtolower($this->autoWriteTimestamp), [
-                'datetime',
-                'date',
-                'timestamp'
-            ])
+            'datetime',
+            'date',
+            'timestamp',
+        ])
         ) {
             $value = $this->formatDateTime($_SERVER['REQUEST_TIME'], $this->dateFormat);
         } else {
@@ -350,7 +350,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
     {
         if (false !== strpos($format, '\\')) {
             $time = new $format($time);
-        } elseif (!$timestamp) {
+        } elseif (!$timestamp && false !== $format) {
             $time = date($format, $time);
         }
         return $time;
@@ -439,10 +439,10 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
             $value = $this->readTransform($value, $this->type[$name]);
         } elseif (in_array($name, [$this->createTime, $this->updateTime])) {
             if (is_string($this->autoWriteTimestamp) && in_array(strtolower($this->autoWriteTimestamp), [
-                    'datetime',
-                    'date',
-                    'timestamp'
-                ])
+                'datetime',
+                'date',
+                'timestamp',
+            ])
             ) {
                 $value = $this->formatDateTime(strtotime($value), $this->dateFormat);
             } else {
@@ -1019,6 +1019,21 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
     }
 
     /**
+     * 设置只读字段
+     * @access public
+     * @param mixed $field 只读字段
+     * @return $this
+     */
+    public function readonly($field)
+    {
+        if (is_string($field)) {
+            $field = explode(',', $field);
+        }
+        $this->readonly = $field;
+        return $this;
+    }
+
+    /**
      * 是否为更新数据
      * @access public
      * @param bool  $update
@@ -1219,7 +1234,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         if (isset(self::$event[$this->class][$event])) {
             foreach (self::$event[$this->class][$event] as $callback) {
                 if (is_callable($callback)) {
-                    $result = call_user_func_array($callback, [& $params]);
+                    $result = call_user_func_array($callback, [ & $params]);
                     if (false === $result) {
                         return false;
                     }
@@ -1275,6 +1290,10 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      */
     public static function get($data = null, $with = [], $cache = false)
     {
+        if (true === $with || is_int($with)) {
+            $cache = $with;
+            $with  = [];
+        }
         $query = static::parseQuery($data, $with, $cache);
         return $query->find($data);
     }
@@ -1290,6 +1309,10 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
      */
     public static function all($data = null, $with = [], $cache = false)
     {
+        if (true === $with || is_int($with)) {
+            $cache = $with;
+            $with  = [];
+        }
         $query = static::parseQuery($data, $with, $cache);
         return $query->select($data);
     }
@@ -1309,7 +1332,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
             $result = $result->where($data);
             $data   = null;
         } elseif ($data instanceof \Closure) {
-            call_user_func_array($data, [& $result]);
+            call_user_func_array($data, [ & $result]);
             $data = null;
         } elseif ($data instanceof Query) {
             $result = $data->with($with)->cache($cache);
@@ -1332,7 +1355,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
             $query->where($data);
             $data = null;
         } elseif ($data instanceof \Closure) {
-            call_user_func_array($data, [& $query]);
+            call_user_func_array($data, [ & $query]);
             $data = null;
         } elseif (is_null($data)) {
             return 0;
