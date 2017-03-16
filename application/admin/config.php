@@ -29,5 +29,5 @@ return array(
 		'prefix'     => 'admin',
 		'type'       => '',
 		'auto_start' => true,
-	),
+	)
 );

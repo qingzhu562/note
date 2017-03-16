@@ -833,7 +833,7 @@ class Route
         // 分隔符替换 确保路由定义使用统一的分隔符
         $url = str_replace($depr, '|', $url);
 
-        if (strpos($url, '|') && isset(self::$rules['alias'][strstr($url, '|', true)])) {
+        if (isset(self::$rules['alias'][$url]) || isset(self::$rules['alias'][strstr($url, '|', true)])) {
             // 检测路由别名
             $result = self::checkRouteAlias($request, $url, $depr);
             if (false !== $result) {
@@ -1057,7 +1057,7 @@ class Route
         if (!empty($array[1])) {
             self::parseUrlParams($array[1]);
         }
-        return ['type' => 'method', 'method' => [$class, $action]];
+        return ['type' => 'method', 'method' => [$class, $action], 'var' => []];
     }
 
     /**
@@ -1077,7 +1077,7 @@ class Route
         if (!empty($array[2])) {
             self::parseUrlParams($array[2]);
         }
-        return ['type' => 'method', 'method' => [$namespace . '\\' . Loader::parseName($class, 1), $method]];
+        return ['type' => 'method', 'method' => [$namespace . '\\' . Loader::parseName($class, 1), $method], 'var' => []];
     }
 
     /**
@@ -1096,7 +1096,7 @@ class Route
         if (!empty($array[1])) {
             self::parseUrlParams($array[1]);
         }
-        return ['type' => 'controller', 'controller' => $controller . '/' . $action];
+        return ['type' => 'controller', 'controller' => $controller . '/' . $action, 'var' => []];
     }
 
     /**
@@ -1281,9 +1281,6 @@ class Route
         } elseif (strpos($url, '/')) {
             // [模块/控制器/操作]
             $path = explode('/', $url);
-        } elseif (false !== strpos($url, '=')) {
-            // 参数1=值1&参数2=值2...
-            parse_str($url, $var);
         } else {
             $path = [$url];
         }

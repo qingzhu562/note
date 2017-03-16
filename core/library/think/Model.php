@@ -290,9 +290,11 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         }
 
         // 标记字段更改
-        if (isset($this->data[$name]) && is_scalar($this->data[$name]) && is_scalar($value) && 0 !== strcmp($this->data[$name], $value)) {
+        if (!isset($this->data[$name])) {
             $this->change[] = $name;
-        } elseif (!isset($this->data[$name]) || $value != $this->data[$name]) {
+        } elseif (is_scalar($value) && is_scalar($this->data[$name]) && 0 !== strcmp($this->data[$name], $value)) {
+            $this->change[] = $name;
+        } elseif (!is_object($value) && $value != $this->data[$name]) {
             $this->change[] = $name;
         }
         // 设置数据对象属性
@@ -378,7 +380,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                 if (empty($param)) {
                     $value = (float) $value;
                 } else {
-                    $value = (float) number_format($value, $param);
+                    $value = (float) number_format($value, $param, '.', '');
                 }
                 break;
             case 'boolean':
@@ -486,7 +488,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                 if (empty($param)) {
                     $value = (float) $value;
                 } else {
-                    $value = (float) number_format($value, $param);
+                    $value = (float) number_format($value, $param, '.', '');
                 }
                 break;
             case 'boolean':
@@ -508,7 +510,7 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                 $value = json_decode($value, true);
                 break;
             case 'array':
-                $value = is_null($value) ? [] : json_decode($value, true);
+                $value = empty($value) ? [] : json_decode($value, true);
                 break;
             case 'object':
                 $value = empty($value) ? new \stdClass() : json_decode($value);
@@ -837,11 +839,6 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         // 数据自动完成
         $this->autoCompleteData($this->auto);
 
-        // 自动写入更新时间
-        if ($this->autoWriteTimestamp && $this->updateTime && (empty($this->change) || !in_array($this->updateTime, $this->change))) {
-            $this->setAttr($this->updateTime, null);
-        }
-
         // 事件回调
         if (false === $this->trigger('before_write', $this)) {
             return false;
@@ -871,6 +868,14 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
                         unset($data[$field]);
                     }
                 }
+            }
+
+            if (empty($data) || (count($data) == 1 && is_string($pk) && isset($data[$pk]))) {
+                // 没有更新
+                return 0;
+            } elseif ($this->autoWriteTimestamp && $this->updateTime && !isset($data[$this->updateTime])) {
+                // 自动写入更新时间
+                $data[$this->updateTime] = $this->autoWriteTimestamp($this->updateTime);
             }
 
             if (empty($where) && !empty($this->updateWhere)) {
@@ -919,10 +924,14 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         } else {
             // 自动写入
             $this->autoCompleteData($this->insert);
-
-            // 自动写入创建时间
-            if ($this->autoWriteTimestamp && $this->createTime && (empty($this->change) || !in_array($this->createTime, $this->change))) {
-                $this->setAttr($this->createTime, null);
+            // 自动写入创建时间和更新时间
+            if ($this->autoWriteTimestamp) {
+                if ($this->createTime && !isset($this->data[$this->createTime])) {
+                    $this->data[$this->createTime] = $this->autoWriteTimestamp($this->createTime);
+                }
+                if ($this->updateTime && !isset($this->data[$this->updateTime])) {
+                    $this->data[$this->updateTime] = $this->autoWriteTimestamp($this->updateTime);
+                }
             }
 
             if (false === $this->trigger('before_insert', $this)) {

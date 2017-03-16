@@ -893,7 +893,7 @@ class Query
                         } else {
                             $name = $alias . '.' . $key;
                         }
-                        $fields[]                   = $name . ' AS ' . $val;
+                        $fields[$name]              = $val;
                         $this->options['map'][$val] = $name;
                     }
                 }
@@ -1118,6 +1118,20 @@ class Query
     {
         $this->parseWhereExp($logic, $field, 'exp', $condition);
         return $this;
+    }
+
+    /**
+     * 设置软删除字段及条件
+     * @access public
+     * @param false|string  $field     查询字段
+     * @param mixed         $condition 查询条件
+     * @return $this
+     */
+    public function useSoftDelete($field, $condition = null)
+    {
+        if ($field) {
+            $this->options['soft_delete'] = [$field, $condition ?: ['null', '']];
+        }
     }
 
     /**
@@ -1895,7 +1909,7 @@ class Query
             $relation = Loader::parseName($relation, 1, false);
             $model    = $class->$relation();
             if ($model instanceof OneToOne && 0 == $model->getEagerlyType()) {
-                $model->eagerly($this, $relation, $subRelation, $closure, $first);
+                $model->removeOption()->eagerly($this, $relation, $subRelation, $closure, $first);
                 $first = false;
             } elseif ($closure) {
                 $with[$key] = $closure;
@@ -2210,7 +2224,7 @@ class Query
             // 执行操作
             $result = '' == $sql ? 0 : $this->execute($sql, $bind);
             if ($result) {
-                if (isset($where[$pk])) {
+                if (is_string($pk) && isset($where[$pk])) {
                     $data[$pk] = $where[$pk];
                 } elseif (is_string($pk) && isset($key) && strpos($key, '|')) {
                     list($a, $val) = explode('|', $key);
@@ -2302,7 +2316,7 @@ class Query
                 }
             }
 
-            if (isset($cache)) {
+            if (isset($cache) && $resultSet) {
                 // 缓存数据集
                 $this->cacheData($key, $resultSet, $cache);
             }
@@ -2459,7 +2473,7 @@ class Query
                 $result = isset($resultSet[0]) ? $resultSet[0] : null;
             }
 
-            if (isset($cache)) {
+            if (isset($cache) && $result) {
                 // 缓存数据
                 $this->cacheData($key, $result, $cache);
             }
