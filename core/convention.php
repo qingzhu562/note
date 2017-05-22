@@ -5,8 +5,6 @@ return [
     // | 应用设置
     // +----------------------------------------------------------------------
 
-    // 应用命名空间
-    'app_namespace'          => 'app',
     // 应用调试模式
     'app_debug'              => true,
     // 应用Trace
@@ -91,6 +89,8 @@ return [
     'url_route_must'         => false,
     // 域名部署
     'url_domain_deploy'      => false,
+    // 默认Host地址
+    'default_host'           => '',
     // 域名根，如thinkphp.cn
     'url_domain_root'        => '',
     // 是否自动转换URL中的控制器和操作名

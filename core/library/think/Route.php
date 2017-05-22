@@ -842,7 +842,7 @@ class Route
         }
         $method = strtolower($request->method());
         // 获取当前请求类型的路由规则
-        $rules = self::$rules[$method];
+        $rules = isset(self::$rules[$method]) ? self::$rules[$method] : [];
         // 检测域名部署
         if ($checkDomain) {
             self::checkDomain($request, $rules, $method);
@@ -924,7 +924,7 @@ class Route
                 } else {
                     $str = $key;
                 }
-                if (is_string($str) && $str && 0 !== strpos(str_replace('|', '/', $url), $str)) {
+                if (is_string($str) && $str && 0 !== stripos(str_replace('|', '/', $url), $str)) {
                     continue;
                 }
                 self::setOption($option);
@@ -1184,9 +1184,9 @@ class Route
                 }
             }
             $pattern = array_merge(self::$rules['pattern'], $pattern);
-            if (false !== $match = self::match($url, $rule, $pattern, $merge)) {
+            if (false !== $match = self::match($url, $rule, $pattern)) {
                 // 匹配到路由规则
-                return self::parseRule($rule, $route, $url, $option, $match, $merge);
+                return self::parseRule($rule, $route, $url, $option, $match);
             }
         }
         return false;

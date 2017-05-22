@@ -235,7 +235,7 @@ class Url
         $rootDomain = Config::get('url_domain_root');
         if (true === $domain) {
             // 自动判断域名
-            $domain = $request->host();
+            $domain = Config::get('default_host') ?: $request->host();
 
             $domains = Route::rules('domain');
             if ($domains) {
@@ -265,7 +265,7 @@ class Url
 
         } else {
             if (empty($rootDomain)) {
-                $host       = $request->host();
+                $host       = Config::get('default_host') ?: $request->host();
                 $rootDomain = substr_count($host, '.') > 1 ? substr(strstr($host, '.'), 1) : $host;
             }
             if (substr_count($domain, '.') < 2 && !strpos($domain, $rootDomain)) {
@@ -297,7 +297,7 @@ class Url
             }
             foreach ($pattern as $key => $val) {
                 if (isset($vars[$key])) {
-                    $url = str_replace(['[:' . $key . ']', '<' . $key . '?>', ':' . $key . '', '<' . $key . '>'], $vars[$key], $url);
+                    $url = str_replace(['[:' . $key . ']', '<' . $key . '?>', ':' . $key . '', '<' . $key . '>'], urlencode($vars[$key]), $url);
                     unset($vars[$key]);
                     $result = [$url, $domain, $suffix];
                 } elseif (2 == $val) {

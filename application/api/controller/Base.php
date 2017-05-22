@@ -8,30 +8,19 @@
 // +----------------------------------------------------------------------
 
 namespace app\api\controller;
+use api\BaseRest;
 
-use think\Request;
+class Base extends BaseRest {
 
-class Index extends Base {
-
-	public $apiAuth = true;
 	// 允许访问的请求类型
-	protected $restMethodList = 'get|post|';
+	protected $restMethodList = 'get|post|put|delete|patch|head|options';
+	//业务错误码的映射表
+	public $errMap = [
+		0    => 'success', //没有错误
+		1001 => '参数错误',
+		9999 => '自定义错误', //让程序给出的自定义错误
+	];
 
-	/**
-	 * get的响应
-	 * @param Request $request
-	 * @return mixed
-	 */
-	public function getResponse(Request $request) {
-		return $this->sendError(1001, 'THIS IS GET', 400);
-	}
-
-	/**
-	 * post的响应
-	 * @param Request $request
-	 * @return mixed
-	 */
-	public function postResponse(Request $request) {
-		return $this->sendSuccess('THIS IS POST');
-	}
+	//是否开启权限认证
+	public $apiAuth = true;
 }

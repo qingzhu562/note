@@ -8,30 +8,8 @@
 // +----------------------------------------------------------------------
 
 namespace app\api\controller;
+use api\BaseAuth;
 
-use think\Request;
-
-class Index extends Base {
-
-	public $apiAuth = true;
-	// 允许访问的请求类型
-	protected $restMethodList = 'get|post|';
-
-	/**
-	 * get的响应
-	 * @param Request $request
-	 * @return mixed
-	 */
-	public function getResponse(Request $request) {
-		return $this->sendError(1001, 'THIS IS GET', 400);
-	}
-
-	/**
-	 * post的响应
-	 * @param Request $request
-	 * @return mixed
-	 */
-	public function postResponse(Request $request) {
-		return $this->sendSuccess('THIS IS POST');
-	}
+class AccessToken extends BaseAuth {
+	
 }
