@@ -113,9 +113,12 @@ class SeoRule extends Base{
 
 	private function getRelatedRules($module, $controller, $action){
 		//查询与当前页面相关的SEO规则
-		$map = "(app='*' or app='$module') and (controller='*' or controller='$controller') and (action='*' or action='$action') and status=1";
-
-		$rules = $this->where($map)->order('sort asc')->select();
+		$rules = $this->where('app',['=','*'],['=',$module],'or')
+			->where('controller',['=','*'],['=',$controller],'or')
+			->where('action',['=','*'],['=',$action],'or')
+			->where('status', 1)
+			->order('sort asc')
+			->select();
 
 		//返回规则列表
 		return $rules;
