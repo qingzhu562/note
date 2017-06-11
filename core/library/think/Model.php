@@ -13,7 +13,7 @@ namespace think;
 
 use InvalidArgumentException;
 use think\db\Query;
-use think\Exception\ValidateException;
+use think\exception\ValidateException;
 use think\model\Collection as ModelCollection;
 use think\model\Relation;
 use think\model\relation\BelongsTo;
@@ -322,6 +322,18 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         } else {
             throw new InvalidArgumentException('property not exists:' . $this->class . '->' . $name);
         }
+    }
+
+    /**
+     * 是否需要自动写入时间字段
+     * @access public
+     * @param bool $auto
+     * @return $this
+     */
+    public function isAutoWriteTimestamp($auto)
+    {
+        $this->autoWriteTimestamp = $auto;
+        return $this;
     }
 
     /**
@@ -958,13 +970,13 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
             // 自动更新
             $this->autoCompleteData($this->update);
 
-            // 获取有更新的数据
-            $data = $this->getChangedData();
-
             // 事件回调
             if (false === $this->trigger('before_update', $this)) {
                 return false;
             }
+
+            // 获取有更新的数据
+            $data = $this->getChangedData();
 
             if (empty($data) || (count($data) == 1 && is_string($pk) && isset($data[$pk]))) {
                 // 关联更新
@@ -1118,6 +1130,66 @@ abstract class Model implements \JsonSerializable, \ArrayAccess
         }
 
         return $data;
+    }
+
+    /**
+     * 字段值(延迟)增长
+     * @access public
+     * @param string  $field    字段名
+     * @param integer $step     增长值
+     * @param integer $lazyTime 延时时间(s)
+     * @return integer|true
+     * @throws Exception
+     */
+    public function setInc($field, $step = 1, $lazyTime = 0)
+    {
+        // 删除条件
+        $pk = $this->getPk();
+
+        if (is_string($pk) && isset($this->data[$pk])) {
+            $where = [$pk => $this->data[$pk]];
+        } elseif (!empty($this->updateWhere)) {
+            $where = $this->updateWhere;
+        } else {
+            $where = null;
+        }
+
+        $result = $this->getQuery()->where($where)->setInc($field, $step, $lazyTime);
+        if (true !== $result) {
+            $this->data[$field] += $step;
+        }
+
+        return $result;
+    }
+
+    /**
+     * 字段值(延迟)增长
+     * @access public
+     * @param string  $field    字段名
+     * @param integer $step     增长值
+     * @param integer $lazyTime 延时时间(s)
+     * @return integer|true
+     * @throws Exception
+     */
+    public function setDec($field, $step = 1, $lazyTime = 0)
+    {
+        // 删除条件
+        $pk = $this->getPk();
+
+        if (is_string($pk) && isset($this->data[$pk])) {
+            $where = [$pk => $this->data[$pk]];
+        } elseif (!empty($this->updateWhere)) {
+            $where = $this->updateWhere;
+        } else {
+            $where = null;
+        }
+
+        $result = $this->getQuery()->where($where)->setDec($field, $step, $lazyTime);
+        if (true !== $result) {
+            $this->data[$field] -= $step;
+        }
+
+        return $result;
     }
 
     /**
