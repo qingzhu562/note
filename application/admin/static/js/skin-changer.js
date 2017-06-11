@@ -11,11 +11,11 @@ if (storage) {
         if (usedSkin != '' && usedSkin != null) {
             document.body.className = usedSkin;
         } else {
-            document.body.className = 'theme-whbl';
+            document.body.className = '';
         }
     } catch(e) {
-        document.body.className = 'theme-whbl';
+        document.body.className = '';
     }
 } else {
-    document.body.className = 'theme-whbl';
+    document.body.className = '';
 }
