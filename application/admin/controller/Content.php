@@ -16,20 +16,13 @@ class Content extends Admin {
 		parent::_initialize();
 		$this->getContentMenu();
 		$this->model_id = $model_id = $this->request->param('model_id');
-		$row            = db('Model')->select();
-		foreach ($row as $key => $value) {
-			$list[$value['id']] = $value;
-		}
+		$list            = db('Model')->column('*', 'id');
 
 		if (empty($list[$model_id])) {
 			return $this->error("无此模型！");
 		} else {
 			$this->modelInfo = $list[$model_id];
-			if ($this->modelInfo['extend'] > 1) {
-				$this->model = model('Content')->extend($this->modelInfo['name']);
-			} else {
-				$this->model = model('Document')->extend($this->modelInfo['name']);
-			}
+			$this->model = model('Content')->extend($this->modelInfo['name']);
 		}
 
 		$this->assign('model_id', $model_id);
@@ -49,11 +42,7 @@ class Content extends Admin {
 		$order     = "id desc";
 		$map       = $this->buildMap();
 		$field     = array_filter($grid_list['fields']);
-		if ($this->modelInfo['extend'] == 1) {
-			array_push($field, 'is_top');
-		} else {
-			unset($map['model_id']);
-		}
+
 
 		$list = $this->model->lists($map, $order);
 
@@ -247,7 +236,7 @@ class Content extends Admin {
 	 */
 	protected function buildMap() {
 		$map  = array();
-		$data = $this->request->get();
+		$data = $this->request->param();
 		foreach ($data as $key => $value) {
 			if ($value) {
 				if ($key == 'keyword') {
@@ -263,12 +252,6 @@ class Content extends Admin {
 		}
 		if (isset($map['page'])) {
 			unset($map['page']);
-		}
-		if ($this->modelInfo['extend'] == 1) {
-			$category  = isset($data['category']) ? $data['category'] : '';
-			$cate_list = parse_field_bind('category', $category, 0);
-			$map['model_id'] = $this->model_id;
-			$this->assign('cate_list', $cate_list);
 		}
 		$this->assign($data);
 		return $map;

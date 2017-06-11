@@ -46,19 +46,7 @@ class Attribute extends Admin {
 	 * @author colin <colin@tensent.cn>
 	 */
 	public function index($model_id = null) {
-		$map['model_id'] = $model_id;
-		if (!$model_id) {
-			return $this->error("非法操作！");
-		}
-
-		$list = model('Attribute')->where($map)->order('id desc')->paginate(25);
-
-		$data = array(
-			'list'     => $list,
-			'model_id' => $model_id,
-			'page'     => $list->render(),
-		);
-		$this->assign($data);
+		$this->getAttributeList($model_id);
 		$this->setMeta('字段管理');
 		return $this->fetch();
 	}
@@ -120,17 +108,60 @@ class Attribute extends Admin {
 	 * @var delattr 是否删除字段表里的字段
 	 * @author colin <colin@tensent.cn>
 	 */
-	public function del() {
-		$id = input('id', '', 'trim,intval');
+	public function del(\think\Request $request) {
+		$id = $request->param('id');
+		$model_id = $request->param('model_id');
+
 		if (!$id) {
 			return $this->error("非法操作！");
 		}
 
-		$result = $this->model->del($id);
+		$result = $this->model->del($id, $model_id);
 		if ($result) {
 			return $this->success("删除成功！");
 		} else {
 			return $this->error($this->model->getError());
+		}
+	}
+
+	public function generate($id = '') {
+		if ($id) {
+			$model  = model('Model')->where('id', $id)->find();
+			$result = $this->model->generate($model);
+			if (false !== $result) {
+				return $this->success('生成成功！', url('admin/model/index'));
+			} else {
+				return $this->error($this->model->getError());
+			}
+		} else {
+			return $this->error('非法操作！');
+		}
+	}
+
+	public function insert(\think\Request $request) {
+		if (IS_POST) {
+			$model_id  = $request->param('id');
+			$attr      = db('Model')->where('id', $model_id)->value('attribute_list');
+			$attr      = explode(',', $attr);
+			$post      = $request->post();
+			$attribute = array_merge($attr, $post['id']);
+
+			$data = array(
+				'attribute_list' => implode(',', $attribute),
+				'table_status'   => 2,
+				'status'         => 0,
+			);
+			$result = db('Model')->where('id', $model_id)->update($data);
+			if (false !== $result) {
+				return $this->success('成功导入！');
+			}else{
+				return $this->error('导入失败！');
+			}
+		} else {
+			$this->getAttributeList();
+			$this->assign('id', $request->param('id'));
+			$this->setMeta('导入字段');
+			return $this->fetch();
 		}
 	}
 
@@ -160,5 +191,22 @@ class Attribute extends Admin {
 				array('name' => 'auto_time', 'title' => '自动完成时间', 'help' => '英文字母开头，长度不超过30', 'type' => 'select', 'option' => $this->the_time),
 			),
 		);
+	}
+
+	protected function getAttributeList($model_id = '') {
+		$map = array();
+		if ($model_id) {
+			$attribute = db('Model')->where('id', $model_id)->value('attribute_list');
+			$map['id'] = array('IN', $attribute);
+		}
+
+		$list = model('Attribute')->where($map)->order('id desc')->paginate(25);
+
+		$data = array(
+			'list'     => $list,
+			'model_id' => $model_id,
+			'page'     => $list->render(),
+		);
+		$this->assign($data);
 	}
 }

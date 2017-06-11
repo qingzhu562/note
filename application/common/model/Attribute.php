@@ -65,23 +65,21 @@ class Attribute extends Base{
 		}
 	}
 
-	public function del($id){
+	public function del($id, $model_id){
 		$map['id'] = $id;
 		$info = $this->find($id);
-		$model = db('Model')->where(array('id'=>$info['model_id']))->find();
+		$tablename = db('Model')->where(array('id'=>$model_id))->value('name');
 
 		//先删除字段表内的数据
 		$result = $this->where($map)->delete();
 		if ($result) {
-			if ($model['extend'] == 1) {
-				$tablename = 'document_'.$model['name'];
-			}else{
-				$tablename = $model['name'];
-			}
-
+			$tablename = strtolower($tablename);
 			//删除模型表中字段
 			$db = new \com\Datatable();
-			$result = $db->del_field($tablename,$info['name'])->query();
+			if (!$db->CheckField($tablename,$info['name'])) {
+				return true;
+			}
+			$result = $db->delField($tablename,$info['name'])->query();
 			if ($result) {
 				return true;
 			}else{
@@ -133,5 +131,16 @@ class Attribute extends Base{
 
 		$result = $db->create();
 		return $result;
+	}
+
+	public function generate($model){
+		$tablename = strtolower($model['name']);
+		//实例化一个数据库操作类
+		$db = new \com\Datatable();
+		//检查表是否存在并创建
+		if (!$db->CheckTable($tablename)) {
+			//创建新表
+			$db->initTable($tablename, $model['title'], 'id')->query();
+		};
 	}
 }

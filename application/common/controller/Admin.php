@@ -174,8 +174,7 @@ class Admin extends Base {
 		$model = \think\Loader::model('Model');
 		$list  = array();
 		$map   = array(
-			'status' => array('gt', 0),
-			'extend' => array('gt', 0),
+			'status' => array('gt', 0)
 		);
 		$list = $model::where($map)->field("name,id,title,icon,'' as 'style'")->select();
 

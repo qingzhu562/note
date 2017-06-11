@@ -7271,3 +7271,5 @@ to {
 }
 }
 span.reloadverify{padding: 0; overflow: hidden; cursor: pointer;}
+.footer-bar{position: fixed; bottom: 0; left: 0; right: 0; background: #fff; overflow: hidden; padding: 10px; text-align: right; z-index: 10000;}
+.dialog-body{padding: 10px; padding-bottom: 60px;}

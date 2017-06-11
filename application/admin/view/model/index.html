@@ -8,7 +8,6 @@
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-success" href="{:url('Model/add')}">新 增</a>
-			<button class="btn btn-info ajax-post" target-form="ids" url="{:url('Model/status',array('status'=>1))}">启 用</button>
 			<button class="btn ajax-post" target-form="ids" url="{:url('Model/status',array('status'=>0))}">禁 用</button>
 		</div>
 	</header>
@@ -36,7 +35,7 @@
 							<input class="ids" type="checkbox" name="ids[]" value="{$item['id']}" />
 						</td>
 						<td>{$item['id']}</td>
-						<td>{$item['name']}</td>
+						<td><i class="fa fa-{$item['icon']}"></i> {$item['name']}</td>
 						<td>
 							<a data-id="{$item.id}" href="{:url('model/edit?id='.$item['id'])}">{$item.title}</a>
 						</td>
@@ -52,17 +51,15 @@
 						</td>
 						<td>
 							<a href="{:url('admin/attribute/index?model_id='.$item['id'])}">字段</a>
-							<a href="{:url('model/status?ids='.$item['id'].'&status='.abs(1-$item['status']))}" class="ajax-get">{$item['status']|show_status_op}</a>
+							<a href="{:url('model/status?id='.$item['id'].'&status='.abs(1-$item['status']))}" class="ajax-get">{$item['status']|show_status_op}</a>
 							<a href="{:url('model/edit?id='.$item['id'])}">编辑</a>
 							<a href="{:url('model/del?id='.$item['id'])}" class="confirm ajax-get">删除</a>
-							{if $item['extend']}
 							<a href="{:url('admin/content/index?model_id='.$item['id'])}">数据</a>
-							{/if}
 						</td>
 					</tr>
 					{/volist}
 					{else/}
-					<td colspan="7" class="text-center">aOh! 暂时还没有内容!</td>
+					<td colspan="7" class="text-center">aOh! 暂时还没有创建模型!</td>
 					{/notempty}
 				</tbody>
 			</table>

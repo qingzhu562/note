@@ -1,0 +1,60 @@
+{include file="admin@public/header" /}
+<div class="dialog-body">
+	<div class="main-box clearfix">
+		<header class="main-box-header clearfix">
+			<div class="pull-left">
+				<h2>{$meta_title}</h2>
+			</div>
+		</header>
+		<div class="main-box-body clearfix">
+			<div class="table-responsive clearfix">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th><input class="checkbox check-all" type="checkbox"></th>
+							<th>表单标题</th>
+							<th>字段名</th>
+							<th>字段类型</th>
+							<th>字段长度</th>
+							<th>默认值</th>
+						</tr>
+					</thead>
+					<tbody>
+						{volist name="list" id="item"}
+						<tr>
+							<td><input class="ids row-selected" type="checkbox" name="id[]" value="{$item['id']}"></td>
+							<td>{$item['title']}</td>
+							<td>{$item['name']}</td>
+							<td>{$item['type_text']}</td>
+							<td>{$item['length']}</td>
+							<td>{$item['value']}</td>
+						</tr>
+						{/volist}
+					</tbody>
+				</table>
+				{$page}
+			</div>
+		</div>
+	</div>
+</div>
+<div class="footer-bar">
+	<button class="btn btn-primary insert-btn">确认导入</button>
+</div>
+<script type="text/javascript">
+var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+//关闭iframe
+$('button.insert-btn').click(function(){
+	$.ajax({
+		url     : "{:url('admin/attribute/insert?id='.$id)}",
+		data    : $('input.ids:checked').serialize(),
+		type    : "POST",
+		success  : function(res){
+			if (res.code == 1) {
+				parent.layer.close(index);
+			}
+		},
+		dataType : 'json'
+	});
+});
+</script>
+{include file="admin@public/footer" /}

@@ -8,7 +8,7 @@
 // +----------------------------------------------------------------------
 
 // SentCMS常量定义
-define('SENTCMS_VERSION', '3.0.20161201');
+define('SENTCMS_VERSION', '3.1.201706');
 define('SENT_ADDON_PATH', ROOT_PATH . DS . 'addons' . DS);
 
 //字符串解密加密

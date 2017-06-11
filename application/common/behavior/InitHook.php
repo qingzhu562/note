@@ -51,12 +51,7 @@ class InitHook {
 		foreach ($list as $key => $value) {
 			$route[$value['rule']] = $value['url'];
 		}
-		$model = db('Model');
-		$map   = array(
-			'status' => array('gt', 0),
-			'extend' => array('gt', 0),
-		);
-		$list = $model->where($map)->field("name,id,title,'' as 'style'")->select();
+		$list = db('Model')->field("name,id")->select();
 		foreach ($list as $key => $value) {
 			$route["admin/" . $value['name'] . "/index"]  = "admin/content/index?model_id=" . $value['id'];
 			$route["admin/" . $value['name'] . "/add"]    = "admin/content/add?model_id=" . $value['id'];
