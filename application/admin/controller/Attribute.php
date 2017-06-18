@@ -46,7 +46,17 @@ class Attribute extends Admin {
 	 * @author colin <colin@tensent.cn>
 	 */
 	public function index($model_id = null) {
-		$this->getAttributeList($model_id);
+		if (!$model_id) {
+			return $this->error('非法操作！');
+		}
+		$list = model('Attribute')->where('model_id', $model_id)->order('id desc')->paginate(25);
+
+		$data = array(
+			'list'     => $list,
+			'model_id' => $model_id,
+			'page'     => $list->render(),
+		);
+		$this->assign($data);
 		$this->setMeta('字段管理');
 		return $this->fetch();
 	}
@@ -55,19 +65,15 @@ class Attribute extends Admin {
 	 * 创建字段
 	 * @author colin <colin@tensent.cn>
 	 */
-	public function add() {
-		$model_id = input('model_id', '', 'trim,intval');
+	public function add($model_id = '') {
 		if (IS_POST) {
-			$result = $this->model->change();
-			if ($result) {
+			$result = $this->model->validate('attribute.add')->save($this->param);
+			if (false !== $result) {
 				return $this->success("创建成功！", url('Attribute/index', array('model_id' => $model_id)));
 			} else {
 				return $this->error($this->model->getError());
 			}
 		} else {
-			if (!$model_id) {
-				return $this->error('非法操作！');
-			}
 			$data = array(
 				'info'       => array('model_id' => $model_id),
 				'fieldGroup' => $this->field,
@@ -82,16 +88,15 @@ class Attribute extends Admin {
 	 * 编辑字段方法
 	 * @author colin <colin@tensent.cn>
 	 */
-	public function edit() {
+	public function edit($id = '', $model_id = '') {
 		if (IS_POST) {
-			$result = $this->model->change();
+			$result = $this->model->validate('attribute.edit')->save($this->param, array('id'=>$id));
 			if ($result) {
-				return $this->success("修改成功！", url('Attribute/index', array('model_id' => $_POST['model_id'])));
+				return $this->success("修改成功！", url('Attribute/index', array('model_id' => $model_id)));
 			} else {
 				return $this->error($this->model->getError());
 			}
 		} else {
-			$id   = input('id', '', 'trim,intval');
 			$info = db('Attribute')->find($id);
 			$data = array(
 				'info'       => $info,
@@ -129,6 +134,7 @@ class Attribute extends Admin {
 			$model  = model('Model')->where('id', $id)->find();
 			$result = $this->model->generate($model);
 			if (false !== $result) {
+				db('Model')->where('id', $id)->setField('table_status', 1);
 				return $this->success('生成成功！', url('admin/model/index'));
 			} else {
 				return $this->error($this->model->getError());
@@ -137,34 +143,7 @@ class Attribute extends Admin {
 			return $this->error('非法操作！');
 		}
 	}
-
-	public function insert(\think\Request $request) {
-		if (IS_POST) {
-			$model_id  = $request->param('id');
-			$attr      = db('Model')->where('id', $model_id)->value('attribute_list');
-			$attr      = explode(',', $attr);
-			$post      = $request->post();
-			$attribute = array_merge($attr, $post['id']);
-
-			$data = array(
-				'attribute_list' => implode(',', $attribute),
-				'table_status'   => 2,
-				'status'         => 0,
-			);
-			$result = db('Model')->where('id', $model_id)->update($data);
-			if (false !== $result) {
-				return $this->success('成功导入！');
-			}else{
-				return $this->error('导入失败！');
-			}
-		} else {
-			$this->getAttributeList();
-			$this->assign('id', $request->param('id'));
-			$this->setMeta('导入字段');
-			return $this->fetch();
-		}
-	}
-
+	
 	//字段编辑所需字段
 	protected function getField() {
 		return array(
@@ -191,22 +170,5 @@ class Attribute extends Admin {
 				array('name' => 'auto_time', 'title' => '自动完成时间', 'help' => '英文字母开头，长度不超过30', 'type' => 'select', 'option' => $this->the_time),
 			),
 		);
-	}
-
-	protected function getAttributeList($model_id = '') {
-		$map = array();
-		if ($model_id) {
-			$attribute = db('Model')->where('id', $model_id)->value('attribute_list');
-			$map['id'] = array('IN', $attribute);
-		}
-
-		$list = model('Attribute')->where($map)->order('id desc')->paginate(25);
-
-		$data = array(
-			'list'     => $list,
-			'model_id' => $model_id,
-			'page'     => $list->render(),
-		);
-		$this->assign($data);
 	}
 }

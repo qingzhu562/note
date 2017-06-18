@@ -10,29 +10,32 @@
 namespace app\common\validate;
 
 /**
-* 设置模型
-*/
-class Attribute extends Base{
+ * 设置模型
+ */
+class Attribute extends Base {
 
 	protected $rule = array(
-		'name'   => 'require|/^[a-zA-Z]\w{0,39}$/',
-		'title'   => 'require',
+		'name'   => 'require|unique:attribute|/^[a-zA-Z]\w{0,39}$/',
+		'title'  => 'require',
 		'type'   => 'require',
-		'length'   => 'requireIn:type,textarea,editor|integer',
-		'remark'   => 'require',
+		'length' => 'requireIn:type,textarea,editor|integer',
+		'remark' => 'require',
+		'value'  => 'requireIf:is_must,1'
 	);
-	
+
 	protected $message = array(
-		'length.requireIn'   => '字段长度必须！',
-		'length.integer'   => '字段必须为整形',
-		'name.require'   => '字段名不能为空！',
+		'length.requireIn' => '字段长度必须！',
+		'length.integer'  => '字段必须为整形',
+		'name.require'    => '字段名不能为空！',
+		'name.unique'     => '字段名已存在！',
 		'title.require'   => '字段标题不能为空！',
-		'type.require'   => '类型不能为空！',
-		'remark.require'   => '描述不能为空！',
+		'type.require'    => '类型不能为空！',
+		'remark.require'  => '描述不能为空！',
+		'value'           => '必填字段默认值必须！'
 	);
-	
+
 	protected $scene = array(
-		'add'   => 'name,title,type,remark,length',
-		'edit'   => 'name,title,type,remark,length'
+		'add'  => 'name,title,type,remark,length,value',
+		'edit' => 'name,title,type,remark,length,value',
 	);
 }

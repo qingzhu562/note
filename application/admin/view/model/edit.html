@@ -63,21 +63,16 @@
 						<div class="form-group">
 							<label class="col-lg-2 control-label">表单显示排序</label>
 							<div class="col-lg-10 boards" id="attribute_group_sort">
-							{volist name=":parse_field_attr($info['attribute_group'])" id="vo"}
+							{volist name="fields" id="field"}
 								<div class="board panel panel-info">
-									<div class="panel-heading">{$vo}</div>
+									<div class="panel-heading">{:parse_field_attr($info['attribute_group'])[$key]}</div>
 									<div class="panel-body">
 										<div class="board-list" data-group="{$key}">
-										{foreach name="fields" item="field" key="k"}
-											{if (($field['group'] == -1) or ($field['group'] eq $key))}
-												<div class="board-item">
-													<span data="{$field['id']}">{$field['title']} [{$field['name']}]</span>
-													<input type="hidden" name="attribute_sort[{$key}][]" value="{$field['id']}"/>
-												</div>
-												{php}
-												unset($fields[$k]);
-												{/php}
-											{/if}
+										{foreach name="field" item="item" key="k"}
+											<div class="board-item">
+												<span data="{$item['id']}">{$item['title']} [{$item['name']}]</span>
+												<input type="hidden" name="attribute_sort[{$key}][]" value="{$item['id']}"/>
+											</div>
 										{/foreach}
 										</div>
 									</div>

@@ -18,6 +18,39 @@ class Attribute extends Base{
 		'id'  => 'integer',
 	);
 
+	protected static function init(){
+		self::afterInsert(function($data){
+			if ($data['model_id']) {
+				$name = db('Model')->where('id', $data['model_id'])->value('name');
+				$db = new \com\Datatable();
+				$attr = $data->toArray();
+				$model_attr = array(
+					'model_id' => $data['model_id'],
+					'attr_id'  => $data->id,
+					'group_id' => 0,
+					'is_add_table'  => 1,
+					'is_show'  => $data['is_show'],
+					'is_must'  => $data['is_must'],
+					'sort' => 0,
+				);
+				$attr['after'] = db('Attribute')->where('model_id', $data['model_id'])->order('id desc')->value('name');
+				return $db->columField(strtolower($name), $attr)->query();
+			}
+		});
+		self::beforeUpdate(function($data){
+			$attr = $data->toArray();
+			$attr['action'] = 'CHANGE';
+			$attr['oldname'] = db('Attribute')->where('id', $attr['id'])->value('name');
+			if ($attr['id']) {
+				$name = db('Model')->where('id', $attr['model_id'])->value('name');
+				$db = new \com\Datatable();
+				return $db->columField(strtolower($name), $attr)->query();
+			}else{
+				return false;
+			}
+		});
+	}
+
 	protected function getTypeTextAttr($value, $data){
     	$type = config('config_type_list');
     	$type_text = explode(',', $type[$data['type']]);
@@ -140,7 +173,7 @@ class Attribute extends Base{
 		//检查表是否存在并创建
 		if (!$db->CheckTable($tablename)) {
 			//创建新表
-			$db->initTable($tablename, $model['title'], 'id')->query();
+			return $db->initTable($tablename, $model['title'], 'id')->query();
 		};
 	}
 }

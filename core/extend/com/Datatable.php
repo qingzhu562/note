@@ -23,6 +23,24 @@ class Datatable {
 	protected $engine_type        = 'MyISAM'; /*数据库引擎*/
 	protected $key                = 'id'; /*数据库主键*/
 	public $sql                   = ''; /*最后生成的sql语句*/
+	protected $typeAlist          = array(
+		"text"     => "VARCHAR",
+		"string"   => "VARCHAR",
+		"password" => "VARCHAR",
+		"textarea" => "TEXT",
+		"bool"     => "INT",
+		"select"   => "INT",
+		"num"      => "INT",
+		"decimal"   => "DECIMAL",
+		"tags"     => "VARCHAR",
+		"datetime" => "INT",
+		"date"     => "INT",
+		"editor"   => "TEXT",
+		"bind"     => "INT",
+		"image"    => "INT",
+		"images"   => "VARCHAR",
+		"attach"   => "VARCHAR",
+	);
 
 	/**
 	 * 初始化数据库信息
@@ -42,7 +60,7 @@ class Datatable {
 	 * @param       string        $table 表名
 	 * @return      void               空
 	 */
-	public function initTable($table = '', $comment = '', $pk = '', $time = true){
+	public function initTable($table = '', $comment = '', $pk = '', $time = true) {
 		$this->table = $this->getTablename($table, true);
 
 		if ($pk) {
@@ -54,17 +72,17 @@ class Datatable {
 			$sql[] = $this->generateField('update_time', 'int', 11, 0, '创建时间', false);
 		}
 
-		$primary = $pk ?  "PRIMARY KEY (`".$pk."`)" : '';
+		$primary = $pk ? "PRIMARY KEY (`" . $pk . "`)" : '';
 		if ($primary) {
 			$generatesql = implode(',', $sql) . ',';
-		}else{
+		} else {
 			$generatesql = implode(',', $sql);
 		}
-		
+
 		$create = "CREATE TABLE IF NOT EXISTS `" . $this->table . "`("
-				. $generatesql
-				. $primary
-				. ") ENGINE=" . $this->engine_type . " AUTO_INCREMENT=1 DEFAULT CHARSET=" . $this->charset . " ROW_FORMAT=DYNAMIC COMMENT='" . $comment . "';";
+		. $generatesql
+		. $primary
+		. ") ENGINE=" . $this->engine_type . " AUTO_INCREMENT=1 DEFAULT CHARSET=" . $this->charset . " ROW_FORMAT=DYNAMIC COMMENT='" . $comment . "';";
 		$this->sql = $create;
 		return $this;
 	}
@@ -75,14 +93,14 @@ class Datatable {
 	 * @var comment 字段的描述
 	 * @author colin <colin@tensent.cn>
 	 */
-	public function generateField($key = '', $type = '', $length = 11, $default = '', $comment = '主键', $is_auto_increment = false){
+	public function generateField($key = '', $type = '', $length = 11, $default = '', $comment = '主键', $is_auto_increment = false) {
 		if ($key && $type) {
 			$auto_increment = $is_auto_increment ? 'AUTO_INCREMENT' : '';
-			$field_type = $length ? $type.'('.$length.')' : $type;
-			$signed = in_array($type, array('int', 'float', 'double')) ? 'signed' : '';
-			$comment = $comment ? "COMMENT '" . $comment . "'" : "";
-			$default = $default ? "DEFAULT '" . $default . "'" : "";
-			$sql = "`{$key}` {$field_type} {$signed} NOT NULL {$default} $auto_increment {$comment}";
+			$field_type     = $length ? $type . '(' . $length . ')' : $type;
+			$signed         = in_array($type, array('int', 'float', 'double')) ? 'signed' : '';
+			$comment        = $comment ? "COMMENT '" . $comment . "'" : "";
+			$default        = $default ? "DEFAULT '" . $default . "'" : "";
+			$sql            = "`{$key}` {$field_type} {$signed} NOT NULL {$default} $auto_increment {$comment}";
 		}
 		return $sql;
 	}
@@ -96,31 +114,27 @@ class Datatable {
 	 */
 	public function columField($table, $attr = array()) {
 		$field_attr['table'] = $table ? $this->getTablename($table, true) : $this->table;
-		$field_attr['field'] = $attr['field'];
-		$field_attr['type']  = $attr['type'] ? $attr['type'] : 'varchar';
+		$field_attr['name'] = $attr['name'];
+		$field_attr['type']  = $attr['type'] ? $this->typeAlist[$attr['type']] : 'varchar';
 		if (intval($attr['length']) && $attr['length']) {
 			$field_attr['length'] = "(" . $attr['length'] . ")";
 		} else {
 			$field_attr['length'] = "";
 		}
-		$field_attr['is_null'] = $attr['is_null'] ? 'NOT NULL' : 'null';
-		$field_attr['default'] = $attr['default'] != '' ? 'default "' . $attr['default'] . '"' : 'default null';
-		if ($field_attr['is_null'] == 'null') {
-			$field_attr['default'] = $field_attr['default'];
-		} else {
-			$field_attr['default'] = '';
-		}
-		$field_attr['comment'] = (isset($attr['comment']) && $attr['comment']) ? $attr['comment'] : '';
-		$field_attr['oldname'] = (isset($attr['oldname']) && $attr['oldname']) ? $attr['oldname'] : '';
-		$field_attr['newname'] = (isset($attr['newname']) && $attr['newname']) ? $attr['newname'] : $field_attr['field'];
-		$field_attr['after']   = (isset($attr['after']) && $attr['after']) ? ' AFTER `' . $attr['after'] . '`' : '';
+		$field_attr['is_null'] = $attr['is_must'] ? 'NOT NULL' : 'NULL';
+		$field_attr['default'] = $attr['value'] != '' ? 'DEFAULT "' . $attr['default'] . '"' : 'DEFAULT null';
+
+		$field_attr['comment'] = (isset($attr['remark']) && $attr['remark']) ? $attr['remark'] : $attr['title'];
+		$field_attr['after']   = (isset($attr['after']) && $attr['after']) ? ' AFTER `' . $attr['after'] . '`' : ' AFTER `id`';
 		$field_attr['action']  = (isset($attr['action']) && $attr['action']) ? $attr['action'] : 'ADD';
 		//确认表是否存在
 
 		if ($field_attr['action'] == 'ADD') {
-			$this->sql = "ALTER TABLE `{$field_attr['table']}` ADD `{$field_attr['field']}` {$field_attr['type']}{$field_attr['length']} {$field_attr['is_null']} {$field_attr['default']} COMMENT '{$field_attr['comment']}'";
+			$this->sql = "ALTER TABLE `{$field_attr['table']}` ADD `{$field_attr['name']}` {$field_attr['type']}{$field_attr['length']} {$field_attr['is_null']} {$field_attr['default']} COMMENT '{$field_attr['comment']}' {$field_attr['after']}";
 		} elseif ($field_attr['action'] == 'CHANGE') {
-			$this->sql = "ALTER TABLE `{$field_attr['table']}` CHANGE `{$field_attr['oldname']}` `{$field_attr['newname']}` {$field_attr['type']}{$field_attr['length']} {$field_attr['is_null']} {$field_attr['default']} COMMENT '{$field_attr['comment']}'";
+			$field_attr['oldname'] = (isset($attr['oldname']) && $attr['oldname']) ? $attr['oldname'] : '';
+
+			$this->sql = "ALTER TABLE `{$field_attr['table']}` CHANGE `{$field_attr['oldname']}` `{$field_attr['name']}` {$field_attr['type']}{$field_attr['length']} {$field_attr['is_null']} {$field_attr['default']} COMMENT '{$field_attr['comment']}'";
 		}
 		return $this;
 	}

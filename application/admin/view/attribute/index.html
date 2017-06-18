@@ -7,10 +7,6 @@
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-danger" href="{:url('add',array('model_id'=>$model_id))}"><i class="fa fa-plus"></i> 新 增</a>
-			{if $model_id}
-			<button class="btn btn-primary openDilog" url="{:url('insert?id='.$model_id)}">导入字段</button>
-			<button class="btn btn-primary ajax-get" url="{:url('generate?id='.$model_id)}">生成数据库</button>
-			{/if}
 			<!-- <button class="btn btn-danger ajax-post confirm" url="{:url('del')}" target-form="ids"><i class="fa fa-remove"></i> 删 除</button> -->
 			<a class="btn btn-warning" href="{:url('Model/index')}"><i class="fa fa-reply"></i> 返回</a>
 		</div>
@@ -39,7 +35,7 @@
 						<td>{$item['length']}</td>
 						<td>{$item['value']}</td>
 						<td>
-							<a href="{:url('edit',array('id'=>$item['id']))}">编辑</a>
+							<a href="{:url('edit',array('id'=>$item['id'], 'model_id'=>$model_id))}">编辑</a>
 							<a href="{:url('del',array('id'=>$item['id'], 'model_id'=>$model_id))}" class="confirm ajax-get">删除</a>
 						</td>
 					</tr>

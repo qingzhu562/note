@@ -123,12 +123,7 @@ class Content extends Fornt {
 	//模块内容详情页
 	public function detail($id = '', $name = '') {
 		//当为文章模型时
-		$info = $this->model->detail($id);
-
-		if ($this->modelInfo['extend'] = 1 && (time() - session('set_content_view')) > 1800) {
-			db('Document')->where(array('id' => $id))->setInc('view');
-			session('set_content_view', time());
-		}
+		$info = $this->model->find($id);
 
 		if (empty($info)) {
 			return $this->error("无此内容！");
@@ -168,11 +163,7 @@ class Content extends Fornt {
 			return $this->error("无此模型！");
 		} else {
 			$this->modelInfo = $model_name ? $name_list[$model_name] : $id_list[$model_id];
-			if ($this->modelInfo['extend'] > 1) {
-				$this->model = model('Content')->extend($this->modelInfo['name']);
-			} else {
-				$this->model = model('Document')->extend($this->modelInfo['name']);
-			}
+			$this->model = new \app\common\model\Content($this->modelInfo['name']);
 
 			$this->assign('model_id', $this->modelInfo['id']);
 			$this->assign('model_list', $name_list);

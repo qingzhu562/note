@@ -22,6 +22,22 @@ class Model extends Base {
 		'update_time'    => 'integer',
 	);
 
+	protected static function init(){
+		self::beforeUpdate(function($event){
+			$data = $event->toArray();
+			$attribute_sort = json_decode($data['attribute_sort'], true);
+			if (!empty($attribute_sort)) {
+				foreach ($attribute_sort as $key => $value) {
+					db('Attribute')->where('id', 'IN', $value)->setField('group_id', $key);
+					foreach ($value as $k => $v) {
+						db('Attribute')->where('id', $v)->setField('sort', $k);
+					}
+				}
+			}
+			return true;
+		});
+	}
+
 	protected function setAttributeSortAttr($value){
 		return $value ? json_encode($value) : '';
 	}
@@ -36,60 +52,6 @@ class Model extends Base {
 			1 => '启用',
 		);
 		return $status[$data['status']];
-	}
-
-	/**
-	 * 更新一个或新增一个模型
-	 * @return array
-	 */
-	public function change() {
-		if (IS_POST) {
-			$data = \think\Request::instance()->post();
-			if ($data) {
-				if (empty($data['id'])) {
-					/*创建表*/
-					$db = new \com\Datatable();
-
-					if ($data['extend'] == 1) {
-						//文档模型
-						$sql = $db->start_table('document_' . $data['name'])->create_id('doc_id', 11, '主键', false)->create_key('doc_id');
-					} else {
-						$sql = $db->start_table($data['name'])->create_id('id', 11, '主键', true)->create_uid()->create_key('id');
-					}
-					//执行操作数据库，建立数据表
-					$result = $sql->end_table($data['title'], $data['engine_type'])->create();
-					if ($result) {
-						$id = $this->validate('model.add')->save($data);
-						if (false === $id) {
-							return array('info' => $this->getError(), 'status' => 0);
-						} else {
-							// 清除模型缓存数据
-							cache('document_model_list', null);
-
-							//记录行为
-							action_log('update_model', 'model', $id, session('auth_user.uid'));
-							return $id ? array('info' => '创建模型成功！', 'status' => 1) : array('info' => '创建模型失败！', 'status' => 1);
-						}
-					} else {
-						return false;
-					}
-				} else {
-					//修改
-					$status = $this->validate('model.edit')->save($data, array('id' => $data['id']));
-					if (false === $status) {
-						return array('info' => $this->getError(), 'status' => 0);
-					} else {
-						// 清除模型缓存数据
-						cache('document_model_list', null);
-						//记录行为
-						action_log('update_model', 'model', $data['id'], session('auth_user.uid'));
-						return array('info' => '保存模型成功！', 'status' => 1);
-					}
-				}
-			} else {
-				return array('info' => $this->getError(), 'status' => 0);
-			}
-		}
 	}
 
 	public function del() {

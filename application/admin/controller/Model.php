@@ -49,6 +49,8 @@ class Model extends Admin {
 		if (IS_POST) {
 			$result = $this->model->validate('Model.add')->save($request->post());
 			if (false !== $result) {
+				//记录行为
+				action_log('add_model', 'model', $result, session('auth_user.uid'));
 				$this->success('创建成功！', url('admin/model/index'));
 			}else{
 				return $this->error($this->model->getError());
@@ -67,6 +69,8 @@ class Model extends Admin {
 		if (IS_POST) {
 			$result = $this->model->validate('Model.edit')->save($request->post(), array('id'=>$request->post('id')));
 			if (false !== $result) {
+				//记录行为
+				action_log('update_model', 'model', $request->post('id'), session('auth_user.uid'));
 				$this->success('更新成功！', url('admin/model/index'));
 			}else{
 				return $this->error($this->model->getError());
@@ -75,31 +79,11 @@ class Model extends Admin {
 			$info = $this->model->where('id', $request->param('id'))->find();
 
 			//获取字段列表
-			if ($info['attribute_list']) {
-				$fields = model('Attribute')->where('id', 'IN', $info['attribute_list'])->where('is_show', 1)->select();
+			$rows = db('Attribute')->where('model_id', $request->param('id'))->where('is_show', 1)->order('group_id asc, sort asc')->select();
+			if ($rows) {
 				// 梳理属性的可见性
-				foreach ($fields as $key => $field) {
-					$field['group']           = -1;
-					$field['sort']            = 0;
-					$fields_tem[$field['id']] = $field->toArray();    //数据对象转换为数组
-				}
-
-				// 获取模型排序字段
-				$field_sort = json_decode($info['attribute_sort'], true);//dump($field_sort);exit();
-				if (!empty($field_sort)) {
-					foreach ($field_sort as $group => $ids) {
-						foreach ($ids as $key => $value) {
-							if (!empty($fields_tem[$value])) {
-								$fields_tem[$value]['group'] = $group;
-								$fields_tem[$value]['sort']  = $key;
-							}
-						}
-					}
-				}
-				
-				if (isset($fields_tem) && $fields_tem) {
-					// 模型字段列表排序
-					$fields = list_sort_by($fields_tem, "sort");
+				foreach ($rows as $key => $field) {
+					$fields[$field['group_id']][] = $field;
 				}
 			}else{
 				$fields = array();

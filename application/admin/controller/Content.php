@@ -22,7 +22,7 @@ class Content extends Admin {
 			return $this->error("无此模型！");
 		} else {
 			$this->modelInfo = $list[$model_id];
-			$this->model = model('Content')->extend($this->modelInfo['name']);
+			$this->model = new \app\common\model\Content($this->modelInfo['name']);
 		}
 
 		$this->assign('model_id', $model_id);
@@ -44,7 +44,7 @@ class Content extends Admin {
 		$field     = array_filter($grid_list['fields']);
 
 
-		$list = $this->model->lists($map, $order);
+		$list = $this->model->where($map)->order($order)->paginate($this->modelInfo['list_row']);
 
 		$data = array(
 			'grid' => $grid_list,
@@ -67,7 +67,7 @@ class Content extends Admin {
 	 */
 	public function add() {
 		if (IS_POST) {
-			$result = $this->model->change();
+			$result = $this->model->save($this->param);
 			if ($result) {
 				return $this->success("添加成功！", url('admin/content/index', array('model_id' => $this->modelInfo['id'])));
 			} else {
@@ -98,7 +98,7 @@ class Content extends Admin {
 	 */
 	public function edit($id) {
 		if (IS_POST) {
-			$result = $this->model->change();
+			$result = $this->model->save($this->param, array('id'=> $id));
 			if ($result !== false) {
 				return $this->success("更新成功！", url('admin/content/index', array('model_id' => $this->modelInfo['id'])));
 			} else {
@@ -108,7 +108,7 @@ class Content extends Admin {
 			if (!$id) {
 				return $this->error("非法操作！");
 			}
-			$info = $this->model->detail($id);
+			$info = $this->model->find($id);
 			if (!$info) {
 				return $this->error($this->model->getError());
 			}
@@ -186,16 +186,9 @@ class Content extends Admin {
 	 * @author molong <ycgpp@126.com>
 	 */
 	protected function getField() {
-		$field_group = parse_config_attr($this->modelInfo['field_group']);
-		$field_sort  = json_decode($this->modelInfo['field_sort'], true);
+		$field_group = parse_config_attr($this->modelInfo['attribute_group']);
 
-		if ($this->modelInfo['extend'] > 1) {
-			$map['model_id'] = $this->modelInfo['id'];
-		} else {
-			$model_id[]      = $this->modelInfo['id'];
-			$model_id[]      = 1;
-			$map['model_id'] = array('IN', $model_id);
-		}
+		$map['model_id'] = $this->modelInfo['id'];
 		if ($this->request->action() == 'add') {
 			$map['is_show'] = array('in', array('1', '2'));
 		} elseif ($this->request->action() == 'edit') {
@@ -204,30 +197,13 @@ class Content extends Admin {
 
 		//获得数组的第一条数组
 		$first_key = array_keys($field_group);
-		$fields    = model('Attribute')->getFieldlist($map);
-		if (!empty($field_sort)) {
-			foreach ($field_sort as $key => $value) {
-				foreach ($value as $index) {
-					if (isset($fields[$index])) {
-						$groupfield[$key][] = $fields[$index];
-						unset($fields[$index]);
-					}
-				}
+		$rows    = model('Attribute')->where($map)->order('group_id asc, sort asc')->select();
+		if (!empty($rows)) {
+			foreach ($rows as $key => $value) {
+				$fields[$field_group[$value['group_id']]][] = $value;
 			}
 		}
-		//未进行排序的放入第一组中
-		$fields[] = array('name' => 'model_id', 'type' => 'hidden'); //加入模型ID值
-		$fields[] = array('name' => 'id', 'type' => 'hidden'); //加入模型ID值
-		foreach ($fields as $key => $value) {
-			$groupfield[$first_key[0]][] = $value;
-		}
-
-		foreach ($field_group as $key => $value) {
-			if ($groupfield[$key]) {
-				$data[$value] = $groupfield[$key];
-			}
-		}
-		return $data;
+		return $fields;
 	}
 
 	/**
@@ -252,6 +228,9 @@ class Content extends Admin {
 		}
 		if (isset($map['page'])) {
 			unset($map['page']);
+		}
+		if (isset($map['model_id'])) {
+			unset($map['model_id']);
 		}
 		$this->assign($data);
 		return $map;
