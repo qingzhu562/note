@@ -153,10 +153,8 @@ class Content extends Admin {
 	 * @author molong <ycgpp@126.com>
 	 */
 	public function status($id, $status) {
-		$model = $this->model;
-
 		$map['id'] = $id;
-		$result    = $model::where($map)->setField('status', $status);
+		$result    = $this->model->where($map)->setField('status', $status);
 		if (false !== $result) {
 			return $this->success("操作成功！");
 		} else {
@@ -169,10 +167,8 @@ class Content extends Admin {
 	 * @author molong <ycgpp@126.com>
 	 */
 	public function settop($id, $is_top) {
-		$model = $this->model;
-
 		$map['id'] = $id;
-		$result    = $model::where($map)->setField('is_top', $is_top);
+		$result    = $this->model->where($map)->setField('is_top', $is_top);
 		if (false !== $result) {
 			return $this->success("操作成功！");
 		} else {
