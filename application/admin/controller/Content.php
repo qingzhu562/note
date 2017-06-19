@@ -139,7 +139,7 @@ class Content extends Admin {
 		}
 
 		$map['id'] = array('IN', $id);
-		$result    = $this->model->del($map);
+		$result    = $this->model->where($map)->delete();
 
 		if (false !== $result) {
 			return $this->success("删除成功！");
@@ -202,6 +202,8 @@ class Content extends Admin {
 			foreach ($rows as $key => $value) {
 				$fields[$field_group[$value['group_id']]][] = $value;
 			}
+		}else{
+			$fields = array();
 		}
 		return $fields;
 	}

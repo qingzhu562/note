@@ -15,7 +15,7 @@ namespace app\common\model;
 class Model extends Base {
 
 	protected $auto   = ['update_time'];
-	protected $insert = ['name', 'create_time', 'status' => 0];
+	protected $insert = ['name', 'create_time', 'status' => 1, 'list_grid'=>'id:ID'];
 	protected $type   = array(
 		'id'             => 'integer',
 		'create_time'    => 'integer',
@@ -23,14 +23,28 @@ class Model extends Base {
 	);
 
 	protected static function init(){
+		self::beforeInsert(function($event){
+			$data = $event->toArray();
+			$tablename = strtolower($data['name']);
+			//实例化一个数据库操作类
+			$db = new \com\Datatable();
+			//检查表是否存在并创建
+			if (!$db->CheckTable($tablename)) {
+				//创建新表
+				return $db->initTable($tablename, $data['title'], 'id')->query();
+			};
+		});
 		self::beforeUpdate(function($event){
 			$data = $event->toArray();
-			$attribute_sort = json_decode($data['attribute_sort'], true);
-			if (!empty($attribute_sort)) {
-				foreach ($attribute_sort as $key => $value) {
-					db('Attribute')->where('id', 'IN', $value)->setField('group_id', $key);
-					foreach ($value as $k => $v) {
-						db('Attribute')->where('id', $v)->setField('sort', $k);
+			if (isset($data['attribute_sort']) && $data['attribute_sort']) {
+				$attribute_sort = json_decode($data['attribute_sort'], true);
+			
+				if (!empty($attribute_sort)) {
+					foreach ($attribute_sort as $key => $value) {
+						db('Attribute')->where('id', 'IN', $value)->setField('group_id', $key);
+						foreach ($value as $k => $v) {
+							db('Attribute')->where('id', $v)->setField('sort', $k);
+						}
 					}
 				}
 			}
@@ -79,43 +93,5 @@ class Model extends Base {
 
 	public function attribute() {
 		return $this->hasMany('Attribute');
-	}
-
-	/**
-	 * 解析字段
-	 * @param  [array] $model      [字段]
-	 * @return [array]             [解析后的字段]
-	 */
-	public function preFields($model) {
-		$fields     = $model->attribute;
-		$groups     = parse_config_attr($model['field_group']);
-		$field_sort = json_decode($model['field_sort'], true);
-
-		//获得数组的第一条数组
-		$first_key = array_keys($groups);
-		if (!empty($field_sort)) {
-			foreach ($field_sort as $key => $value) {
-				foreach ($value as $index) {
-					if (isset($fields[$index])) {
-						$groupfield[$key][] = $fields[$index];
-						unset($fields[$index]);
-					}
-				}
-			}
-		}
-		//未进行排序的放入第一组中
-		$fields[] = array('name' => 'model_id', 'type' => 'hidden'); //加入模型ID值
-		$fields[] = array('name' => 'id', 'type' => 'hidden'); //加入模型ID值
-		foreach ($fields as $key => $value) {
-			$groupfield[$first_key[0]][] = $value;
-		}
-
-		foreach ($groups as $key => $value) {
-			if ($groupfield[$key]) {
-				$data[$value] = $groupfield[$key];
-			}
-		}
-		return $data;
-		return array();
 	}
 }

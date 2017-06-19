@@ -138,9 +138,6 @@ class Model extends Admin {
 		}
 
 		$model = $this->model->where($map)->find();
-		if ($model['table_status'] != 1 && $data['status'] == 1) {
-			return $this->error('数据表未创建或更新');
-		}
 		if ($model['list_grid'] == '' && $data['status'] == 1) {
 			return $this->error('模型列表未定义');
 		}

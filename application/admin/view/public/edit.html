@@ -54,7 +54,7 @@
 					{/volist}
 				</div>
 			</div>
-			{else/}
+			{elseif isset($keyList) /}
 			{volist name="keyList" id="field"}
 			{if $field['type'] eq 'hidden'}
 			<input type="hidden" name="{$field['name']}" value="{$info[$field['name']]|default=''}"/>

@@ -165,15 +165,4 @@ class Attribute extends Base{
 		$result = $db->create();
 		return $result;
 	}
-
-	public function generate($model){
-		$tablename = strtolower($model['name']);
-		//实例化一个数据库操作类
-		$db = new \com\Datatable();
-		//检查表是否存在并创建
-		if (!$db->CheckTable($tablename)) {
-			//创建新表
-			return $db->initTable($tablename, $model['title'], 'id')->query();
-		};
-	}
 }
