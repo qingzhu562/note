@@ -128,21 +128,6 @@ class Attribute extends Admin {
 			return $this->error($this->model->getError());
 		}
 	}
-
-	public function generate($id = '') {
-		if ($id) {
-			$model  = model('Model')->where('id', $id)->find();
-			$result = $this->model->generate($model);
-			if (false !== $result) {
-				db('Model')->where('id', $id)->setField('table_status', 1);
-				return $this->success('生成成功！', url('admin/model/index'));
-			} else {
-				return $this->error($this->model->getError());
-			}
-		} else {
-			return $this->error('非法操作！');
-		}
-	}
 	
 	//字段编辑所需字段
 	protected function getField() {

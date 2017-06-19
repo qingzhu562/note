@@ -15,7 +15,7 @@ namespace app\common\validate;
 class Attribute extends Base {
 
 	protected $rule = array(
-		'name'   => 'require|unique:attribute|/^[a-zA-Z]\w{0,39}$/',
+		'name'   => 'require|/^[a-zA-Z]\w{0,39}$/',
 		'title'  => 'require',
 		'type'   => 'require',
 		'length' => 'requireIn:type,textarea,editor|integer',
@@ -27,7 +27,6 @@ class Attribute extends Base {
 		'length.requireIn' => '字段长度必须！',
 		'length.integer'  => '字段必须为整形',
 		'name.require'    => '字段名不能为空！',
-		'name.unique'     => '字段名已存在！',
 		'title.require'   => '字段标题不能为空！',
 		'type.require'    => '类型不能为空！',
 		'remark.require'  => '描述不能为空！',
