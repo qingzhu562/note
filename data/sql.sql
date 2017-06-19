@@ -9,7 +9,6 @@
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 --
@@ -1128,13 +1127,6 @@ CREATE TABLE `sent_member` (
   `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '会员状态'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='会员表';
 
---
--- 转存表中的数据 `sent_member`
---
-
-INSERT INTO `sent_member` (`uid`, `username`, `password`, `nickname`, `email`, `mobile`, `sex`, `birthday`, `qq`, `score`, `signature`, `pos_province`, `pos_city`, `pos_district`, `pos_community`, `salt`, `login`, `reg_ip`, `reg_time`, `last_login_ip`, `last_login_time`, `status`) VALUES
-(1, 'admin', '4b1c5287043d53c31a62397b0204ca3c', 'admin', 'admin@tensent.cn', NULL, 0, '0000-00-00', '', 0, NULL, 0, 0, 0, 0, 'HQhWaR', 8, 0, 1497143083, 2130706433, 1497846922, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -1146,13 +1138,6 @@ CREATE TABLE `sent_member_extend` (
   `uid` int(11) NOT NULL COMMENT '用户UID',
   `education` int(10) DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
---
--- 转存表中的数据 `sent_member_extend`
---
-
-INSERT INTO `sent_member_extend` (`uid`, `education`) VALUES
-(1, 0);
 
 -- --------------------------------------------------------
 
@@ -1635,7 +1620,7 @@ ALTER TABLE `sent_link`
 -- 使用表AUTO_INCREMENT `sent_member`
 --
 ALTER TABLE `sent_member`
-  MODIFY `uid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户ID', AUTO_INCREMENT=2;
+  MODIFY `uid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户ID', AUTO_INCREMENT=1;
 --
 -- 使用表AUTO_INCREMENT `sent_member_extend_group`
 --
@@ -1670,4 +1655,4 @@ ALTER TABLE `sent_rewrite`
 -- 使用表AUTO_INCREMENT `sent_seo_rule`
 --
 ALTER TABLE `sent_seo_rule`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '唯一标识', AUTO_INCREMENT=4;COMMIT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '唯一标识', AUTO_INCREMENT=4;
