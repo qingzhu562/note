@@ -60,24 +60,13 @@ class Datatable {
 	 * @param       string        $table 表名
 	 * @return      void               空
 	 */
-	public function initTable($table = '', $comment = '', $pk = '', $time = true) {
+	public function initTable($table = '', $comment = '', $pk = 'id') {
 		$this->table = $this->getTablename($table, true);
 
-		if ($pk) {
-			$sql[] = $this->generateField('id', 'int', 11, '', '主键', true);
-		}
-		if ($time) {
-			//初始化表内含创建时间和更新时间两个字段
-			$sql[] = $this->generateField('create_time', 'int', 11, 0, '创建时间', false);
-			$sql[] = $this->generateField('update_time', 'int', 11, 0, '创建时间', false);
-		}
+		$sql = $this->generateField($pk, 'int', 11, '', '主键', true);
 
 		$primary = $pk ? "PRIMARY KEY (`" . $pk . "`)" : '';
-		if ($primary) {
-			$generatesql = implode(',', $sql) . ',';
-		} else {
-			$generatesql = implode(',', $sql);
-		}
+		$generatesql = $sql . ',';
 
 		$create = "CREATE TABLE IF NOT EXISTS `" . $this->table . "`("
 		. $generatesql
@@ -122,7 +111,7 @@ class Datatable {
 			$field_attr['length'] = "";
 		}
 		$field_attr['is_null'] = $attr['is_must'] ? 'NOT NULL' : 'NULL';
-		$field_attr['default'] = $attr['value'] != '' ? 'DEFAULT "' . $attr['default'] . '"' : 'DEFAULT null';
+		$field_attr['default'] = $attr['value'] != '' ? 'DEFAULT "' . $attr['value'] . '"' : '';
 
 		$field_attr['comment'] = (isset($attr['remark']) && $attr['remark']) ? $attr['remark'] : $attr['title'];
 		$field_attr['after']   = (isset($attr['after']) && $attr['after']) ? ' AFTER `' . $attr['after'] . '`' : ' AFTER `id`';

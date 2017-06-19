@@ -17,7 +17,6 @@
 				<ul class="nav nav-tabs">
 					<li class="active"><a href="#tab1" data-toggle="tab">基 础</a></li>
 					<li><a href="#tab2" data-toggle="tab">设 计</a></li>
-					<li><a href="#tab3" data-toggle="tab">高 级</a></li>
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane fade in active" id="tab1">
@@ -45,14 +44,6 @@
 						</div>
 					</div>
 					<div class="tab-pane fade" id="tab2">
-
-	                    <div class="form-group">
-	                        <label class="col-lg-2 control-label">字段别名定义</label>
-	                        <div class="col-lg-6 col-sm-10">
-	                            <textarea name="attribute_alias" class="form-control">{$info['attribute_alias']}</textarea>
-	                            <span class="help-block">（用于表单显示的名称）</span>
-	                        </div>
-	                    </div>
 						<div class="form-group">
 							<label class="col-lg-2 control-label">表单显示分组</label>
 							<div class="col-lg-6 col-sm-10">
@@ -65,7 +56,7 @@
 							<div class="col-lg-10 boards" id="attribute_group_sort">
 							{volist name="fields" id="field"}
 								<div class="board panel panel-info">
-									<div class="panel-heading">{:parse_field_attr($info['attribute_group'])[$key]}</div>
+									<div class="panel-heading">{$key}</div>
 									<div class="panel-body">
 										<div class="board-list" data-group="{$key}">
 										{foreach name="field" item="item" key="k"}
@@ -105,8 +96,6 @@
 								<span class="help-block">（默认列表模板的高级搜索项）</span>
 							</div>
 						</div>
-					</div>
-					<div class="tab-pane fade" id="tab3">
 						<div class="form-group">
 							<label class="col-lg-2 control-label">列表模板</label>
 							<div class="col-lg-6 col-sm-10">

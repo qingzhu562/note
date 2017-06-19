@@ -22,14 +22,14 @@
 		<ul class="list">
 			{volist name="list" id="item"}
 			<li>
-				<a href="{:url('index/content/detail?model_id='.$item['model_id'],array('id'=>$item['id']))}">
+				<a href="{:url('index/content/detail?model_id='.$model_id,array('id'=>$item['id']))}">
 					<div class="time">
 						<span class="day">{$item['create_time']|date='m',###}</span>
 						<span class="moth">{$item['create_time']|date='d',###}</span>
 					</div>
 					<div class="info">
 						<div class="tit">{$item['title']|msubstr=###,0,80}</div>
-						<div class="des">{$item['description']|msubstr=###,0,120}</div>
+						<div class="des">{$item['description']|default=''|msubstr=###,0,120}</div>
 					</div>
 				</a>
 			</li>

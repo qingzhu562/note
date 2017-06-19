@@ -196,11 +196,13 @@ class Content extends Admin {
 		}
 
 		//获得数组的第一条数组
-		$first_key = array_keys($field_group);
-		$rows    = model('Attribute')->where($map)->order('group_id asc, sort asc')->select();
+		$rows    = model('Attribute')->getFieldlist($map, 'id');
 		if (!empty($rows)) {
 			foreach ($rows as $key => $value) {
-				$fields[$field_group[$value['group_id']]][] = $value;
+				$list[$value['group_id']][] = $value;
+			}
+			foreach ($field_group as $key => $value) {
+				$fields[$value] = isset($list[$key]) ? $list[$key] : array();
 			}
 		}else{
 			$fields = array();

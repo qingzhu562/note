@@ -14,7 +14,7 @@
 			<div class="title">{$info['title']}</div>
 			<div class="info">
 				<span>发布时间：{$info['create_time']|date='Y-m-d H:i:s',###}</span>
-				<span>访问量：{$info['view']}</span>
+				<span>访问量：{$info['view']|default=0}</span>
 			</div>
 		</div>
 		<div class="art-body">

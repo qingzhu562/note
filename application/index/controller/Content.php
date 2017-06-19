@@ -58,20 +58,21 @@ class Content extends Fornt {
 		}
 
 		$cate = $this->getCategory($id);
-
-		if ($this->modelInfo['extend'] == 1) {
-			//获得当前栏目的所有子栏目
+		$map = array();
+		$attr = db('Attribute')->where('model_id', $this->modelInfo['id'])->column('name');
+		if (in_array('category_id', $attr)) {
 			$ids                = get_category_child($id);
 			$map['category_id'] = array('IN', $ids);
-			$map['model_id']    = $this->modelInfo['id'];
+		}
+		if (in_array('status', $attr)) {
 			$map['status']      = array('GT', 0);
 		}
-
-		if ($this->modelInfo['extend'] > 1) {
-			$order = "id desc";
-		} else {
+		if (in_array('is_top', $attr)) {
 			$order = "is_top desc,id desc";
+		}else{
+			$order = "id desc";
 		}
+
 		$list = $this->model->where($map)->order($order)->paginate(15);
 
 		$data = array(

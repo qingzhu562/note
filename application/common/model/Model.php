@@ -15,7 +15,7 @@ namespace app\common\model;
 class Model extends Base {
 
 	protected $auto   = ['update_time'];
-	protected $insert = ['name', 'create_time', 'status' => 1, 'list_grid'=>'id:ID'];
+	protected $insert = ['name', 'create_time', 'status' => 1, 'list_grid'=>"id:ID\r\ntitle:标题\r\ncreate_time:添加时间|time_format\r\nupdate_time:更新时间|time_format"];
 	protected $type   = array(
 		'id'             => 'integer',
 		'create_time'    => 'integer',
@@ -32,7 +32,22 @@ class Model extends Base {
 			if (!$db->CheckTable($tablename)) {
 				//创建新表
 				return $db->initTable($tablename, $data['title'], 'id')->query();
-			};
+			}else{
+				return false;
+			}
+		});
+		self::afterInsert(function($event){
+			$data = $event->toArray();
+			if ($data['is_doc']) {
+				$fields = include(APP_PATH.'admin/fields.php');
+				if (!empty($fields)) {
+					foreach ($fields as $key => $value) {
+						$fields[$key]['model_id'] = $data['id'];
+					}
+					model('Attribute')->saveAll($fields);
+				}
+			}
+			return true;
 		});
 		self::beforeUpdate(function($event){
 			$data = $event->toArray();
@@ -76,12 +91,13 @@ class Model extends Base {
 		$db = new \com\Datatable();
 		if ($db->CheckTable($tablename)) {
 			//检测表是否存在
-			$result = $db->del_table($tablename)->query();
+			$result = $db->delTable($tablename)->query();
 			if (!$result) {
 				return false;
 				$this->error = "数据表删除失败！";
 			}
 		}
+		db('Attribute')->where('model_id', $id)->delete(); //删除字段信息
 		$result = $this->where('id', $id)->delete();
 		if ($result) {
 			return true;

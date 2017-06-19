@@ -20,7 +20,6 @@ class Attribute extends Base {
 		'type'   => 'require',
 		'length' => 'requireIn:type,textarea,editor|integer',
 		'remark' => 'require',
-		'value'  => 'requireIf:is_must,1'
 	);
 
 	protected $message = array(
@@ -30,7 +29,6 @@ class Attribute extends Base {
 		'title.require'   => '字段标题不能为空！',
 		'type.require'    => '类型不能为空！',
 		'remark.require'  => '描述不能为空！',
-		'value'           => '必填字段默认值必须！'
 	);
 
 	protected $scene = array(

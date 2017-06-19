@@ -53,7 +53,7 @@ class Model extends Admin {
 				action_log('add_model', 'model', $result, session('auth_user.uid'));
 				$this->success('创建成功！', url('admin/model/index'));
 			}else{
-				return $this->error($this->model->getError());
+				return $this->error($this->model->getError() ? $this->model->getError() : '模型标识为保留名称！');
 			}
 		}else{
 			$this->setMeta('新增模型');
@@ -78,12 +78,16 @@ class Model extends Admin {
 		}else{
 			$info = $this->model->where('id', $request->param('id'))->find();
 
+			$field_group = parse_config_attr($info['attribute_group']);
 			//获取字段列表
 			$rows = db('Attribute')->where('model_id', $request->param('id'))->where('is_show', 1)->order('group_id asc, sort asc')->select();
 			if ($rows) {
 				// 梳理属性的可见性
 				foreach ($rows as $key => $field) {
-					$fields[$field['group_id']][] = $field;
+					$list[$field['group_id']][] = $field;
+				}
+				foreach ($field_group as $key => $value) {
+					$fields[$value] = isset($list[$key]) ? $list[$key] : array();
 				}
 			}else{
 				$fields = array();
